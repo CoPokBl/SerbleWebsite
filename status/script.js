@@ -51,8 +51,7 @@ const services = [
     },
     {
         "name": "File Host",
-        "description": "My Homework Tracker project is an API made in ASP.NET that allows users to track their homework. There are multiple " +
-            "clients that I made for it, you can view them in the repos page, just click the button below.",
+        "description": "Free file hosting for everyone. You can upload files and get a link to them. ",
         "button": "Website",
         "button_link": "https://files.serble.net/",
         "url": "https://files.serble.net/",
@@ -61,9 +60,7 @@ const services = [
     },
     {
         "name": "NextCloud",
-        "description": `This is a very awesome link shortener that allows you to shorten any link with a custom name for free. 
-            It's also a very simple to use, just click a button and boom, you have a link! You can check it out 
-            with the button below. I made it in JavaScript using Cloudflare's free workers and key value storage.`,
+        "description": `My public NextCloud service`,
         "button": "Website",
         "button_link": "https://cloud.serble.net/",
         "url": "https://cloud.serble.net/",
@@ -76,6 +73,15 @@ const services = [
         "button": "Info",
         "button_link": "https://www.mysql.com/",
         "url": "https://cloud.serble.net/",
+        "get_status": false,
+        "display_response": false
+    },
+    {
+        "name": "Emby",
+        "description": "Media Server",
+        "button": "Website",
+        "button_link": "https://media.serble.net/",
+        "url": "https://media.serble.net/",
         "get_status": true,
         "display_response": false
     }
@@ -152,6 +158,7 @@ services.forEach(function(service) {
         console.log("Not checking " + service.name);
         document.getElementById(service.name).getElementsByClassName('status-text')[0].classList.add(uncheckedClass);
         document.getElementById(service.name).getElementsByClassName('status-text')[0].innerText = "Not checked";
+        document.getElementById(service.name).getElementsByClassName('status-circle')[0].classList.add(uncheckedIcon);
     }
 
 });
