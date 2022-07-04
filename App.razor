@@ -1,0 +1,26 @@
+﻿<Router AppAssembly="@typeof(App).Assembly">
+    
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
+        <FocusOnNavigate RouteData="@routeData" Selector="h1"/>
+    </Found>
+    
+    <NotFound>
+        <PageTitle>Not found</PageTitle>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <PageTitle>Serble - Not Found</PageTitle>
+            <div class="text-center" style="justify-content: center; display: contents;">
+                <h1 class="display-4">404 - Not Found</h1>
+                <p role="alert">
+                    Sorry, there's nothing here, you could try another URL or go to our <a href="/">home page</a>.
+                    Or you could look at this picture of a cat: <br>
+                    <hr class="my-4">
+                    <div style="display: flex; justify-content: center">
+                        <img src="https://http.cat/404" style="text-align: center;" alt="A picture of a cat hiding under paper"/>
+                    </div>
+                </p>
+            </div>
+        </LayoutView>
+    </NotFound>
+    
+</Router>

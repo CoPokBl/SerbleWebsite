@@ -1,0 +1,10 @@
+{
+  "bind_url": "http://*:5000",
+  "storage_service": "http",
+  "http_authorization_token": "my very secure auth token",
+  "http_url": "https://myverysecurestoragebackend.io/",
+  "my_host": "https://theplacewherethisappisaccessable.com/",
+  "token_issuer": "CoPokBl",
+  "token_audience": "Privileged Users",
+  "token_secret": "74f384eb-0a1b-4067-bd1d-35c69feb36c3"
+}

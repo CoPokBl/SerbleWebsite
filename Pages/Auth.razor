@@ -1,0 +1,39 @@
+@page "/auth"
+@using System.Text.Json
+<h3>Auth</h3>
+<p>Did you know that I don't do anything?</p>
+
+<label>
+    Username
+</label>
+<input
+    @bind="_username"
+    @oninput="ui => _username = ui.Value?.ToString()"
+    style="background-color: rgb(34, 34, 34); color: #ffffff"
+    class="form-control"
+    type="text"/>
+
+@if (_user == null) {
+    <p>Loading User...</p>
+}
+else {
+    <p>User: @_user</p>
+}
+
+<button onclick="@Login">Login</button>
+
+@code {
+    private string? _user = null;
+    private string? _username = null;
+
+    protected override async Task OnInitializedAsync() {
+        
+    }
+    
+    private void Login() {
+        _user = "";
+    }
+    
+    
+
+}
