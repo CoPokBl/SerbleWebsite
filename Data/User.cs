@@ -9,5 +9,6 @@ public class User {
     
     // 0=Disabled Account 1=Normal, 2=Admin
     public int PermLevel { get; set; }
+    public string PermString { get; set; }
     
 }

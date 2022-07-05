@@ -8,4 +8,5 @@ public interface IStorageService {
     public void GetUser(string userId, out User? user);
     public void UpdateUser(User userDetails);
     public void DeleteUser(string userId);
+    public void GetUserFromName(string userName, out User? user);
 }

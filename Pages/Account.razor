@@ -1,0 +1,63 @@
+@page "/account"
+@using SerbleWebsite.Data
+@inject IJSRuntime JsRuntime
+@inject NavigationManager NavigationManager
+<h3>Account</h3>
+
+@{
+   string[] parts = _userInfo.Split("\n");
+}
+@foreach (string part in parts) {
+   @if (part.Length > 0) {
+      <p>@part</p>
+   }
+}
+<button @onclick="Logout">Logout</button>
+<button @onclick="ReloadText">Reload Text</button>
+
+@code {
+   private string _userInfo = "Loading...";
+   
+   private void ReloadText() {
+      InvokeAsync(StateHasChanged).Wait();
+   }
+
+   protected override async void OnAfterRender(bool firstRender) {
+      if (!firstRender) return;
+      
+      // Find cookie
+      Cookie cookies = new (JsRuntime);
+      string tokenCookie = await cookies.GetValue("token");
+      if (tokenCookie == "") {
+         _userInfo = "Not logged in (No cookie)";
+         return;
+      }
+      if (!new TokenHandler(Program.Config!).ValidateCurrentToken(tokenCookie, out Dictionary<string, string>? claims)) {
+         _userInfo = "Not logged in (Invalid token)";
+         return;
+      }
+      if (claims == null) throw new Exception("claims is null");
+      // Get user obj
+      Program.StorageService!.GetUser(claims["id"], out User? user);
+      if (user == null) {
+         // User not found, they must have been deleted
+         Logout();
+         return;
+      }
+      _userInfo = "Logged in\n" +
+                  $"Username: {user.Username}\n" +
+                  $"Id: {user.Id}\n" +
+                  $"Perm Level: {user.PermLevel}\n" +
+                  $"Perm String: {user.PermString}\n" +
+                  $"Email: {user.Email}";
+      ReloadText();
+   }
+
+   private async void Logout() {
+      Cookie cookies = new (JsRuntime);
+      await cookies.SetValue("token", "", 0);
+      _userInfo = "Please reload";
+      NavigationManager.NavigateTo("/login", true);
+   }
+   
+}

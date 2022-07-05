@@ -87,5 +87,8 @@ public class FileStorageService : IStorageService {
     public void DeleteUser(string userId) {
         _users.RemoveAll(u => u.Id == userId);
     }
-    
+
+    public void GetUserFromName(string userName, out User? user) {
+        user = _users.FirstOrDefault(u => u.Username == userName);
+    }
 }

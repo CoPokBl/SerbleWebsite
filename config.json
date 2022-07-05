@@ -1,6 +1,6 @@
 {
   "bind_url": "http://*:5000",
-  "storage_service": "http",
+  "storage_service": "file",
   "http_authorization_token": "my very secure auth token",
   "http_url": "https://myverysecurestoragebackend.io/",
   "my_host": "https://theplacewherethisappisaccessable.com/",

@@ -12,15 +12,12 @@ public class TokenHandler {
         _config = config;
     }
     
-    public string GenerateToken(long maxUpload, bool isAdmin = false) {
+    public string GenerateToken(Dictionary<string, string> claims) {
         string mySecret = _config["token_secret"];
         SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(mySecret));
         JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
         SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor {
-            Subject = new ClaimsIdentity(new[] {
-                new Claim("maxUpload", maxUpload.ToString()),
-                new Claim("isAdmin", isAdmin.ToString())
-            }),
+            Subject = new ClaimsIdentity(claims.Select(c => new Claim(c.Key, c.Value)).ToArray()),
             Expires = DateTime.Now.AddYears(1),
             Issuer = _config["token_issuer"],
             Audience = _config["token_audience"],
