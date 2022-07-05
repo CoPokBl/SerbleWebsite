@@ -22,7 +22,6 @@ public static class Program {
     };
     public static Dictionary<string, string>? Config;
     public static IStorageService? StorageService;
-    private static bool _isLoggerInitialized;
 
     private static int Main(string[] args) {
 
@@ -42,10 +41,6 @@ public static class Program {
             return stopCode;
         }
         catch (Exception e) {
-            if (!_isLoggerInitialized) {
-                Console.WriteLine("An error occured before the logging service could start.");
-                return 1;
-            }
             Logger.Error(e);
             Logger.Error("The application has crashed due to an unhandled exception.");
             Logger.WaitFlush();

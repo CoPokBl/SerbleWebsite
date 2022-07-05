@@ -11,4 +11,13 @@ public class User {
     public int PermLevel { get; set; }
     public string PermString { get; set; }
     
+    public User() {
+        Id = "";
+        Username = "";
+        Email = "";
+        PasswordHash = "";
+        PermLevel = 0;
+        PermString = "";
+    }
+    
 }

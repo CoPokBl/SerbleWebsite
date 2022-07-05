@@ -58,10 +58,8 @@
 </div>
 
 @code {
-    private string? _user;
     private string? _username;
     private string? _password;
-    private bool _rememberMe;
     private Error _error = Error.None;
     
     // OnAfterRender is called after the component is rendered.
@@ -75,8 +73,7 @@
         
     }
 
-    private async void Login() {
-        _user = "Submited with: " + _username + " and " + _password + " and " + _rememberMe;
+    private void Login() {
 
         if (_username == null || _password == null) {
             _error = Error.NullFields;
