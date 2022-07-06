@@ -1,4 +1,4 @@
-namespace SerbleWebsite.Data; 
+namespace SerbleWebsite.Data.Schemas; 
 
 public class User {
     

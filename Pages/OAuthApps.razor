@@ -1,0 +1,49 @@
+@page "/OAuthApps"
+@using SerbleWebsite.Data.Schemas
+@inject NavigationManager NavigationManager
+
+<RequireLogin Callback="OnLoad"></RequireLogin>
+
+<div class="text-center">
+    <h3>OAuthApps</h3>
+    
+    @if (_apps == null) {
+        <p>Loading apps...</p>
+    }
+    else {
+        @if (_apps.Length == 0) {
+            <p>No Apps</p>
+        }
+        @foreach (OAuthApp app in _apps) {
+            <p>
+                <b>Name: @app.Name</b><br/>
+                ID: @app.Id<br/>
+                Description: @app.Description<br/>
+                ClientSecret: @app.ClientSecret<br/>
+            </p>
+        }
+        <button
+            class="btn btn-lg btn-success"
+            @onclick='() => NavigationManager.NavigateTo("/oauthapps/new")'>
+            New App
+        </button>
+    }
+</div>
+
+<br/>
+
+@code {
+    
+    private OAuthApp[]? _apps;
+
+    private bool OnLoad(User user) {
+        Program.StorageService!.GetOAuthAppsFromUser(user.Id, out _apps);
+        ReloadText();
+        return true;
+    }
+
+    private void ReloadText() {
+        InvokeAsync(StateHasChanged).Wait();
+    }
+    
+}

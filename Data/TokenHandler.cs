@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using GeneralPurposeLib;
 using Microsoft.IdentityModel.Tokens;
 
 namespace SerbleWebsite.Data; 
@@ -13,6 +14,11 @@ public class TokenHandler {
     }
     
     public string GenerateToken(Dictionary<string, string> claims) {
+        
+        foreach (string claim in TokenClaims.Claims) {
+            if (!claims.ContainsKey(claim)) Logger.Warn("The following required claim was missing from a generated token: " + claim);
+        }
+        
         string mySecret = _config["token_secret"];
         SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(mySecret));
         JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();

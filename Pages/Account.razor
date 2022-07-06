@@ -1,7 +1,11 @@
 @page "/account"
 @using SerbleWebsite.Data
+@using SerbleWebsite.Data.Schemas
 @inject IJSRuntime JsRuntime
 @inject NavigationManager NavigationManager
+
+<RequireLogin Callback="LoginChecked" RedirectToLogin="false"></RequireLogin>
+
 <h3>Account</h3>
 
 @{
@@ -22,7 +26,20 @@
       InvokeAsync(StateHasChanged).Wait();
    }
 
+   private bool LoginChecked(User? user) {
+      _userInfo = user == null ? "Not logged in" : 
+                  "Logged in\n" +
+                  $"Username: {user.Username}\n" +
+                  $"Id: {user.Id}\n" +
+                  $"Perm Level: {user.PermLevel}\n" +
+                  $"Perm String: {user.PermString}\n" +
+                  $"Email: {user.Email}";
+      ReloadText();
+      return true;
+   }
+
    protected override async void OnAfterRender(bool firstRender) {
+      return;
       if (!firstRender) return;
       
       // Find cookie

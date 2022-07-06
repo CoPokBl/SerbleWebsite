@@ -1,22 +1,48 @@
 using System.Security;
-using System.Text.Json;
 using GeneralPurposeLib;
+using Newtonsoft.Json;
+using SerbleWebsite.Data.Schemas;
+using JsonException = System.Text.Json.JsonException;
 
 namespace SerbleWebsite.Data; 
+
+/*
+ * Dotnet's builtin JSON serializer does not seem to work with truples.
+ * So I'm using Newtonsoft.Json.
+ */
 
 public class FileStorageService : IStorageService {
     
     private List<User> _users = new();
+    private List<OAuthApp> _apps = new();
 
     public void Init() {
         _users = new List<User>();
+        _apps = new List<OAuthApp>();
+        
+        // Add dummy data
+        _users.Add(new User {
+            Id = Guid.NewGuid().ToString(),
+            Username = "admin",
+            PasswordHash = "e",
+            PermLevel = 0
+        });
+        OAuthApp app = new (_users.First().Id) {
+            Name = "Test App",
+            Description = "Test App"
+        };
+        _apps.Add(app);
+
         Logger.Info("Loading data from data.json...");
         if (File.Exists("data.json")) {
-            _users = JsonSerializer.Deserialize<List<User>>(File.ReadAllText("data.json")) ?? new List<User>();
+            string jsonData = File.ReadAllText("data.json");
+            (List<User>, List<OAuthApp>) data = JsonConvert.DeserializeObject<(List<User>, List<OAuthApp>)>(jsonData);
+            _users = data.Item1;
+            _apps = data.Item2;
             Logger.Info("Loaded data from data.json");
         } else {
             Logger.Info("No data.json found, creating new data.json");
-            File.WriteAllText("data.json", JsonSerializer.Serialize(_users));
+            File.WriteAllText("data.json", JsonConvert.SerializeObject((_users, _apps)));
             Logger.Info("Created new data.json");
         }
         Logger.Info("Data loaded");
@@ -30,7 +56,7 @@ public class FileStorageService : IStorageService {
             string errorText = "Unspecified error";
             Logger.Info("Saving data to data.json...");
             try {
-                File.WriteAllText("data.json", JsonSerializer.Serialize(_users));
+                File.WriteAllText("data.json", JsonConvert.SerializeObject((_users, _apps)));
                 Logger.Info("Saved data to data.json");
             }
             catch (JsonException e) {
@@ -90,5 +116,28 @@ public class FileStorageService : IStorageService {
 
     public void GetUserFromName(string userName, out User? user) {
         user = _users.FirstOrDefault(u => u.Username == userName);
+    }
+
+    public void AddOAuthApp(OAuthApp app) {
+        _apps.Add(app);
+    }
+
+    public void GetOAuthApp(string appId, out OAuthApp? app) {
+        app = _apps.FirstOrDefault(a => a.Id == appId);
+    }
+
+    public void UpdateOAuthApp(OAuthApp app) {
+        OAuthApp? appToUpdate = _apps.FirstOrDefault(a => a.Id == app.Id);
+        if (appToUpdate == null) return;
+        int index = _apps.IndexOf(appToUpdate);
+        _apps[index] = app;
+    }
+
+    public void DeleteOAuthApp(string appId) {
+        _apps.RemoveAll(a => a.Id == appId);
+    }
+
+    public void GetOAuthAppsFromUser(string userId, out OAuthApp[] apps) {
+        apps = _apps.Where(a => a.OwnerId == userId).ToArray();
     }
 }

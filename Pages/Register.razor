@@ -1,5 +1,6 @@
 @page "/register"
 @using SerbleWebsite.Data
+@using SerbleWebsite.Data.Schemas
 @inject IJSRuntime JsRuntime
 @inject NavigationManager NavigationManager
 
@@ -52,7 +53,7 @@
           <label for="floatingPassword">Password</label>
         </div>
         
-        <button class="w-100 btn btn-lg btn-primary" @onclick="Login" style="padding-bottom: 10px">Register</button>
+        <button class="w-100 btn btn-lg btn-primary" @onclick="Submit" style="padding-bottom: 10px">Register</button>
         <p>Want to login? <a href="/login">Go here</a></p>
     </div>
 </div>
@@ -73,7 +74,7 @@
         
     }
 
-    private void Login() {
+    private void Submit() {
 
         if (_username == null || _password == null) {
             _error = Error.NullFields;

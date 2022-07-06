@@ -1,0 +1,52 @@
+@using SerbleWebsite.Data
+@using SerbleWebsite.Data.Schemas
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
+
+@code {
+    
+    [Parameter]
+    public Func<User?, bool>? Callback { get; set; }
+
+    [Parameter]
+    public bool RedirectToLogin { get; set; } = true;
+
+    protected override async void OnAfterRender(bool firstRender) {
+        if (!firstRender) return;
+        Uri absoluteUri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+        Cookie cookieHandler = new (JsRuntime);
+
+        // Attempt Login
+        string tokenCookie = await cookieHandler.GetValue("token");
+        if (tokenCookie == "") {
+            NotLoggedIn();
+        }
+        
+        if (!new TokenHandler(Program.Config!).ValidateCurrentToken(tokenCookie, out Dictionary<string, string>? claims)) {
+            NotLoggedIn();
+            return;
+        }
+        if (claims == null) { throw new Exception("Claims are null"); }
+        
+        // Get User
+        Program.StorageService!.GetUser(claims["id"], out User? user);
+        if (user == null) { NotLoggedIn(); return; }
+        
+        // If page returns false, then user is not allowed to access page
+        if (!Callback!.Invoke(user)) {
+            NotLoggedIn();
+        }
+    }
+    
+    private void NotLoggedIn() {
+        // Redirect to Login Page
+        if (RedirectToLogin) {
+            NavigationManager.NavigateTo("/login?return_url=" + Uri.EscapeDataString(NavigationManager.Uri));
+            return;
+        }
+        
+        // Or run callback with null user
+        Callback!.Invoke(null);
+    }
+
+}

@@ -4,6 +4,7 @@
 @using SerbleWebsite.Data
 @using Microsoft.AspNetCore.WebUtilities
 @using Microsoft.Extensions.Primitives
+@using SerbleWebsite.Data.Schemas
 @inject IJSRuntime JsRuntime
 @inject NavigationManager NavigationManager
 
@@ -14,12 +15,20 @@
     @if (_askAccess && _isAppAuth) {
         <h1>@_appName</h1>
         <p>
-            @_appName would like access to your account. They will be able to access your Username and Email. 
-            They CANNOT access your password. Do not click Allow unless you were sent here by @_appName and you
+            @_appName would like access to your account. They CANNOT access your password. 
+            Do not click Allow unless you were sent here by @_appName and you
             trust them. They are requesting access to the following scopes:
-            @foreach (string scope in _queryValues!["scope"].ToString().Split(' ')) {
-                <p>- @scope</p>
+            <p>
+            <br/>
+            @foreach (string scope in 
+                ScopeHandler.ListOfScopeIdsToScopeNames(
+                    ScopeHandler.FilterInvalidScopes(
+                        _queryValues!["scope"]
+                            .First()
+                            .Split(' ')))) {
+                <div>- @scope</div>
             }
+            </p>
             <b>IF YOU DON'T UNDERSTAND THEN CLICK DENY</b>
         </p>
         <div class="d-flex" style="">
@@ -100,7 +109,6 @@
 </div>
 
 @code {
-    private string? _user;
     private string? _username;
     private string? _password;
     private bool _rememberMe;
@@ -112,7 +120,7 @@
     private string? _token;
     private readonly string[] _requiredQueryValues = {
         "redirect_uri",
-        // "client_id",
+        "client_id",
         "response_type",
         "scope",
         "state"
@@ -134,7 +142,12 @@
             }
 
             // Get information
-            _appName = _queryValues.ContainsKey("appname") ? _queryValues["appname"] : "Unknown App";
+            Program.StorageService!.GetOAuthApp(_queryValues["client_id"], out OAuthApp? app);
+            if (app == null) {
+                NavigationManager.NavigateTo("/invalidoauth");
+                return;
+            }
+            _appName = app.Name;
             ReloadText();
         }
         
@@ -143,7 +156,14 @@
         if (token == "") {
             return;
         }
-        if (!new TokenHandler(Program.Config!).ValidateCurrentToken(token, out _)) {
+        if (!new TokenHandler(Program.Config!).ValidateCurrentToken(token, out Dictionary<string, string>? claims)) {
+            return;
+        }
+        if (claims == null) {
+            return;
+        }
+        Program.StorageService!.GetUser(claims["id"], out User? user);
+        if (user == null) {
             return;
         }
         LoginSuccess(token);
@@ -157,9 +177,12 @@
         InvokeAsync(StateHasChanged).Wait();
     }
 
-    private async void Login() {
-        _user = "Submited with: " + _username + " and " + _password + " and " + _rememberMe;
+    private void Login() {
+        LoginMain();
+        ReloadText();
+    }
 
+    private async void LoginMain() {
         if (_username == null || _password == null) {
             _error = Error.NullFields;
             return;
@@ -197,7 +220,7 @@
     private void LoginSuccess(string token) {
         if (!_isAppAuth) {
             // Normal login
-            NavigationManager.NavigateTo("/account");
+            NavigationManager.NavigateTo(_queryValues!.ContainsKey("return_url") ? _queryValues["return_url"] : "/account");
         }
         
         // App authentication
