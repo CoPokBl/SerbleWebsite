@@ -35,8 +35,13 @@ public static class ScopeHandler {
         return ScopeNames.Where((_, index) => scopeIds.Contains(Scopes[index]));
     }
     
-    public static string[] FilterInvalidScopes(IEnumerable<string> scopes) {
+    public static IEnumerable<string> FilterInvalidScopes(IEnumerable<string> scopes) {
         return scopes.Where(scope => Scopes.Contains(scope)).ToArray();
+    }
+    
+    public static string[] StringToListOfScopeIds(string scopeString) {
+        string?[] scopes = scopeString.Select((t, i) => t == '1' ? Scopes[i] : null).Where(t => t != null).ToArray();
+        return scopes.Where(t => t != null).ToArray()!;
     }
     
 }

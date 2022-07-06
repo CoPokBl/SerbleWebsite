@@ -13,11 +13,24 @@
 <div class="text-center form-signin">
     
     @if (_askAccess && _isAppAuth) {
+        
         <h1>@_appName</h1>
         <p>
-            @_appName would like access to your account. They CANNOT access your password. 
-            Do not click Allow unless you were sent here by @_appName and you
-            trust them. They are requesting access to the following scopes:
+            @if (_user!.AuthorizedApps.Contains(_app!.Id)) {
+                // Already authorized, they want more permissions probably
+                <div>
+                    @_appName has already been authorized to access your account. They are trying to change the permissions.
+                    They are requesting the following scopes:
+                </div>
+            }
+            else {
+                <div>
+                    @_appName would like access to your account. They CANNOT access your password. 
+                    Do not click Allow unless you were sent here by @_appName and you
+                    trust them. They are requesting access to the following scopes:
+                </div>
+            }
+        
             <p>
             <br/>
             @foreach (string scope in 
@@ -112,11 +125,14 @@
     private string? _username;
     private string? _password;
     private bool _rememberMe;
+    private bool _appRequestAuth = false;
     private Error _error = Error.None;
     private Dictionary<string, StringValues>? _queryValues;
     private bool _isAppAuth;
+    private OAuthApp? _app;
     private string _appName = "";
     private bool _askAccess;
+    private User? _user;
     private string? _token;
     private readonly string[] _requiredQueryValues = {
         "redirect_uri",
@@ -148,6 +164,7 @@
                 return;
             }
             _appName = app.Name;
+            _app = app;
             ReloadText();
         }
         
@@ -166,6 +183,7 @@
         if (user == null) {
             return;
         }
+        _user = user;
         LoginSuccess(token);
     }
     
@@ -202,13 +220,14 @@
         }
         
         // Login successful
+        _user = user;
         _error = Error.None;
         
         // Get token
         string token = new TokenHandler(Program.Config!).GenerateToken(new Dictionary<string, string> {
             { "scope", "1" },
-            { "id", user.Id! }
-        });
+            { "id", user.Id }
+        }, _isAppAuth ? _app : null);
         
         // Set cookie
         Cookie cookieService = new (JsRuntime);
@@ -224,9 +243,28 @@
         }
         
         // App authentication
-        bool thing = _queryValues!.TryGetValue("yes", out StringValues yes);
-        if (thing) {
-            Console.WriteLine($"Yes: {yes}");
+        
+        // Check if they are already authorized and they didn't send a request for more perms
+        bool alreadyAuthorized = _user!.AuthorizedApps.Contains(_app!.Id);
+        if (_queryValues!.ContainsKey("reauth") && _queryValues["reauth"] == "true") {
+            alreadyAuthorized = false;
+            _appRequestAuth = true;
+        }
+        if (alreadyAuthorized) {
+            // They are already authorized
+            string newUri = _queryValues!["redirect_uri"];
+            string appToken = new TokenHandler(Program.Config!).GenerateToken(new Dictionary<string, string> {
+                { "scope", ScopeHandler.ListOfScopeIdsToString(ScopeHandler.FilterInvalidScopes(
+                    _queryValues!["scope"]
+                        .First()
+                        .Split(' '))) },
+                { "id", _user!.Id }
+            }, _app);
+            newUri = QueryHelpers.AddQueryString(newUri, "token", appToken);
+            newUri = QueryHelpers.AddQueryString(newUri, "authorized", "true");
+            newUri = QueryHelpers.AddQueryString(newUri, "state", _queryValues["state"]);
+            NavigationManager.NavigateTo(newUri);
+            return;
         }
         _askAccess = true;
         _token = token;
@@ -244,7 +282,25 @@
         }
         string newUri = _queryValues["redirect_uri"];
         if (authorize) {
-            newUri = QueryHelpers.AddQueryString(newUri, "token", _token!);
+            // Make token
+            string token = new TokenHandler(Program.Config!).GenerateToken(new Dictionary<string, string> {
+                { "scope", ScopeHandler.ListOfScopeIdsToString(ScopeHandler.FilterInvalidScopes(
+                    _queryValues!["scope"]
+                        .First()
+                        .Split(' '))) },
+                { "id", _user!.Id }
+            }, _app);
+            newUri = QueryHelpers.AddQueryString(newUri, "token", token);
+            
+            // Add app as authorized app
+            List<string> newAuthed = _user.AuthorizedApps.ToList();
+            if (_appRequestAuth) {
+                // Remove app as authorized app
+                newAuthed.Remove(_app!.Id);
+            }
+            newAuthed.Add(_app!.Id);
+            _user.AuthorizedApps = newAuthed.ToArray();
+            Program.StorageService!.UpdateUser(_user);
         }
         newUri = QueryHelpers.AddQueryString(newUri, "authorized", authorize ? "true" : "false");
         newUri = QueryHelpers.AddQueryString(newUri, "state", _queryValues["state"]);

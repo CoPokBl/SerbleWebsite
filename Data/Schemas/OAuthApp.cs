@@ -19,4 +19,9 @@ public class OAuthApp {
         Logger.Debug("OAuthApp created: " + Id);
     }
     
+    public OAuthApp CycleClientSecret() {
+        ClientSecret = Guid.NewGuid().ToString();
+        return this;
+    }
+    
 }
