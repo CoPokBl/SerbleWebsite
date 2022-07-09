@@ -16,7 +16,7 @@
         
         <h1>@_appName</h1>
         <p>
-            @if (_user!.AuthorizedApps.Contains(_app!.Id)) {
+            @if (_user!.AuthorizedAppIds.Contains(_app!.Id)) {
                 // Already authorized, they want more permissions probably
                 <div>
                     @_appName has already been authorized to access your account. They are trying to change the permissions.
@@ -125,7 +125,7 @@
     private string? _username;
     private string? _password;
     private bool _rememberMe;
-    private bool _appRequestAuth = false;
+    private bool _appRequestAuth;
     private Error _error = Error.None;
     private Dictionary<string, StringValues>? _queryValues;
     private bool _isAppAuth;
@@ -240,12 +240,12 @@
         if (!_isAppAuth) {
             // Normal login
             NavigationManager.NavigateTo(_queryValues!.ContainsKey("return_url") ? _queryValues["return_url"] : "/account");
+            return;
         }
         
         // App authentication
-        
         // Check if they are already authorized and they didn't send a request for more perms
-        bool alreadyAuthorized = _user!.AuthorizedApps.Contains(_app!.Id);
+        bool alreadyAuthorized = _user!.AuthorizedAppIds.Contains(_app!.Id);
         if (_queryValues!.ContainsKey("reauth") && _queryValues["reauth"] == "true") {
             alreadyAuthorized = false;
             _appRequestAuth = true;
@@ -281,24 +281,29 @@
             return;
         }
         string newUri = _queryValues["redirect_uri"];
+        string appSecret = Guid.NewGuid().ToString();
+        
         if (authorize) {
             // Make token
+            string scopeString = ScopeHandler.ListOfScopeIdsToString(ScopeHandler.FilterInvalidScopes(
+                _queryValues!["scope"]
+                    .First()
+                    .Split(' ')));
             string token = new TokenHandler(Program.Config!).GenerateToken(new Dictionary<string, string> {
-                { "scope", ScopeHandler.ListOfScopeIdsToString(ScopeHandler.FilterInvalidScopes(
-                    _queryValues!["scope"]
-                        .First()
-                        .Split(' '))) },
-                { "id", _user!.Id }
+                { "scope", scopeString },
+                { "id", _user!.Id },
+                { "app_secret", appSecret }
             }, _app);
             newUri = QueryHelpers.AddQueryString(newUri, "token", token);
             
             // Add app as authorized app
-            List<string> newAuthed = _user.AuthorizedApps.ToList();
+            List<(string, string)> newAuthed = _user.AuthorizedApps.ToList();
             if (_appRequestAuth) {
                 // Remove app as authorized app
-                newAuthed.Remove(_app!.Id);
+                (string, string) entry = newAuthed.First(e => e.Item1 == _app!.Id);
+                newAuthed.Remove(entry);
             }
-            newAuthed.Add(_app!.Id);
+            newAuthed.Add((_app!.Id, appSecret));
             _user.AuthorizedApps = newAuthed.ToArray();
             Program.StorageService!.UpdateUser(_user);
         }

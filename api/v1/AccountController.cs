@@ -7,7 +7,7 @@ namespace SerbleWebsite.api.v1;
 public class AccountController : Controller {
     
     [HttpGet]
-    public IActionResult Index() {
+    public IActionResult Index([FromQuery] string appId) {
         return Ok();
     }
     

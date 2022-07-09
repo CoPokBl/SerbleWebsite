@@ -10,12 +10,16 @@ public static class ScopeHandler {
     
     public static readonly string[] Scopes = {
         "full_access",
-        "file_host"
+        "file_host",
+        "user_info",
+        "apps_control"
     };
     
     public static readonly string[] ScopeNames = {
         "Full Account Access",
-        "File Host"
+        "File Host",
+        "Account Information",
+        "Control Of Authorized Applications"
     };
 
     // id, name
@@ -23,7 +27,9 @@ public static class ScopeHandler {
 
     public static string[] ScopeDescriptions = {
         "Allows full access to the account.",
-        "Allows the user to access the file host."
+        "Allows access the file host.",
+        "Allows access to the account's information (Eg. Username, Email).",
+        "Allows control over authorized applications."
     };
 
     public static string ListOfScopeIdsToString(IEnumerable<string> scopeIds) {

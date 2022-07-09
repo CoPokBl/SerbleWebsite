@@ -20,7 +20,7 @@ else {
       <div>Perm String: @_user.PermString</div>
 
       <div>Authorized Apps:</div>
-      @foreach (string app in _user.AuthorizedApps) {
+      @foreach (string app in _user.AuthorizedAppIds) {
          Program.StorageService!.GetOAuthApp(app, out OAuthApp? appObj);
          if (appObj == null) continue;
          string appName = appObj.Name;
@@ -56,8 +56,8 @@ else {
    
    private void RevokeApp(string app) {
       if (_user == null) return;
-      List<string> authedAppsList = _user.AuthorizedApps.ToList();
-      authedAppsList.Remove(app);
+      List<(string, string)> authedAppsList = _user.AuthorizedApps.ToList();
+      authedAppsList.RemoveAll(x => x.Item1 == app);
       _user.AuthorizedApps = authedAppsList.ToArray();
       Program.StorageService!.UpdateUser(_user);
       ReloadText();

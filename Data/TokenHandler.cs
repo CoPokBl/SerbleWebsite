@@ -68,6 +68,26 @@ public class TokenHandler {
             if (claims["client_secret"] != app.ClientSecret) {
                 return false;
             }
+
+            if (!claims.ContainsKey("app_secret")) {
+                return false;
+            }
+            Program.StorageService!.GetUser(claims["id"], out User? user);
+            if (user == null) {
+                return false;
+            }
+
+            string appSecret;
+            try {
+                appSecret = user.AuthorizedApps.First(a => a.Item1 == app.Id).Item2;
+            }
+            catch (InvalidOperationException) {
+                // Doesn't exist
+                return false;
+            }
+            if (claims["app_secret"] != appSecret) {
+                return false;
+            }
         }
         else {
             if (claims.ContainsKey("client_secret")) {
