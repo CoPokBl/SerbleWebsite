@@ -18,7 +18,11 @@ public static class Program {
         { "my_host" , "https://theplacewherethisappisaccessable.com/" },
         { "token_issuer", "CoPokBl" },
         { "token_audience", "Privileged Users" },
-        { "token_secret" , Guid.NewGuid().ToString() }
+        { "token_secret" , Guid.NewGuid().ToString() },
+        { "mysql_ip", "mysql.example.com" },
+        { "mysql_user", "coolperson" },
+        { "mysql_password", "myverysecurepassword" },
+        { "mysql_database", "serble" }
     };
     public static Dictionary<string, string>? Config;
     public static IStorageService? StorageService;

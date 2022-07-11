@@ -6,5 +6,9 @@
   "my_host": "https://theplacewherethisappisaccessable.com/",
   "token_issuer": "CoPokBl",
   "token_audience": "Privileged Users",
-  "token_secret": "74f384eb-0a1b-4067-bd1d-35c69feb36c3"
+  "token_secret": "74f384eb-0a1b-4067-bd1d-35c69feb36c3",
+  "mysql_ip": "mysql.example.com",
+  "mysql_user": "coolperson",
+  "mysql_password": "myverysecurepassword",
+  "mysql_database": "serble"
 }
