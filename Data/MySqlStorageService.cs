@@ -134,7 +134,6 @@ public class MySqlStorageService : IStorageService {
         reader.Close();
         
         cmd.CommandText = @"SELECT * FROM serblesite_user_authorized_apps WHERE userid=@id";
-        cmd.Parameters.AddWithValue("@id", userId);
         using MySqlDataReader reader2 = cmd.ExecuteReader();
         List<(string, string)> authedApps = new ();
         while (reader2.Read()) {
