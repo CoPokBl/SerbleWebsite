@@ -88,8 +88,9 @@ public static class Program {
         
         // Storage service
         try {
-            StorageService = Config["storage_service"] switch {
+            StorageService = Config["storage_service"].ToLower() switch {
                 "file" => new FileStorageService(),
+                "mysql" => new MySqlStorageService(),
                 _ => throw new Exception("Unknown storage service")
             };
         }
