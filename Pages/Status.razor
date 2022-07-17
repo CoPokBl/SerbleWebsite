@@ -1,0 +1,61 @@
+@page "/Status"
+@using SerbleWebsite.Data
+
+<h3 class="text-center">Serble Services</h3>
+<br>
+
+@if (Services == null) {
+        <p class="text-center">Getting Statuses Of Services...</p>
+}
+else {
+        @for (int i = 0,x = 0; i < Services.Length / 2 + 1; i++) {
+                <div class="row align-items-md-stretch" style="padding-left: 100px; padding-right: 100px">
+                        @for (int y = 0; y < 2; y++) {
+                                if (x > Services.Length - 1) {
+                                        continue;
+                                }
+                                Service service = Services[x];
+                                string classText = !service.GetStatus ? UncheckedClass : service.Online ? OnlineClass : OfflineClass;
+                                string icon = !service.GetStatus ? UncheckedIcon : service.Online ? OnlineIcon : OfflineIcon;
+                                string text = !service.GetStatus ? "Unchecked" : service.Online ? "Online" : "Offline";
+                                <div class="col-md-6 text-light">
+                                        <div class="h-100 p-5 bg-dark rounded-3" id="${service.name}">
+                                                <h2 class="service-heading">@service.Name</h2>
+                                                <p>
+                                                        @service.Description
+                                                </p>
+                                                <div class="" style="display: flex; gap: 5px;">
+                                                        <div class="status-circle @icon" style="width: 12px; height: 12px; border-radius: 12px; margin-top: 5px"></div>
+                                                        <p class="status-text @classText">@text</p>
+                                                </div>
+                                                <p><a class="btn btn-outline-light" href="@service.ButtonUrl" role="button">@service.ButtonText &raquo;</a></p>
+                                        </div>
+                                </div>
+                                x++;
+                        }
+                </div><br>
+        }
+}
+
+
+
+@code {
+        private const string OnlineClass = "text-success";
+        private const string OfflineClass = "text-danger";
+        private const string ErrorClass = "text-warning";
+        private const string UncheckedClass = "text-info";
+
+        const string OnlineIcon = "bg-success";
+        const string OfflineIcon = "bg-danger";
+        const string ErrorIcon = "bg-warning";
+        const string UncheckedIcon = "bg-info";
+
+        private Service[]? Services { get; set; }
+        
+        protected override async void OnAfterRender(bool firstRender) {
+                if (!firstRender) return;
+                Services = await ServicesStatusService.GetServiceStatuses();
+                StateHasChanged();
+        }
+        
+}

@@ -1,0 +1,65 @@
+[
+  {
+    "Name": "Homework Tracker",
+    "Description": "My Homework Tracker project is an API made in ASP.NET that allows users to track their homework. There are multiple clients that I made for it, you can view them in the repos page, just click the button below.",
+    "ButtonText": "GitHub",
+    "ButtonUrl": "https://github.com/CoPokBl/HomeworkTrackerServer",
+    "Url": "https://homeworktrack.serble.net:9897/api",
+    "GetStatus": true,
+    "DisplayResponse": true
+  },
+  {
+    "Name": "Link Shortener",
+    "Description": "This is a very awesome link shortener that allows you to shorten any link with a custom name for free. It's also a very simple to use, just click a button and boom, you have a link! You can check it out with the button below. I made it in JavaScript using Cloudflare's free workers and key value storage.",
+    "ButtonText": "Website",
+    "ButtonUrl": "https://link.serble.net",
+    "Url": "https://link.serble.net/",
+    "GetStatus": true,
+    "DisplayResponse": false
+  },
+  {
+    "Name": "Searx Instance",
+    "Description": "I made a Searx instance for me and anyone who wants to use it. Searx is a search engine that gives you complete privacy while still giving you accurate results by taking them from multiple other search engines. Go ahead and try it out by clicking the button below.",
+    "ButtonText": "Website",
+    "ButtonUrl": "https://search.serble.net/",
+    "Url": "https://search.serble.net/",
+    "GetStatus": true,
+    "DisplayResponse": false
+  },
+  {
+    "Name": "File Host",
+    "Description": "Free file hosting for everyone. You can upload files and get a link to them. ",
+    "ButtonText": "Website",
+    "ButtonUrl": "https://files.serble.net/",
+    "Url": "https://files.serble.net/",
+    "GetStatus": true,
+    "DisplayResponse": false
+  },
+  {
+    "Name": "NextCloud",
+    "Description": "My public NextCloud service",
+    "ButtonText": "Website",
+    "ButtonUrl": "https://cloud.serble.net/",
+    "Url": "https://cloud.serble.net/",
+    "GetStatus": true,
+    "DisplayResponse": false
+  },
+  {
+    "Name": "MySQL",
+    "Description": "This is just the MySQL server powering all of these projects. Nothing special.",
+    "ButtonText": "Info",
+    "ButtonUrl": "https://www.mysql.com/",
+    "Url": "https://cloud.serble.net/",
+    "GetStatus": false,
+    "DisplayResponse": false
+  },
+  {
+    "Name": "Emby",
+    "Description": "Media Server",
+    "ButtonText": "Website",
+    "ButtonUrl": "https://media.serble.net/",
+    "Url": "https://media.serble.net/",
+    "GetStatus": true,
+    "DisplayResponse": false
+  }
+]

@@ -140,6 +140,17 @@ public static class Program {
             Logger.Error("Failed to initialize services");
             return 1;
         }
+        
+        // Init services
+        Logger.Info("Initializing services...");
+        try {
+            ServicesStatusService.Init();
+        }
+        catch (Exception e) {
+            Logger.Error("Failed to initialize services");
+            Logger.Error(e);
+            return 1;
+        }
 
         WebApplication app;
         try {
