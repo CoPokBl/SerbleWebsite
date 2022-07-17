@@ -6,11 +6,11 @@ using SerbleWebsite.Data.Schemas;
 namespace SerbleWebsite.api.v1; 
 
 [ApiController]
-[Route("api/v1/account/{userid}")]
+[Route("api/v1/account/")]
 public class AccountController : Controller {
     
     [HttpGet]
-    public ActionResult<SanitisedUser> Index(string userid, [FromQuery] string appId, [FromHeader] AuthorizationHeader? authorizationHeader) {
+    public ActionResult<SanitisedUser> Index([FromQuery] string appId, [FromHeader] AuthorizationHeader? authorizationHeader) {
         // Check if the app has access to the user's account
         if (authorizationHeader == null) {
             Logger.Debug("No authorization header provided");
