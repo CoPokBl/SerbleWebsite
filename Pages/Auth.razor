@@ -309,6 +309,7 @@
         }
         newUri = QueryHelpers.AddQueryString(newUri, "authorized", authorize ? "true" : "false");
         newUri = QueryHelpers.AddQueryString(newUri, "state", _queryValues["state"]);
+        newUri = QueryHelpers.AddQueryString(newUri, "userid", _user!.Id);
         NavigationManager.NavigateTo(newUri);
     }
 
