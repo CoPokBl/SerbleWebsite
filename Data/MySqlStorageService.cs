@@ -28,7 +28,6 @@ public class MySqlStorageService : IStorageService {
         await _connection!.CloseAsync();
         try {
             await _connection!.OpenAsync();
-            _connection.Open();
         }
         catch (MySqlException e) {
             Logger.Error("MySQL Reconnection Error Occured");
