@@ -11,6 +11,33 @@ public class MySqlStorageService : IStorageService {
     private MySqlConnection? _connection;  // MySQL Connection Object
     private string? _connectString;
     
+    private void CheckConnection() {
+        if (_connection == null) {
+            RepairConnection();
+            return;
+        }
+
+        if (!_connection.Ping()) {
+            RepairConnection();
+            return;
+        }
+    }
+    
+    private async void RepairConnection() {
+        Logger.Warn("Repairing MySQL Connection");
+        await _connection!.CloseAsync();
+        try {
+            await _connection!.OpenAsync();
+            _connection.Open();
+        }
+        catch (MySqlException e) {
+            Logger.Error("MySQL Reconnection Error Occured");
+            Logger.Error(e);
+            throw;
+        }
+        Logger.Info("MySQL Connection Repaired");
+    }
+    
     public void Init() {
         Logger.Info("Connecting to MySQL...");
         _connectString = $"server={Program.Config!["mysql_ip"]};" +
@@ -98,6 +125,7 @@ public class MySqlStorageService : IStorageService {
     }
 
     public void AddUser(User userDetails, out User newUser) {
+        CheckConnection();
         userDetails.Id = Guid.NewGuid().ToString();
         using MySqlCommand cmd = new MySqlCommand();
         cmd.Connection = _connection;
@@ -113,6 +141,7 @@ public class MySqlStorageService : IStorageService {
     }
 
     public void GetUser(string userId, out User? user) {
+        CheckConnection();
         using MySqlCommand cmd = new MySqlCommand();
         cmd.Connection = _connection;
         cmd.CommandText = @"SELECT * FROM serblesite_users WHERE id=@id";
@@ -145,6 +174,7 @@ public class MySqlStorageService : IStorageService {
     }
 
     public void UpdateUser(User userDetails) {
+        CheckConnection();
         using MySqlCommand cmd = new MySqlCommand();
         cmd.Connection = _connection;
         cmd.CommandText = @"UPDATE serblesite_users SET username=@username, email=@email, password=@password, permlevel=@permlevel, permstring=@permstring WHERE id=@id";
@@ -158,6 +188,7 @@ public class MySqlStorageService : IStorageService {
     }
 
     public void DeleteUser(string userId) {
+        CheckConnection();
         using MySqlCommand cmd = new MySqlCommand();
         cmd.Connection = _connection;
         cmd.CommandText = @"DELETE FROM serblesite_users WHERE id=@id";
@@ -166,6 +197,7 @@ public class MySqlStorageService : IStorageService {
     }
 
     public void GetUserFromName(string userName, out User? user) {
+        CheckConnection();
         using MySqlCommand cmd = new MySqlCommand();
         cmd.Connection = _connection;
         cmd.CommandText = @"SELECT * FROM serblesite_users WHERE username=@username";
@@ -199,6 +231,7 @@ public class MySqlStorageService : IStorageService {
     }
 
     public void AddOAuthApp(OAuthApp app) {
+        CheckConnection();
         using MySqlCommand cmd = new MySqlCommand();
         cmd.Connection = _connection;
         cmd.CommandText = @"INSERT INTO serblesite_apps(id, ownerid, name, description, clientsecret) VALUES(@id, @owner, @name, @description, @clientsecret)";
@@ -211,6 +244,7 @@ public class MySqlStorageService : IStorageService {
     }
 
     public void GetOAuthApp(string appId, out OAuthApp? app) {
+        CheckConnection();
         using MySqlCommand cmd = new MySqlCommand();
         cmd.Connection = _connection;
         cmd.CommandText = @"SELECT * FROM serblesite_apps WHERE id=@id";
@@ -231,6 +265,7 @@ public class MySqlStorageService : IStorageService {
     }
 
     public void UpdateOAuthApp(OAuthApp app) {
+        CheckConnection();
         using MySqlCommand cmd = new MySqlCommand();
         cmd.Connection = _connection;
         cmd.CommandText = @"UPDATE serblesite_apps SET name=@name, description=@description, clientsecret=@clientsecret, ownerid=@ownerid WHERE id=@id";
@@ -243,6 +278,7 @@ public class MySqlStorageService : IStorageService {
     }
 
     public void DeleteOAuthApp(string appId) {
+        CheckConnection();
         using MySqlCommand cmd = new MySqlCommand();
         cmd.Connection = _connection;
         cmd.CommandText = @"DELETE FROM serblesite_apps WHERE id=@id";
@@ -251,6 +287,7 @@ public class MySqlStorageService : IStorageService {
     }
 
     public void GetOAuthAppsFromUser(string userId, out OAuthApp[] apps) {
+        CheckConnection();
         using MySqlCommand cmd = new MySqlCommand();
         cmd.Connection = _connection;
         cmd.CommandText = @"SELECT * FROM serblesite_apps WHERE ownerid=@ownerid";
