@@ -17,10 +17,15 @@ public class MySqlStorageService : IStorageService {
             return;
         }
 
-        if (!_connection.Ping()) {
-            RepairConnection();
-            return;
+        try {
+            if (!_connection.Ping()) {
+                RepairConnection();
+            }
         }
+        catch (Exception) {
+            RepairConnection();
+        }
+        
     }
     
     private async void RepairConnection() {
@@ -68,15 +73,6 @@ public class MySqlStorageService : IStorageService {
         catch (Exception) {
             Logger.Error("Failed to close MySQL connection");
         }
-    }
-        
-    // The return value isn't used because this function is used as a way to detect invalid colours
-    private static Color ColorFromStr(string str) {
-        if (str == "-1.-1.-1") {
-            return Color.Empty;
-        }
-        string[] strs = str.Split(".");
-        return Color.FromArgb(255, Convert.ToInt32(strs[0]), Convert.ToInt32(strs[1]), Convert.ToInt32(strs[2]));
     }
 
     private void CreateTables() {
@@ -162,15 +158,15 @@ public class MySqlStorageService : IStorageService {
         
         reader.Close();
         
-        cmd.CommandText = @"SELECT * FROM serblesite_user_authorized_apps WHERE userid=@id";
-        using MySqlDataReader reader2 = cmd.ExecuteReader();
-        List<(string, string)> authedApps = new ();
-        while (reader2.Read()) {
-            authedApps.Add((reader2.GetString("appid"), reader2.GetString("appsecret")));
-        }
-        reader2.Close();
-        
-        user.AuthorizedApps = authedApps.ToArray();
+        // cmd.CommandText = @"SELECT * FROM serblesite_user_authorized_apps WHERE userid=@id";
+        // using MySqlDataReader reader2 = cmd.ExecuteReader();
+        // List<(string, string)> authedApps = new ();
+        // while (reader2.Read()) {
+        //     authedApps.Add((reader2.GetString("appid"), reader2.GetString("appsecret")));
+        // }
+        // reader2.Close();
+        //
+        // user.AuthorizedApps = authedApps.ToArray();
     }
 
     public void UpdateUser(User userDetails) {
@@ -193,6 +189,10 @@ public class MySqlStorageService : IStorageService {
         cmd.Connection = _connection;
         cmd.CommandText = @"DELETE FROM serblesite_users WHERE id=@id";
         cmd.Parameters.AddWithValue("@id", userId);
+        cmd.ExecuteNonQuery();
+        
+        // Delete all the authed app data
+        cmd.CommandText = @"DELETE FROM serblesite_user_authorized_apps WHERE userid=@id";
         cmd.ExecuteNonQuery();
     }
 
@@ -218,16 +218,54 @@ public class MySqlStorageService : IStorageService {
         
         reader.Close();
         
+        // cmd.CommandText = @"SELECT * FROM serblesite_user_authorized_apps WHERE userid=@id";
+        // cmd.Parameters.AddWithValue("@id", user.Id);
+        // using MySqlDataReader reader2 = cmd.ExecuteReader();
+        // List<(string, string)> authedApps = new ();
+        // while (reader2.Read()) {
+        //     authedApps.Add((reader2.GetString("appid"), reader2.GetString("appsecret")));
+        // }
+        // reader2.Close();
+        //
+        // user.AuthorizedApps = authedApps.ToArray();
+    }
+
+    public void AddAuthorizedApp(string userId, string appId, string appSecret) {
+        CheckConnection();
+        using MySqlCommand cmd = new MySqlCommand();
+        cmd.Connection = _connection;
+        cmd.CommandText = @"INSERT INTO serblesite_user_authorized_apps(userid, appid, appsecret) VALUES(@userid, @appid, @appsecret)";
+        cmd.Parameters.AddWithValue("@userid", userId);
+        cmd.Parameters.AddWithValue("@appid", appId);
+        cmd.Parameters.AddWithValue("@appsecret", appSecret);
+        cmd.ExecuteNonQuery();
+    }
+
+    public void GetAuthorizedApps(string userId, out (string, string)[] apps) {
+        CheckConnection();
+        using MySqlCommand cmd = new MySqlCommand();
+        cmd.Connection = _connection;
         cmd.CommandText = @"SELECT * FROM serblesite_user_authorized_apps WHERE userid=@id";
-        cmd.Parameters.AddWithValue("@id", user.Id);
+        cmd.Parameters.AddWithValue("@id", userId);
         using MySqlDataReader reader2 = cmd.ExecuteReader();
+        
         List<(string, string)> authedApps = new ();
         while (reader2.Read()) {
             authedApps.Add((reader2.GetString("appid"), reader2.GetString("appsecret")));
         }
         reader2.Close();
         
-        user.AuthorizedApps = authedApps.ToArray();
+        apps = authedApps.ToArray();
+    }
+
+    public void DeleteAuthorizedApp(string userId, string appId) {
+        CheckConnection();
+        using MySqlCommand cmd = new MySqlCommand();
+        cmd.Connection = _connection;
+        cmd.CommandText = @"DELETE FROM serblesite_user_authorized_apps WHERE userid=@userid AND appid=@appid";
+        cmd.Parameters.AddWithValue("@userid", userId);
+        cmd.Parameters.AddWithValue("@appid", appId);
+        cmd.ExecuteNonQuery();
     }
 
     public void AddOAuthApp(OAuthApp app) {

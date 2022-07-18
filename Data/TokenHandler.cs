@@ -39,8 +39,9 @@ public class TokenHandler {
         return tokenHandler.WriteToken(token);
     }
         
-    public bool ValidateCurrentToken(string? token, out Dictionary<string, string>? claims, OAuthApp? app = null) {
+    public bool ValidateCurrentToken(string? token, out Dictionary<string, string>? claims, out string failMsg, OAuthApp? app = null) {
         claims = null;
+        failMsg = "Error";
         string mySecret = _config["token_secret"];
         SymmetricSecurityKey mySecurityKey = new(Encoding.ASCII.GetBytes(mySecret));
         JwtSecurityTokenHandler tokenHandler = new();
@@ -55,10 +56,14 @@ public class TokenHandler {
             }, out SecurityToken _);
         }
         catch (Exception) {
+            failMsg = "Validator failed";
             return false;
         }
         JwtSecurityTokenHandler tokenHandler2 = new();
-        if (tokenHandler2.ReadToken(token) is not JwtSecurityToken securityToken) return false;
+        if (tokenHandler2.ReadToken(token) is not JwtSecurityToken securityToken) {
+            failMsg = "Token was not a JWT";
+            return false;
+        }
 
         // Put all claims in a dictionary
         if (securityToken.Claims == null) return false;
@@ -66,14 +71,13 @@ public class TokenHandler {
 
         if (app != null) {
             if (claims["client_secret"] != app.ClientSecret) {
+                failMsg = "Client secret did not match";
                 return false;
             }
 
-            if (!claims.ContainsKey("app_secret")) {
-                return false;
-            }
             Program.StorageService!.GetUser(claims["id"], out User? user);
             if (user == null) {
+                failMsg = "User was not found";
                 return false;
             }
 
@@ -83,24 +87,27 @@ public class TokenHandler {
             }
             catch (InvalidOperationException) {
                 // Doesn't exist
+                failMsg = "App was not found";
                 return false;
             }
-            if (claims["app_secret"] != appSecret) {
-                return false;
-            }
+
         }
         else {
             if (claims.ContainsKey("client_secret")) {
                 // It's an app token but it's being checked as a user token
+                failMsg = "Token was an app token but was checked as a user token";
                 return false;
             }
         }
         
         // If any of the values from TokenClaims are not present in the claims dictionary, return false
         foreach (string claim in TokenClaims.Claims) {
-            if (!claims.ContainsKey(claim)) return false;
+            if (claims.ContainsKey(claim)) continue;
+            failMsg = $"The claim '{claim}' was not included in the token";
+            return false;
         }
-
+        
+        failMsg = "Successfully validated token";
         return true;
     }
         

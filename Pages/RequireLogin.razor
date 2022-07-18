@@ -22,7 +22,7 @@
             NotLoggedIn();
         }
         
-        if (!new TokenHandler(Program.Config!).ValidateCurrentToken(tokenCookie, out Dictionary<string, string>? claims)) {
+        if (!new TokenHandler(Program.Config!).ValidateCurrentToken(tokenCookie, out Dictionary<string, string>? claims, out _)) {
             NotLoggedIn();
             return;
         }

@@ -59,7 +59,7 @@ else {
       List<(string, string)> authedAppsList = _user.AuthorizedApps.ToList();
       authedAppsList.RemoveAll(x => x.Item1 == app);
       _user.AuthorizedApps = authedAppsList.ToArray();
-      Program.StorageService!.UpdateUser(_user);
+      _user.RegisterChanges();
       ReloadText();
    }
    

@@ -36,8 +36,8 @@ public class AuthorizationHeader {
         }
         
         TokenHandler tokenHandler = new TokenHandler(Program.Config!);
-        if (!tokenHandler.ValidateCurrentToken(parts[1], out Dictionary<string, string>? claims, app)) {
-            msg = "Token validation failed";
+        if (!tokenHandler.ValidateCurrentToken(parts[1], out Dictionary<string, string>? claims, out string failMsg, app)) {
+            msg = "Token validation failed: " + failMsg;
             return false;
         }
         
