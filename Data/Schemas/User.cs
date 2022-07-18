@@ -43,7 +43,6 @@ public class User {
         PasswordHash = "";
         PermLevel = 0;
         PermString = "";
-        AuthorizedApps = Array.Empty<(string, string)>();
         _originalAuthedApps = Array.Empty<(string, string)>();
     }
     

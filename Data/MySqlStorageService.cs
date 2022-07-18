@@ -17,10 +17,15 @@ public class MySqlStorageService : IStorageService {
             return;
         }
 
-        if (!_connection.Ping()) {
-            RepairConnection();
-            return;
+        try {
+            if (!_connection.Ping()) {
+                RepairConnection();
+            }
         }
+        catch (Exception) {
+            RepairConnection();
+        }
+        
     }
     
     private async void RepairConnection() {
