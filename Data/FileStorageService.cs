@@ -118,6 +118,18 @@ public class FileStorageService : IStorageService {
         user = _users.FirstOrDefault(u => u.Username == userName);
     }
 
+    public void AddAuthorizedApp(string userId, string appId, string appSecret) {
+        throw new NotImplementedException();
+    }
+
+    public void GetAuthorizedApps(string userId, out (string, string)[] apps) {
+        throw new NotImplementedException();
+    }
+
+    public void DeleteAuthorizedApp(string userId, string appId) {
+        throw new NotImplementedException();
+    }
+
     public void AddOAuthApp(OAuthApp app) {
         _apps.Add(app);
     }

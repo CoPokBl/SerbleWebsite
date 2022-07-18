@@ -305,7 +305,7 @@
             }
             newAuthed.Add((_app!.Id, appSecret));
             _user.AuthorizedApps = newAuthed.ToArray();
-            Program.StorageService!.UpdateUser(_user);
+            _user.RegisterChanges();
         }
         newUri = QueryHelpers.AddQueryString(newUri, "authorized", authorize ? "true" : "false");
         newUri = QueryHelpers.AddQueryString(newUri, "state", _queryValues["state"]);
