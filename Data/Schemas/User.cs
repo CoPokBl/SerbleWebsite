@@ -1,3 +1,5 @@
+using GeneralPurposeLib;
+
 namespace SerbleWebsite.Data.Schemas; 
 
 public class User {
@@ -14,12 +16,12 @@ public class User {
     // (appId, appSecret)
     public (string, string)[] AuthorizedApps {
         get {
-            if (_obtainedAuthedApps == null) {
-                Program.StorageService!.GetAuthorizedApps(Id, out _obtainedAuthedApps);
-            }
-            return _obtainedAuthedApps;
+            if (_obtainedAuthedApps != null) return _obtainedAuthedApps;
+            ObtainAuthorizedApps();
+            return _obtainedAuthedApps!;
         }
         set {
+            if (_obtainedAuthedApps == null) ObtainAuthorizedApps();
             if (!_hasAuthedAppsBeenInitialized) {
                 _originalAuthedApps = value;
                 _hasAuthedAppsBeenInitialized = true;
@@ -27,7 +29,7 @@ public class User {
             _obtainedAuthedApps = value;
         }
     }
-    
+
     private (string, string)[]? _obtainedAuthedApps;
     private (string, string)[] _originalAuthedApps;
     private bool _hasAuthedAppsBeenInitialized;
@@ -44,17 +46,25 @@ public class User {
         AuthorizedApps = Array.Empty<(string, string)>();
         _originalAuthedApps = Array.Empty<(string, string)>();
     }
+    
+    private void ObtainAuthorizedApps() {
+        Program.StorageService!.GetAuthorizedApps(Id, out _obtainedAuthedApps);
+        Logger.Debug($"Obtained Authorized Apps for {Username}");
+    }
 
     public void RegisterChanges() {
+        Logger.Debug($"Registering changes to user: '{Username}' with id: '{Id}'");
+        
         Program.StorageService!.UpdateUser(this);
 
         if (!_hasAuthedAppsBeenInitialized || _obtainedAuthedApps == null) {
+            Logger.Debug("No changes to authorized apps were made");
             return;
         }
         
         // Find out which apps were added/removed
-        IEnumerable<(string, string)> addedApps = _obtainedAuthedApps.Except(_originalAuthedApps);
-        IEnumerable<(string, string)> removedApps = _originalAuthedApps.Except(_obtainedAuthedApps);
+        (string, string)[] addedApps = _obtainedAuthedApps.Except(_originalAuthedApps).ToArray();
+        (string, string)[] removedApps = _originalAuthedApps.Except(_obtainedAuthedApps).ToArray();
         
         // Add the new apps
         foreach ((string, string) app in addedApps) {
@@ -65,6 +75,8 @@ public class User {
         foreach ((string, string) app in removedApps) {
             Program.StorageService.DeleteAuthorizedApp(Id, app.Item1);
         }
+        
+        Logger.Debug("Added/Removed authed apps: " + addedApps.Length + "/" + removedApps.Length);
     }
     
 }
