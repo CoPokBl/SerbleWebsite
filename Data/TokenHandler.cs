@@ -74,11 +74,13 @@ public class TokenHandler {
                 failMsg = "Client secret did not match";
                 return false;
             }
-
-            if (!claims.ContainsKey("app_secret")) {
-                failMsg = "App secret was not included in the token";
-                return false;
-            }
+            
+            // Wtf is this?
+            // if (!claims.ContainsKey("app_secret")) {
+            //     failMsg = "App secret was not included in the token";
+            //     return false;
+            // }
+            
             Program.StorageService!.GetUser(claims["id"], out User? user);
             if (user == null) {
                 failMsg = "User was not found";
