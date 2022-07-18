@@ -1,5 +1,6 @@
 using GeneralPurposeLib;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 using SerbleWebsite.Data;
 using SerbleWebsite.Data.Schemas;
 
@@ -19,6 +20,13 @@ public class AccountController : Controller {
 
         if (!authorizationHeader.Check(appId, out string[]? scopes, out User? user, out string? msg)) {
             Logger.Debug("Check failed: " + msg);
+            
+            // Log all headers
+            Logger.Debug("Headers:");
+            foreach (KeyValuePair<string, StringValues> header in Request.Headers) {
+                Logger.Debug($"{header.Key}: {header.Value}");
+            }
+            
             return Unauthorized();
         }
 
