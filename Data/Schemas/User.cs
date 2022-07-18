@@ -22,17 +22,12 @@ public class User {
         }
         set {
             if (_obtainedAuthedApps == null) ObtainAuthorizedApps();
-            if (!_hasAuthedAppsBeenInitialized) {
-                _originalAuthedApps = value;
-                _hasAuthedAppsBeenInitialized = true;
-            }
             _obtainedAuthedApps = value;
         }
     }
 
     private (string, string)[]? _obtainedAuthedApps;
-    private (string, string)[] _originalAuthedApps;
-    private bool _hasAuthedAppsBeenInitialized;
+    private (string, string)[]? _originalAuthedApps;
 
     public IEnumerable<string> AuthorizedAppIds => AuthorizedApps.Select(x => x.Item1).ToArray();
     
@@ -47,7 +42,8 @@ public class User {
     }
     
     private void ObtainAuthorizedApps() {
-        Program.StorageService!.GetAuthorizedApps(Id, out _obtainedAuthedApps);
+        Program.StorageService!.GetAuthorizedApps(Id, out _originalAuthedApps);
+        _obtainedAuthedApps = _originalAuthedApps;
         Logger.Debug($"Obtained Authorized Apps for {Username}");
     }
 
@@ -56,7 +52,7 @@ public class User {
         
         Program.StorageService!.UpdateUser(this);
 
-        if (!_hasAuthedAppsBeenInitialized || _obtainedAuthedApps == null) {
+        if (_originalAuthedApps == null || _obtainedAuthedApps == null) {
             Logger.Debug("No changes to authorized apps were made");
             return;
         }
