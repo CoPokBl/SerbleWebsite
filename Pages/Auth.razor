@@ -173,7 +173,7 @@
         if (token == "") {
             return;
         }
-        if (!new TokenHandler(Program.Config!).ValidateCurrentToken(token, out Dictionary<string, string>? claims)) {
+        if (!new TokenHandler(Program.Config!).ValidateCurrentToken(token, out Dictionary<string, string>? claims, out _)) {
             return;
         }
         if (claims == null) {

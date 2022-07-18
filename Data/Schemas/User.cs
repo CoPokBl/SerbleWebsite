@@ -53,8 +53,8 @@ public class User {
         }
         
         // Find out which apps were added/removed
-        var addedApps = _obtainedAuthedApps.Except(_originalAuthedApps);
-        var removedApps = _originalAuthedApps.Except(_obtainedAuthedApps);
+        IEnumerable<(string, string)> addedApps = _obtainedAuthedApps.Except(_originalAuthedApps);
+        IEnumerable<(string, string)> removedApps = _originalAuthedApps.Except(_obtainedAuthedApps);
         
         // Add the new apps
         foreach ((string, string) app in addedApps) {
