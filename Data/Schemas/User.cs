@@ -61,16 +61,16 @@ public class User {
         AuthorizedApp[] addedApps = _obtainedAuthedApps.Except(_originalAuthedApps).ToArray();
         AuthorizedApp[] removedApps = _originalAuthedApps.Except(_obtainedAuthedApps).ToArray();
         
-        // Add the new apps
-        foreach (AuthorizedApp app in addedApps) {
-            Program.StorageService.AddAuthorizedApp(Id, app);
-        }
-        
         // Remove the removed apps
         foreach (AuthorizedApp app in removedApps) {
             Program.StorageService.DeleteAuthorizedApp(Id, app.AppId);
         }
         
+        // Add the new apps
+        foreach (AuthorizedApp app in addedApps) {
+            Program.StorageService.AddAuthorizedApp(Id, app);
+        }
+
         Logger.Debug("Added/Removed authed apps: " + addedApps.Length + "/" + removedApps.Length);
     }
     
