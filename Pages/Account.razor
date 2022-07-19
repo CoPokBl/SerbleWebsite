@@ -56,8 +56,8 @@ else {
    
    private void RevokeApp(string app) {
       if (_user == null) return;
-      List<(string, string)> authedAppsList = _user.AuthorizedApps.ToList();
-      authedAppsList.RemoveAll(x => x.Item1 == app);
+      List<AuthorizedApp> authedAppsList = _user.AuthorizedApps.ToList();
+      authedAppsList.RemoveAll(x => x.AppId == app);
       _user.AuthorizedApps = authedAppsList.ToArray();
       _user.RegisterChanges();
       ReloadText();

@@ -13,8 +13,8 @@ public class User {
     public int PermLevel { get; set; }
     public string PermString { get; set; }
     
-    // (appId, appSecret)
-    public (string, string)[] AuthorizedApps {
+    // (appId, scopes)
+    public AuthorizedApp[] AuthorizedApps {
         get {
             if (_obtainedAuthedApps != null) return _obtainedAuthedApps;
             ObtainAuthorizedApps();
@@ -26,10 +26,10 @@ public class User {
         }
     }
 
-    private (string, string)[]? _obtainedAuthedApps;
-    private (string, string)[]? _originalAuthedApps;
+    private AuthorizedApp[]? _obtainedAuthedApps;
+    private AuthorizedApp[]? _originalAuthedApps;
 
-    public IEnumerable<string> AuthorizedAppIds => AuthorizedApps.Select(x => x.Item1).ToArray();
+    public IEnumerable<string> AuthorizedAppIds => AuthorizedApps.Select(x => x.AppId).ToArray();
     
     public User() {
         Id = "";
@@ -38,7 +38,7 @@ public class User {
         PasswordHash = "";
         PermLevel = 0;
         PermString = "";
-        _originalAuthedApps = Array.Empty<(string, string)>();
+        _originalAuthedApps = Array.Empty<AuthorizedApp>();
     }
     
     private void ObtainAuthorizedApps() {
@@ -58,17 +58,17 @@ public class User {
         }
         
         // Find out which apps were added/removed
-        (string, string)[] addedApps = _obtainedAuthedApps.Except(_originalAuthedApps).ToArray();
-        (string, string)[] removedApps = _originalAuthedApps.Except(_obtainedAuthedApps).ToArray();
+        AuthorizedApp[] addedApps = _obtainedAuthedApps.Except(_originalAuthedApps).ToArray();
+        AuthorizedApp[] removedApps = _originalAuthedApps.Except(_obtainedAuthedApps).ToArray();
         
         // Add the new apps
-        foreach ((string, string) app in addedApps) {
-            Program.StorageService.AddAuthorizedApp(Id, app.Item1, app.Item2);
+        foreach (AuthorizedApp app in addedApps) {
+            Program.StorageService.AddAuthorizedApp(Id, app);
         }
         
         // Remove the removed apps
-        foreach ((string, string) app in removedApps) {
-            Program.StorageService.DeleteAuthorizedApp(Id, app.Item1);
+        foreach (AuthorizedApp app in removedApps) {
+            Program.StorageService.DeleteAuthorizedApp(Id, app.AppId);
         }
         
         Logger.Debug("Added/Removed authed apps: " + addedApps.Length + "/" + removedApps.Length);

@@ -5,6 +5,7 @@ namespace SerbleWebsite.Data.Schemas;
 public class AuthorizationHeader {
     
     [FromHeader]
+    // Format: "SECRET USERID"
     public string SerbleAuth { get; set; }
 
     public bool Check(string appId, out string[]? scopes, out User? user, out string? msg) {
@@ -22,6 +23,8 @@ public class AuthorizationHeader {
             msg = "Header is not in the correct format";
             return false;
         }
+        string secret = parts[0];
+        string userId = parts[1];
 
         // Find app
         Program.StorageService!.GetOAuthApp(appId, out OAuthApp? app);
@@ -29,20 +32,29 @@ public class AuthorizationHeader {
             msg = "App null";
             return false;
         }
-        
-        TokenHandler tokenHandler = new TokenHandler(Program.Config!);
-        if (!tokenHandler.ValidateCurrentToken(parts[1], out Dictionary<string, string>? claims, out string failMsg, app)) {
-            msg = "Token validation failed: " + failMsg;
-            return false;
-        }
 
-        if (app.ClientSecret != parts[0]) {
+        if (app.ClientSecret != secret) {
             msg = "Client secret is not correct";
             return false;
         }
         
-        scopes = ScopeHandler.StringToListOfScopeIds(claims!["scope"]);
-        Program.StorageService.GetUser(claims["id"], out user);
+        // Check if app is authorized for user
+        Program.StorageService.GetUser(userId, out user);
+        if (user == null) {
+            msg = "User not found";
+            return false;
+        }
+
+        if (!user.AuthorizedAppIds.Contains(appId)) {
+            msg = "App unauthorized for user";
+            return false;
+        }
+        
+        scopes = ScopeHandler.StringToListOfScopeIds(
+            user.AuthorizedApps
+                .Where(appObj => appObj.AppId == appId)
+                .Select(appObj2 => appObj2.Scopes)
+                .First());
 
         msg = "Check success";
         return true;

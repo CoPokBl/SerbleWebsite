@@ -289,21 +289,15 @@
                 _queryValues!["scope"]
                     .First()
                     .Split(' ')));
-            string token = new TokenHandler(Program.Config!).GenerateToken(new Dictionary<string, string> {
-                { "scope", scopeString },
-                { "id", _user!.Id },
-                { "app_secret", appSecret }
-            }, _app);
-            newUri = QueryHelpers.AddQueryString(newUri, "token", token);
-            
+
             // Add app as authorized app
-            List<(string, string)> newAuthed = _user.AuthorizedApps.ToList();
+            List<AuthorizedApp> newAuthed = _user!.AuthorizedApps.ToList();
             if (_appRequestAuth) {
                 // Remove app as authorized app
-                (string, string) entry = newAuthed.First(e => e.Item1 == _app!.Id);
+                AuthorizedApp entry = newAuthed.First(e => e.AppId == _app!.Id);
                 newAuthed.Remove(entry);
             }
-            newAuthed.Add((_app!.Id, appSecret));
+            newAuthed.Add(new AuthorizedApp(_app!.Id, scopeString));
             _user.AuthorizedApps = newAuthed.ToArray();
             _user.RegisterChanges();
         }

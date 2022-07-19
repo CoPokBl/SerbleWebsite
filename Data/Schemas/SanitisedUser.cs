@@ -9,7 +9,7 @@ public class SanitisedUser {
     // 0=Disabled Account 1=Normal, 2=Admin
     public int? PermLevel { get; set; }
     public string? PermString { get; set; }
-    public string[]? AuthorizedApps { get; set; }
+    public AuthorizedApp[]? AuthorizedApps { get; set; }
 
     public SanitisedUser(User user, string scopeString) {
         string[] scopes = ScopeHandler.StringToListOfScopeIds(scopeString);
@@ -23,7 +23,7 @@ public class SanitisedUser {
         }
 
         if (scopes.Contains("apps_control") || hasFullAccess) {
-            AuthorizedApps = user.AuthorizedApps.Select(a => a.Item1).ToArray();
+            AuthorizedApps = user.AuthorizedApps;
         }
     }
 
