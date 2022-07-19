@@ -12,8 +12,8 @@ public interface IStorageService {
     public void DeleteUser(string userId);
     public void GetUserFromName(string userName, out User? user);
 
-    public void AddAuthorizedApp(string userId, string appId, string appSecret);
-    public void GetAuthorizedApps(string userId, out (string, string)[] apps);
+    public void AddAuthorizedApp(string userId, AuthorizedApp app);
+    public void GetAuthorizedApps(string userId, out AuthorizedApp[] apps);
     public void DeleteAuthorizedApp(string userId, string appId);
 
     public void AddOAuthApp(OAuthApp app);

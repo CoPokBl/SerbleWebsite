@@ -246,23 +246,24 @@
         // App authentication
         // Check if they are already authorized and they didn't send a request for more perms
         bool alreadyAuthorized = _user!.AuthorizedAppIds.Contains(_app!.Id);
-        if (_queryValues!.ContainsKey("reauth") && _queryValues["reauth"] == "true") {
+        if (_user.AuthorizedApps.Any(authedApp => authedApp.AppId == _app!.Id) && 
+            _user.AuthorizedApps
+                .First(authedApp => authedApp.AppId == _app!.Id).Scopes 
+                != ScopeHandler
+                    .ListOfScopeIdsToString(ScopeHandler
+                        .FilterInvalidScopes(
+                            _queryValues!["scope"]
+                                .First()
+                                .Split(' ')))) {
             alreadyAuthorized = false;
             _appRequestAuth = true;
         }
         if (alreadyAuthorized) {
             // They are already authorized
             string newUri = _queryValues!["redirect_uri"];
-            string appToken = new TokenHandler(Program.Config!).GenerateToken(new Dictionary<string, string> {
-                { "scope", ScopeHandler.ListOfScopeIdsToString(ScopeHandler.FilterInvalidScopes(
-                    _queryValues!["scope"]
-                        .First()
-                        .Split(' '))) },
-                { "id", _user!.Id }
-            }, _app);
-            newUri = QueryHelpers.AddQueryString(newUri, "token", appToken);
             newUri = QueryHelpers.AddQueryString(newUri, "authorized", "true");
             newUri = QueryHelpers.AddQueryString(newUri, "state", _queryValues["state"]);
+            newUri = QueryHelpers.AddQueryString(newUri, "userid", _user!.Id);
             NavigationManager.NavigateTo(newUri);
             return;
         }
@@ -289,21 +290,15 @@
                 _queryValues!["scope"]
                     .First()
                     .Split(' ')));
-            string token = new TokenHandler(Program.Config!).GenerateToken(new Dictionary<string, string> {
-                { "scope", scopeString },
-                { "id", _user!.Id },
-                { "app_secret", appSecret }
-            }, _app);
-            newUri = QueryHelpers.AddQueryString(newUri, "token", token);
-            
+
             // Add app as authorized app
-            List<(string, string)> newAuthed = _user.AuthorizedApps.ToList();
+            List<AuthorizedApp> newAuthed = _user!.AuthorizedApps.ToList();
             if (_appRequestAuth) {
                 // Remove app as authorized app
-                (string, string) entry = newAuthed.First(e => e.Item1 == _app!.Id);
+                AuthorizedApp entry = newAuthed.First(e => e.AppId == _app!.Id);
                 newAuthed.Remove(entry);
             }
-            newAuthed.Add((_app!.Id, appSecret));
+            newAuthed.Add(new AuthorizedApp(_app!.Id, scopeString));
             _user.AuthorizedApps = newAuthed.ToArray();
             _user.RegisterChanges();
         }

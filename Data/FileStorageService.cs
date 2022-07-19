@@ -15,10 +15,13 @@ public class FileStorageService : IStorageService {
     
     private List<User> _users = new();
     private List<OAuthApp> _apps = new();
+    // (userid, appid, scopes)
+    private List<(string, AuthorizedApp)> _authorizations = new();
 
     public void Init() {
         _users = new List<User>();
         _apps = new List<OAuthApp>();
+        _authorizations = new List<(string, AuthorizedApp)>();
         
         // Add dummy data
         _users.Add(new User {
@@ -36,9 +39,10 @@ public class FileStorageService : IStorageService {
         Logger.Info("Loading data from data.json...");
         if (File.Exists("data.json")) {
             string jsonData = File.ReadAllText("data.json");
-            (List<User>, List<OAuthApp>) data = JsonConvert.DeserializeObject<(List<User>, List<OAuthApp>)>(jsonData);
+            (List<User>, List<OAuthApp>, List<(string, AuthorizedApp)>) data = JsonConvert.DeserializeObject<(List<User>, List<OAuthApp>, List<(string, AuthorizedApp)>)>(jsonData);
             _users = data.Item1;
             _apps = data.Item2;
+            _authorizations = data.Item3;
             Logger.Info("Loaded data from data.json");
         } else {
             Logger.Info("No data.json found, creating new data.json");
@@ -56,7 +60,7 @@ public class FileStorageService : IStorageService {
             string errorText = "Unspecified error";
             Logger.Info("Saving data to data.json...");
             try {
-                File.WriteAllText("data.json", JsonConvert.SerializeObject((_users, _apps)));
+                File.WriteAllText("data.json", JsonConvert.SerializeObject((_users, _apps, _authorizations)));
                 Logger.Info("Saved data to data.json");
             }
             catch (JsonException e) {
@@ -118,16 +122,16 @@ public class FileStorageService : IStorageService {
         user = _users.FirstOrDefault(u => u.Username == userName);
     }
 
-    public void AddAuthorizedApp(string userId, string appId, string appSecret) {
-        throw new NotImplementedException();
+    public void AddAuthorizedApp(string userId, AuthorizedApp app) {
+        _authorizations.Add((userId, app));
     }
 
-    public void GetAuthorizedApps(string userId, out (string, string)[] apps) {
-        throw new NotImplementedException();
+    public void GetAuthorizedApps(string userId, out AuthorizedApp[] apps) {
+        apps = _authorizations.Where(a => a.Item1 == userId).Select(a => a.Item2).ToArray();
     }
 
     public void DeleteAuthorizedApp(string userId, string appId) {
-        throw new NotImplementedException();
+        _authorizations.RemoveAll(a => a.Item1 == userId && a.Item2.AppId == appId);
     }
 
     public void AddOAuthApp(OAuthApp app) {

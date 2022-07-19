@@ -1,5 +1,4 @@
 using System.Data;
-using System.Drawing;
 using GeneralPurposeLib;
 using MySql.Data.MySqlClient;
 using SerbleWebsite.Data.Schemas;
@@ -85,8 +84,8 @@ public class MySqlStorageService : IStorageService {
                                 permstring VARCHAR(64))");
         SendMySqlStatement(@"CREATE TABLE IF NOT EXISTS serblesite_user_authorized_apps(
                                 userid VARCHAR(64),
-                                appid VARCHAR(255), 
-                                appsecret VARCHAR(64))");
+                                appid VARCHAR(64), 
+                                scopes VARCHAR(128))");
         SendMySqlStatement(@"CREATE TABLE IF NOT EXISTS serblesite_apps(" +
                            "ownerid VARCHAR(64), " +
                            "id VARCHAR(64), " +
@@ -157,16 +156,6 @@ public class MySqlStorageService : IStorageService {
         };
         
         reader.Close();
-        
-        // cmd.CommandText = @"SELECT * FROM serblesite_user_authorized_apps WHERE userid=@id";
-        // using MySqlDataReader reader2 = cmd.ExecuteReader();
-        // List<(string, string)> authedApps = new ();
-        // while (reader2.Read()) {
-        //     authedApps.Add((reader2.GetString("appid"), reader2.GetString("appsecret")));
-        // }
-        // reader2.Close();
-        //
-        // user.AuthorizedApps = authedApps.ToArray();
     }
 
     public void UpdateUser(User userDetails) {
@@ -217,31 +206,20 @@ public class MySqlStorageService : IStorageService {
         };
         
         reader.Close();
-        
-        // cmd.CommandText = @"SELECT * FROM serblesite_user_authorized_apps WHERE userid=@id";
-        // cmd.Parameters.AddWithValue("@id", user.Id);
-        // using MySqlDataReader reader2 = cmd.ExecuteReader();
-        // List<(string, string)> authedApps = new ();
-        // while (reader2.Read()) {
-        //     authedApps.Add((reader2.GetString("appid"), reader2.GetString("appsecret")));
-        // }
-        // reader2.Close();
-        //
-        // user.AuthorizedApps = authedApps.ToArray();
     }
 
-    public void AddAuthorizedApp(string userId, string appId, string appSecret) {
+    public void AddAuthorizedApp(string userId, AuthorizedApp app) {
         CheckConnection();
         using MySqlCommand cmd = new MySqlCommand();
         cmd.Connection = _connection;
-        cmd.CommandText = @"INSERT INTO serblesite_user_authorized_apps(userid, appid, appsecret) VALUES(@userid, @appid, @appsecret)";
+        cmd.CommandText = @"INSERT INTO serblesite_user_authorized_apps(userid, appid, scopes) VALUES(@userid, @appid, @scopes)";
         cmd.Parameters.AddWithValue("@userid", userId);
-        cmd.Parameters.AddWithValue("@appid", appId);
-        cmd.Parameters.AddWithValue("@appsecret", appSecret);
+        cmd.Parameters.AddWithValue("@appid", app.AppId);
+        cmd.Parameters.AddWithValue("@scopes", app.Scopes);
         cmd.ExecuteNonQuery();
     }
 
-    public void GetAuthorizedApps(string userId, out (string, string)[] apps) {
+    public void GetAuthorizedApps(string userId, out AuthorizedApp[] apps) {
         CheckConnection();
         using MySqlCommand cmd = new MySqlCommand();
         cmd.Connection = _connection;
@@ -249,9 +227,11 @@ public class MySqlStorageService : IStorageService {
         cmd.Parameters.AddWithValue("@id", userId);
         using MySqlDataReader reader2 = cmd.ExecuteReader();
         
-        List<(string, string)> authedApps = new ();
+        List<AuthorizedApp> authedApps = new ();
         while (reader2.Read()) {
-            authedApps.Add((reader2.GetString("appid"), reader2.GetString("appsecret")));
+            authedApps.Add(new AuthorizedApp(
+                reader2.GetString("appid"), 
+                reader2.GetString("scopes")));
         }
         reader2.Close();
         

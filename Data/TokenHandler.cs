@@ -26,9 +26,9 @@ public class TokenHandler {
         }
         
         string mySecret = _config["token_secret"];
-        SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(mySecret));
-        JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-        SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor {
+        SymmetricSecurityKey securityKey = new(Encoding.ASCII.GetBytes(mySecret));
+        JwtSecurityTokenHandler tokenHandler = new();
+        SecurityTokenDescriptor tokenDescriptor = new() {
             Subject = new ClaimsIdentity(claims.Select(c => new Claim(c.Key, c.Value)).ToArray()),
             Expires = DateTime.Now.AddYears(1),
             Issuer = _config["token_issuer"],
@@ -39,7 +39,7 @@ public class TokenHandler {
         return tokenHandler.WriteToken(token);
     }
         
-    public bool ValidateCurrentToken(string? token, out Dictionary<string, string>? claims, out string failMsg, OAuthApp? app = null) {
+    public bool ValidateCurrentToken(string? token, out Dictionary<string, string>? claims, out string failMsg) {
         claims = null;
         failMsg = "Error";
         string mySecret = _config["token_secret"];
@@ -68,36 +68,11 @@ public class TokenHandler {
         // Put all claims in a dictionary
         if (securityToken.Claims == null) return false;
         claims = securityToken.Claims.ToDictionary(claim => claim.Type, claim => claim.Value);
-
-        if (app != null) {
-            if (claims["client_secret"] != app.ClientSecret) {
-                failMsg = "Client secret did not match";
-                return false;
-            }
-
-            Program.StorageService!.GetUser(claims["id"], out User? user);
-            if (user == null) {
-                failMsg = "User was not found";
-                return false;
-            }
-
-            string appSecret;
-            try {
-                appSecret = user.AuthorizedApps.First(a => a.Item1 == app.Id).Item2;
-            }
-            catch (InvalidOperationException) {
-                // Doesn't exist
-                failMsg = "App was not found";
-                return false;
-            }
-
-        }
-        else {
-            if (claims.ContainsKey("client_secret")) {
-                // It's an app token but it's being checked as a user token
-                failMsg = "Token was an app token but was checked as a user token";
-                return false;
-            }
+        
+        if (claims.ContainsKey("client_secret")) {
+            // It's an app token but it's being checked as a user token
+            failMsg = "Token was an app token (depreciated) but was checked as a user token";
+            return false;
         }
         
         // If any of the values from TokenClaims are not present in the claims dictionary, return false
