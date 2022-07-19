@@ -37,7 +37,7 @@ public class AuthorizationHeader {
         }
 
         if (app.ClientSecret != parts[0]) {
-            msg = "X_App_Secret is not correct";
+            msg = "Client secret is not correct";
             return false;
         }
         
