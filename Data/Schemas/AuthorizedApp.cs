@@ -1,8 +1,8 @@
 namespace SerbleWebsite.Data.Schemas; 
 
 public class AuthorizedApp {
-    public string AppId { get; set; }
-    public string Scopes { get; set; }
+    public string AppId { get; }
+    public string Scopes { get; }
     
     public AuthorizedApp(string appId, string scopes) {
         AppId = appId;
@@ -31,6 +31,10 @@ public class AuthorizedApp {
 
     protected bool Equals(AuthorizedApp other) {
         return this == other;
+    }
+    
+    public override int GetHashCode() {
+        return HashCode.Combine(AppId, Scopes);
     }
     
 }

@@ -13,7 +13,6 @@
 
     protected override async void OnAfterRender(bool firstRender) {
         if (!firstRender) return;
-        Uri absoluteUri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
         Cookie cookieHandler = new (JsRuntime);
 
         // Attempt Login

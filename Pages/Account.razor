@@ -5,35 +5,46 @@
 @inject NavigationManager NavigationManager
 
 <RequireLogin Callback="LoginChecked"></RequireLogin>
-
-<h3>Account</h3>
-
 @if (_user == null) {
-   <p>Loading...</p>
+   <div class="text-center">
+      <h1>Loading...</h1>
+   </div>
 }
 else {
-   <p>
-      <div>ID: @_user.Id</div>
-      <div>Username: @_user.Username</div>
-      <div>Email: @_user.Email</div>
-      <div>Perm Level: @_user.PermLevel</div>
-      <div>Perm String: @_user.PermString</div>
-
-      <div>Authorized Apps:</div>
-      @foreach (string app in _user.AuthorizedAppIds) {
-         Program.StorageService!.GetOAuthApp(app, out OAuthApp? appObj);
-         if (appObj == null) continue;
-         string appName = appObj.Name;
-         <div>
-            - @appName
-            <button @onclick="() => RevokeApp(app)">Revoke Access</button>
+   <div class="row">
+      <div class="col-md-3 border-right">
+         <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+            <span class="font-weight-bold">@_user.Username</span><span> </span></div>
+      </div>
+      <div class="col-md-5 border-right">
+         <div class="p-3 py-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+               <h4 class="text-right">Profile Settings</h4>
+            </div>
+            <div class="row mt-2">
+               <div class="col-md-6"><label class="labels">Username</label><input type="text" class="form-control" placeholder="first name" value="@_user.Username"></div>
+            </div>
+            <div class="row mt-3">
+               <div class="col-md-12"><label class="labels">Email</label><input type="text" class="form-control" placeholder="Email" value="@_user.Email"></div>
+               <div style="padding-top: 20px"></div>
+               <hr/>
+               <h4>Change Password</h4>
+               <div class="col-md-12"><label class="labels">Password</label><input type="text" class="form-control" placeholder="***********" value=""></div>
+               <div class="col-md-12"><label class="labels">Confirm Password</label><input type="text" class="form-control" placeholder="***********" value=""></div>
+               <div style="padding-top: 20px"></div>
+               <hr/>
+            </div>
+            <div class="row mt-3">
+               <div class="col-md-6"><label class="labels">ID</label><input type="text" class="form-control" placeholder="country" value="@_user.Id" readonly></div>
+            </div>
+            <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button" @onclick="Save">Save Changes</button></div>
          </div>
-      }
-   </p>
+      </div>
+   </div>
 }
 
-<button @onclick="Logout">Logout</button>
-<button @onclick="ReloadText">Reload Text</button>
+@* <button @onclick="Logout">Logout</button> *@
+@* <button @onclick="ReloadText">Reload Text</button> *@
 
 @code {
    private User? _user;
@@ -61,6 +72,10 @@ else {
       _user.AuthorizedApps = authedAppsList.ToArray();
       _user.RegisterChanges();
       ReloadText();
+   }
+
+   private void Save() {
+      
    }
    
 }

@@ -239,7 +239,7 @@
     private void LoginSuccess(string token) {
         if (!_isAppAuth) {
             // Normal login
-            NavigationManager.NavigateTo(_queryValues!.ContainsKey("return_url") ? _queryValues["return_url"] : "/account");
+            NavigationManager.NavigateTo(_queryValues!.ContainsKey("return_url") ? _queryValues["return_url"] : "/account", true);
             return;
         }
         

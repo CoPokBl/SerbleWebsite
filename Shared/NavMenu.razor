@@ -1,5 +1,12 @@
-﻿<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="/"><img src="/assets/images/icon.png" width="41" height="41" alt="Serble Logo"></a>
+﻿@using SerbleWebsite.Data.Schemas
+@using SerbleWebsite.Data
+@inject IJSRuntime JsRuntime
+@inject NavigationManager NavigationManager
+
+<RequireLogin RedirectToLogin="false" Callback="LoginProcessed"></RequireLogin>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/" style="padding-left: 20px"><img src="/assets/images/icon.png" width="41" height="41" alt="Serble Logo"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -19,18 +26,58 @@
                     Info
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="/events">Upcoming Events</a>
                     <a class="dropdown-item" href="/discord">Discord</a>
-                    <a class="dropdown-item" href="/forums">Forums</a>
-                    <a class="dropdown-item" href="/combat">Combat System</a>
                 </div>
             </li>
-
         </ul>
-
     </div>
+    
+    @if (_user != null) {
+        <div class="dropdown text-end" style="padding-right: 120px;">
+            <a href="#" class="d-block link-secondary text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                @_user.Username
+                @* <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle"> *@
+            </a>
+            <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
+                <li><a class="dropdown-item" href="/oauthapps">My Applications</a></li>
+                <li><a class="dropdown-item" href="/account">Account</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><button class="dropdown-item" type="button" @onclick="Logout">Logout</button></li>
+            </ul>
+        </div>
+    }
+    else {
+        <div class="dropdown text-end" style="padding-right: 120px;">
+            <button type="button" class="btn btn-outline-light" @onclick="Login">Login</button>
+        </div>
+    }
+    
 </nav>
 
 @code {
+    private User? _user = null;
 
+    private bool LoginProcessed(User? user) {
+        if (user == null) {
+            return true;
+        }
+        _user = user;
+        ReloadText();
+        return true;
+    }
+    
+    private void ReloadText() {
+        InvokeAsync(StateHasChanged).Wait();
+    }
+
+    private void Login() {
+        NavigationManager.NavigateTo("/login?return_url=" + NavigationManager.Uri);
+    }
+    
+    private async void Logout() {
+        Cookie cookies = new (JsRuntime);
+        await cookies.SetValue("token", "");
+        NavigationManager.NavigateTo(NavigationManager.Uri, true);
+    }
+    
 }
