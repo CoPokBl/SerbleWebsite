@@ -1,10 +1,12 @@
 @page "/account"
 @using SerbleWebsite.Data
 @using SerbleWebsite.Data.Schemas
+@using System.Text.RegularExpressions
 @inject IJSRuntime JsRuntime
 @inject NavigationManager NavigationManager
 
 <RequireLogin Callback="LoginChecked"></RequireLogin>
+
 @if (_user == null) {
    <div class="text-center">
       <h1>Loading...</h1>
@@ -22,20 +24,34 @@ else {
                <h4 class="text-right">Profile Settings</h4>
             </div>
             <div class="row mt-2">
-               <div class="col-md-6"><label class="labels">Username</label><input type="text" class="form-control" placeholder="first name" value="@_user.Username"></div>
+               <div class="col-md-6"><label class="labels">Username</label><input style="background-color: rgb(34, 34, 34); color: #ffffff" type="text" class="form-control" placeholder="first name" value="@_user.Username" id="username"></div>
+               @if (_errors.Contains(Error.UsernameInvalid)) {
+                  <p style="color: red; font-size: 13px">Invalid Username</p>
+               }
+               else {
+                  if (_errors.Contains(Error.UsernameTaken)) {
+                     <p style="color: red; font-size: 13px">That username is already taken</p>
+                  }
+               }
             </div>
             <div class="row mt-3">
-               <div class="col-md-12"><label class="labels">Email</label><input type="text" class="form-control" placeholder="Email" value="@_user.Email"></div>
+               <div class="col-md-12"><label class="labels">Email</label><input style="background-color: rgb(34, 34, 34); color: #ffffff" type="text" class="form-control" placeholder="Email" value="@_user.Email" id="email"></div>
+               @if (_errors.Contains(Error.EmailInvalid)) {
+                  <p style="color: red; font-size: 13px">Invalid Email</p>
+               }
                <div style="padding-top: 20px"></div>
                <hr/>
                <h4>Change Password</h4>
-               <div class="col-md-12"><label class="labels">Password</label><input type="text" class="form-control" placeholder="***********" value=""></div>
-               <div class="col-md-12"><label class="labels">Confirm Password</label><input type="text" class="form-control" placeholder="***********" value=""></div>
+               <div class="col-md-12"><label class="labels">Password</label><input style="background-color: rgb(34, 34, 34); color: #ffffff" id="password" type="password" class="form-control" placeholder="***********" value=""></div>
+               <div class="col-md-12"><label class="labels">Confirm Password</label><input style="background-color: rgb(34, 34, 34); color: #ffffff" id="confirmPassword" type="password" class="form-control" placeholder="***********" value=""></div>
+               @if (_errors.Contains(Error.PasswordDifferent)) {
+                  <p style="color: red; font-size: 13px">Passwords don't match</p>
+               }
                <div style="padding-top: 20px"></div>
                <hr/>
             </div>
             <div class="row mt-3">
-               <div class="col-md-6"><label class="labels">ID</label><input type="text" class="form-control" placeholder="country" value="@_user.Id" readonly></div>
+               <div class="col-md-6"><label class="labels">ID</label><input type="text" style="background-color: rgb(34, 34, 34); color: #ffffff" class="form-control" placeholder="country" value="@_user.Id" readonly></div>
             </div>
             <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button" @onclick="Save">Save Changes</button></div>
          </div>
@@ -43,12 +59,10 @@ else {
    </div>
 }
 
-@* <button @onclick="Logout">Logout</button> *@
-@* <button @onclick="ReloadText">Reload Text</button> *@
-
 @code {
    private User? _user;
-   
+   private List<Error> _errors = new ();
+
    private void ReloadText() {
       InvokeAsync(StateHasChanged).Wait();
    }
@@ -74,8 +88,61 @@ else {
       ReloadText();
    }
 
-   private void Save() {
+   private async void Save() {
+      _errors.Clear();
+      User newUser = _user!;
+      HtmlInteractor interactor = new (JsRuntime);
+      string username = await interactor.GetValue("username");
+      string email = await interactor.GetValue("email");
+      string password = await interactor.GetValue("password");
+      string confirmPassword = await interactor.GetValue("confirmPassword");
+      bool validationSuccess = true;
       
+      if (email != "") {
+         // Validate email with regex
+         if (!Regex.IsMatch(email, @"(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|""(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*"")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])")) {
+            validationSuccess = false;
+            _errors.Add(Error.EmailInvalid);
+         }
+      }
+      else {
+         Console.WriteLine("Email is empty");
+      }
+
+      if (username == "") {
+         _errors.Add(Error.UsernameInvalid);
+         validationSuccess = false;
+      }
+      
+      Program.StorageService!.GetUserFromName(username, out User? existingUser);
+      if (existingUser != null) {
+         validationSuccess = false;
+         _errors.Add(Error.UsernameTaken);
+      }
+
+      if (password != confirmPassword) {
+         _errors.Add(Error.PasswordDifferent);
+         validationSuccess = false;
+      }
+
+      ReloadText();
+      if (!validationSuccess) {
+         return;
+      }
+
+      newUser.Email = email;
+      newUser.Username = username;
+      newUser.PasswordHash = Utils.Hash(password);
+      newUser.RegisterChanges();
+      NavigationManager.NavigateTo(NavigationManager.Uri, true);
+   }
+
+   enum Error {
+      None,
+      UsernameTaken,
+      UsernameInvalid,
+      EmailInvalid,
+      PasswordDifferent
    }
    
 }
