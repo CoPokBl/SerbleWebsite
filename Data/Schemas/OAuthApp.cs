@@ -16,7 +16,6 @@ public class OAuthApp {
         OwnerId = ownerId;
         Id = Guid.NewGuid().ToString();
         ClientSecret = Guid.NewGuid().ToString();
-        Logger.Debug("OAuthApp created: " + Id);
     }
     
     public OAuthApp CycleClientSecret() {
