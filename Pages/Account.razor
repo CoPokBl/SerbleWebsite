@@ -61,7 +61,7 @@ else {
 
 @code {
    private User? _user;
-   private List<Error> _errors = new ();
+   private readonly List<Error> _errors = new ();
 
    private void ReloadText() {
       InvokeAsync(StateHasChanged).Wait();

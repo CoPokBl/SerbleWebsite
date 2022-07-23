@@ -50,4 +50,8 @@ public static class ScopeHandler {
         return scopes.Where(t => t != null).ToArray()!;
     }
     
+    public static string GetDescriptionFromName(string name) {
+        return ScopeDescriptions[Array.IndexOf(ScopeNames, name)];
+    }
+    
 }

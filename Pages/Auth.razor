@@ -33,14 +33,16 @@
         
             <p>
             <br/>
-            @foreach (string scope in 
-                ScopeHandler.ListOfScopeIdsToScopeNames(
-                    ScopeHandler.FilterInvalidScopes(
-                        _queryValues!["scope"]
-                            .First()
-                            .Split(' ')))) {
-                <div>- @scope</div>
-            }
+            <ul style="text-align: left">
+                @foreach (string scope in 
+                    ScopeHandler.ListOfScopeIdsToScopeNames(
+                        ScopeHandler.FilterInvalidScopes(
+                            _queryValues!["scope"]
+                                .First()
+                                .Split(' ')))) {
+                    <li><a href="javascript: void(0)" data-bs-toggle="tooltip" data-bs-placement="left" title="@ScopeHandler.GetDescriptionFromName(scope)">@scope</a></li>
+                }
+            </ul>
             </p>
             <b>IF YOU DON'T UNDERSTAND THEN CLICK DENY</b>
         </p>
@@ -196,8 +198,8 @@
 
     private async void LoginMain() {
         HtmlInteractor htmlInteractor = new(JsRuntime);
-        string username = htmlInteractor.GetValue("floatingUsername").ToString()!;
-        string password = htmlInteractor.GetValue("floatingPassword").ToString()!;
+        string username = await htmlInteractor.GetValue("floatingUsername");
+        string password = await htmlInteractor.GetValue("floatingPassword");
         if (username == null || password == null) {
             _error = Error.NullFields;
             return;

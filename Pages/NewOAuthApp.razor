@@ -1,5 +1,7 @@
 @page "/OAuthApps/new"
 @using SerbleWebsite.Data.Schemas
+@using SerbleWebsite.Data
+@inject IJSRuntime JsRuntime
 @inject NavigationManager NavigationManager
 
 <RequireLogin Callback="OnLoad"></RequireLogin>
@@ -7,7 +9,6 @@
 
 <div class="text-center form-signin">
     <div>
-        @* <img class="mb-4" src="assets/images/icon.png" alt="" width="72" height="72"> *@
         <h1 class="h3 mb-3 fw-normal">New OAuth Application</h1>
         
         <p style="color: red;">
@@ -30,33 +31,28 @@
         </p>
     
         <div class="form-floating">
-            <input 
-                @bind="_name"
-                @oninput="ui => _name = ui.Value?.ToString()!"
+            <input
                 type="text" 
                 class="form-control" 
-                id="floatingInput" 
-                placeholder="EpicGamer9000" 
+                id="name" 
+                placeholder="App Name" 
                 maxlength="255"
                 style="background-color: rgb(34, 34, 34); color: #ffffff">
           <label for="floatingInput">Application Name</label>
         </div>
         <div class="form-floating" style="padding-top: 10px; padding-bottom: 10px">
             <textarea
-                @bind="_description"
-                @oninput="ui => _description = ui.Value?.ToString()!"
                 class="form-control" 
-                id="floatingPassword" 
-                placeholder="Password" 
+                id="desc" 
+                placeholder="App Description" 
                 maxlength="1024"
                 style="background-color: rgb(34, 34, 34); color: #ffffff"></textarea>
-            <label for="floatingPassword">Description</label>
+            <label for="desc">Description</label>
         </div>
         
         <br/>
 
-        <button class="w-100 btn btn-lg btn-primary" @onclick="Submit" style="padding-top: 10px">Register</button>
-        <p>Want to login? <a href="/login">Go here</a></p>
+        <button class="w-100 btn btn-lg btn-primary" @onclick="Submit" style="padding-top: 10px">Create</button>
     </div>
 </div>
 
@@ -64,14 +60,10 @@
 @code {
 
     private Error _error = Error.None;
-    private string _name = "";
-    private string _description = "";
-    //private string _redirectUri = "";
-    private List<string> _scopes = new ();
-    private string? userId = null;
+    private string? _userId;
 
     private bool OnLoad(User user) {
-        userId = user.Id;
+        _userId = user.Id;
         return true;
     }
 
@@ -79,14 +71,17 @@
         InvokeAsync(StateHasChanged).Wait();
     }
 
-    private void Submit() {
-        if (userId == null) {
+    private async void Submit() {
+        if (_userId == null) {
             _error = Error.Wait;
             return;
         }
-        OAuthApp app = new (userId) {
-            Name = _name,
-            Description = _description,
+        HtmlInteractor interactor = new(JsRuntime);
+        string name = await interactor.GetValue("name");
+        string desc = await interactor.GetValue("desc");
+        OAuthApp app = new (_userId) {
+            Name = name,
+            Description = desc
         };
         Program.StorageService!.AddOAuthApp(app);
         _error = Error.None;

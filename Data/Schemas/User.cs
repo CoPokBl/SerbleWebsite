@@ -16,7 +16,9 @@ public class User {
     // (appId, scopes)
     public AuthorizedApp[] AuthorizedApps {
         get {
+            Logger.Debug("Get was made on AuthorizedApps");
             if (_obtainedAuthedApps != null) return _obtainedAuthedApps;
+            Logger.Debug("AuthorizedApps was null");
             ObtainAuthorizedApps();
             return _obtainedAuthedApps!;
         }
@@ -72,6 +74,12 @@ public class User {
         }
 
         Logger.Debug("Added/Removed authed apps: " + addedApps.Length + "/" + removedApps.Length);
+    }
+    
+    public User ResetAuthorizedApps() {
+        _obtainedAuthedApps = null;
+        _originalAuthedApps = null;
+        return this;
     }
     
 }
