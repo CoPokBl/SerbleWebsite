@@ -84,19 +84,15 @@
 
             <div class="form-floating">
                 <input
-                    @bind="_username"
-                    @oninput="ui => _username = ui.Value?.ToString()"
                     type="text"
                     class="form-control"
-                    id="floatingInput"
+                    id="floatingUsername"
                     placeholder="EpicGamer9000"
                     style="background-color: rgb(34, 34, 34); color: #ffffff">
-                <label for="floatingInput">Username</label>
+                <label for="floatingUsername">Username</label>
             </div>
             <div class="form-floating">
                 <input
-                    @bind="_password"
-                    @oninput="ui => _password = ui.Value?.ToString()"
                     type="password"
                     class="form-control"
                     id="floatingPassword"
@@ -122,8 +118,6 @@
 </div>
 
 @code {
-    private string? _username;
-    private string? _password;
     private bool _rememberMe;
     private bool _appRequestAuth;
     private Error _error = Error.None;
@@ -201,20 +195,23 @@
     }
 
     private async void LoginMain() {
-        if (_username == null || _password == null) {
+        HtmlInteractor htmlInteractor = new(JsRuntime);
+        string username = htmlInteractor.GetValue("floatingUsername").ToString()!;
+        string password = htmlInteractor.GetValue("floatingPassword").ToString()!;
+        if (username == null || password == null) {
             _error = Error.NullFields;
             return;
         }
         
         // Attempt login
-        Program.StorageService!.GetUserFromName(_username, out User? user);
+        Program.StorageService!.GetUserFromName(username, out User? user);
         
         if (user == null) {
             _error = Error.InvalidUser;
             return;
         }
 
-        if (user.PasswordHash != Utils.Hash(_password)) {
+        if (user.PasswordHash != Utils.Hash(password)) {
             _error = Error.InvalidPassword;
             return;
         }
@@ -282,8 +279,7 @@
             return;
         }
         string newUri = _queryValues["redirect_uri"];
-        string appSecret = Guid.NewGuid().ToString();
-        
+
         if (authorize) {
             // Make token
             string scopeString = ScopeHandler.ListOfScopeIdsToString(ScopeHandler.FilterInvalidScopes(
