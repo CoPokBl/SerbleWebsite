@@ -38,7 +38,7 @@
                 placeholder="App Name" 
                 maxlength="255"
                 style="background-color: rgb(34, 34, 34); color: #ffffff">
-          <label for="floatingInput">Application Name</label>
+          <label for="name">Application Name</label>
         </div>
         <div class="form-floating" style="padding-top: 10px; padding-bottom: 10px">
             <textarea
@@ -65,10 +65,6 @@
     private bool OnLoad(User user) {
         _userId = user.Id;
         return true;
-    }
-
-    private void ReloadText() {
-        InvokeAsync(StateHasChanged).Wait();
     }
 
     private async void Submit() {

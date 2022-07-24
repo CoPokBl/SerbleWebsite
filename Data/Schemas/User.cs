@@ -75,11 +75,5 @@ public class User {
 
         Logger.Debug("Added/Removed authed apps: " + addedApps.Length + "/" + removedApps.Length);
     }
-    
-    public User ResetAuthorizedApps() {
-        _obtainedAuthedApps = null;
-        _originalAuthedApps = null;
-        return this;
-    }
-    
+
 }

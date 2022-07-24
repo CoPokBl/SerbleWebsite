@@ -104,7 +104,7 @@ public class FileStorageService : IStorageService {
     }
 
     public void GetUser(string userId, out User? user) {
-        user = _users.FirstOrDefault(u => u.Id == userId)!.ResetAuthorizedApps();
+        user = _users.FirstOrDefault(u => u.Id == userId)!;
     }
 
     public void UpdateUser(User userDetails) {

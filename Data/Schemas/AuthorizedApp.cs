@@ -9,11 +9,6 @@ public class AuthorizedApp {
         Scopes = scopes;
     }
 
-    public AuthorizedApp() {
-        AppId = "";
-        Scopes = "";
-    }
-
     public static bool operator ==(AuthorizedApp a1, AuthorizedApp a2) {
         return a1.AppId == a2.AppId && a1.Scopes == a2.Scopes;
     }
