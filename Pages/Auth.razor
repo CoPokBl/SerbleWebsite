@@ -13,7 +13,7 @@
 
 <div class="text-center form-signin">
     
-    @if (Loading) {
+    @if (_loading) {
         <h3>Loading...</h3>
     }
     else {
@@ -52,12 +52,12 @@
                 <b>IF YOU DON'T UNDERSTAND THEN CLICK DENY</b>
             </p>
             <div class="d-flex" style="">
-                <button class="w-100 btn btn-lg btn-primary" @onclick="a => AuthorizeApp(true)" style="margin-right: 10px">Allow</button>
-                <button class="w-100 btn btn-lg btn-danger" @onclick="a => AuthorizeApp(false)" style="padding-bottom: 10px">Deny</button>
+                <button class="w-100 btn btn-lg btn-primary" @onclick="_ => AuthorizeApp(true)" style="margin-right: 10px">Allow</button>
+                <button class="w-100 btn btn-lg btn-danger" @onclick="_ => AuthorizeApp(false)" style="padding-bottom: 10px">Deny</button>
             </div>
         }
         else {
-            <div>
+            <form onsubmit="return false">
                 <img class="mb-4" src="assets/images/icon.png" alt="" width="72" height="72">
                 @if (_isAppAuth) {
                     <h1 class="h3 mb-3 fw-normal">Sign In to @_appName</h1>
@@ -66,7 +66,7 @@
                     <h1 class="h3 mb-3 fw-normal">Sign In</h1>
                 }
 
-                <p style="color: red;">
+                <div style="color: red;">
                     @switch (_error) {
 
                         case Error.None:
@@ -83,11 +83,15 @@
                         case Error.InvalidPassword:
                             <p>Incorrect password, need an account? <a href="/register">Register</a></p>
                             break;
+                            
+                        case Error.AccountDisabled:
+                            <p>That account is disabled</p>
+                            break;
 
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
-                </p>
+                </div>
 
                 <div class="form-floating">
                     <input
@@ -119,7 +123,7 @@
                 </div>
                 <button class="w-100 btn btn-lg btn-primary" @onclick="Login" style="padding-bottom: 10px">Sign in</button>
                 <p>Don't have an account? <a href="/register">Register for free</a></p>
-            </div>
+            </form>
         }
     }
 
@@ -135,10 +139,8 @@
     private string _appName = "";
     private bool _askAccess;
     private User? _user;
-    private bool Loading {
-        get => _internalLoading;
-        set { _internalLoading = value; ReloadText(); }
-    }
+    private bool _loading = true;
+
     private readonly string[] _requiredQueryValues = {
         "redirect_uri",
         "client_id",
@@ -146,7 +148,6 @@
         "scope",
         "state"
     };
-    private bool _internalLoading = true;
 
     protected override async void OnAfterRender(bool firstRender) {
         if (!firstRender) return;
@@ -171,45 +172,47 @@
             }
             _appName = app.Name;
             _app = app;
-            Loading = false;
+            _loading = false;
+            ReloadText();
         }
         
         // Check if user is logged in.
         string token = await cookieService.GetValue("token");
         if (token == "") {
-            Loading = false;
+            _loading = false;
+            ReloadText();
             return;
         }
         if (!new TokenHandler(Program.Config!).ValidateCurrentToken(token, out Dictionary<string, string>? claims, out _)) {
-            Loading = false;
+            _loading = false;
+            ReloadText();
             return;
         }
         if (claims == null) {
-            Loading = false;
+            _loading = false;
+            ReloadText();
             return;
         }
         Program.StorageService!.GetUser(claims["id"], out User? user);
         if (user == null) {
-            Loading = false;
+            _loading = false;
+            ReloadText();
             return;
         }
         _user = user;
-        Loading = false;
+        _loading = false;
         LoginSuccess();
     }
-    
-    protected override void OnInitialized() {
-        
-    }
-    
+
     private void ReloadText() {
         InvokeAsync(StateHasChanged).Wait();
     }
 
     private void Login() {
-        Loading = true;
+        _loading = true;
+        ReloadText();
         LoginMain();
-        Loading = false;
+        _loading = false;
         ReloadText();
     }
 
@@ -223,11 +226,19 @@
         
         if (user == null) {
             _error = Error.InvalidUser;
+            ReloadText();
             return;
         }
 
         if (user.PasswordHash != Utils.Hash(password)) {
             _error = Error.InvalidPassword;
+            ReloadText();
+            return;
+        }
+
+        if (user.PermLevel < (int) AccountAccessLevel.Normal) {
+            _error = Error.AccountDisabled;
+            ReloadText();
             return;
         }
         
@@ -284,7 +295,7 @@
     }
 
     private void AuthorizeApp(bool authorize) {
-        Loading = true;
+        _loading = true;
         if (!_queryValues!.ContainsKey("redirect_uri")) {
             NavigationManager.NavigateTo("/noredirect");
             return;
@@ -323,7 +334,8 @@
         None,
         NullFields,
         InvalidUser,
-        InvalidPassword
+        InvalidPassword,
+        AccountDisabled
     }
 
 }

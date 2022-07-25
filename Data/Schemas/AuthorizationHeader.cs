@@ -45,6 +45,11 @@ public class AuthorizationHeader {
             return false;
         }
 
+        if (user.PermLevel < (int) AccountAccessLevel.Normal) {
+            msg = "User account is disabled";
+            return false;
+        }
+
         if (!user.AuthorizedAppIds.Contains(appId)) {
             msg = "App unauthorized for user";
             return false;

@@ -1,0 +1,54 @@
+@page "/admin/ControlBoard"
+@using GeneralPurposeLib
+
+<style>
+    .button-element {
+        padding-bottom: 20px;
+    }
+</style>
+
+<AdminGui Title="Control Board" Page="AdminGui.CurrentPage.ControlBoard">
+    
+    <div class="container border rounded-2">
+        <h3>Output:</h3>
+        @foreach (string outputLine in _output.ToArray().Reverse().Take(10).Reverse()) {
+            <p>@outputLine</p>
+        }
+    </div>
+    
+    <div class="button-element">
+        <button class="btn-danger btn" @onclick="Shutdown">Shutdown</button>
+        <label>Shutdown Server</label>
+    </div>
+
+    <div class="button-element">
+        <button class="btn-danger btn" @onclick="Restart">Restart</button>
+        <label>Restart Server</label>
+    </div>
+
+</AdminGui>
+
+@code {
+    private readonly List<string> _output = new();
+    
+    private void ReloadText() {
+        InvokeAsync(StateHasChanged).Wait();
+    }
+    
+    private void Shutdown() {
+        _output.Add("Shutting down...");
+        ReloadText();
+        Program.RunApp = false;
+        _output.Add("Requested shutdown.");
+        ReloadText();
+    }
+    
+    private void Restart() {
+        _output.Add("Restarting...");
+        ReloadText();
+        Program.RestartAppOnce = true;
+        Program.RunApp = false;
+        _output.Add("Requested restart.");
+        ReloadText();
+    }
+}

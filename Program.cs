@@ -2,6 +2,7 @@
 using System.Security;
 using GeneralPurposeLib;
 using SerbleWebsite.Data;
+using SerbleWebsite.Data.Schemas;
 using LogLevel = GeneralPurposeLib.LogLevel;
 using UnauthorizedAccessException = System.UnauthorizedAccessException;
 
@@ -26,7 +27,11 @@ public static class Program {
     };
     public static Dictionary<string, string>? Config;
     public static IStorageService? StorageService;
-
+    public static bool RunApp = true;
+    public static bool RestartApp = false;
+    public static bool RestartAppOnce = false;
+    public static Lockdown? Lockdown = null;
+    
     private static int Main(string[] args) {
 
         try {
@@ -38,10 +43,15 @@ public static class Program {
             return 1;
         }
 
-        int stopCode;
+        int stopCode = 0;
+        bool firstRun = true;
         try {
-            stopCode = Run(args);
-            Logger.Warn("Application stopped");
+            while (RestartApp || RestartAppOnce || firstRun) {
+                if (firstRun) { firstRun = false; }
+                if (RestartAppOnce) { RestartAppOnce = false; }
+                stopCode = Run(args);
+                Logger.Warn("Application stopped with code " + stopCode);
+            }
             return stopCode;
         }
         catch (Exception e) {
@@ -177,8 +187,24 @@ public static class Program {
 
         bool didError = false;
         try {
-            app.Run();
-            Logger.Info("Server stopped with no errors.");
+            CancellationTokenSource tokenSource = new();
+            CancellationToken cancellationToken = tokenSource.Token;
+            Task appTask = app.RunAsync(cancellationToken);
+            Logger.Info("Application started");
+            
+            while (RunApp) {
+                if (appTask.IsCompleted) {
+                    Logger.Info("Application execution finished");
+                    break;
+                }
+                Thread.Sleep(100);
+            }
+            tokenSource.Cancel();
+            Logger.Info("Attempting to stop application (Will abort after 10 seconds)");
+            bool successfulStop = appTask.Wait(new TimeSpan(0, 0, 10));
+            Logger.Info(!successfulStop
+                ? "Application stop timed out, completing execution"
+                : "Server stopped with no errors.");
         }
         catch (Exception e) {
             Logger.Error(e);
@@ -189,7 +215,7 @@ public static class Program {
         // Shutdown storage
         Logger.Info("Shutting down storage...");
         try {
-            StorageService?.Deinit();
+            StorageService.Deinit();
         }
         catch (Exception e) {
             Logger.Error("Failed to shutdown storage");

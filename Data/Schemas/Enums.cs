@@ -10,3 +10,9 @@ public enum BootstrapColor {
     Danger,
     Link
 }
+
+public enum AccountAccessLevel {
+    Disabled = 0,
+    Normal = 1,
+    Admin = 2
+}

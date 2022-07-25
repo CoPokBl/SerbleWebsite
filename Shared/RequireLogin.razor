@@ -1,15 +1,22 @@
 @using SerbleWebsite.Data
 @using SerbleWebsite.Data.Schemas
+@using GeneralPurposeLib
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JsRuntime
 
 @code {
-    
+
     [Parameter]
-    public Func<User?, bool>? Callback { get; set; }
+    public Func<User?, bool>? Callback { get; set; } = _ => true; 
 
     [Parameter]
     public bool RedirectToLogin { get; set; } = true;
+    
+    [Parameter]
+    public bool RedirectToAccessDenied { get; set; }
+    
+    [Parameter]
+    public AccountAccessLevel RequiredAccessLevel { get; set; } = AccountAccessLevel.Normal;
 
     protected override async void OnAfterRender(bool firstRender) {
         if (!firstRender) return;
@@ -30,7 +37,19 @@
         // Get User
         Program.StorageService!.GetUser(claims["id"], out User? user);
         if (user == null) { NotLoggedIn(); return; }
-        
+        if (user.PermLevel < (int) RequiredAccessLevel) { NotLoggedIn(); return; }
+        // TODO: Lockdowns
+        // if (Program.AdminLockdown && RequiredAccessLevel == AccountAccessLevel.Admin) {
+        //     Logger.Warn(user.Username + " tried to access admin page while admin lockdown is enabled. Blocked access.");
+        //     NotLoggedIn(); 
+        //     return;
+        // }
+        // if (Program.UserLockdown && user.PermLevel < (int) AccountAccessLevel.Admin) {
+        //     Logger.Warn(user.Username + " tried to authenticate during user lockdown. Blocked access.");
+        //     NotLoggedIn(); 
+        //     return;
+        // }
+
         // If page returns false, then user is not allowed to access page
         if (!Callback!.Invoke(user)) {
             NotLoggedIn();
@@ -38,13 +57,17 @@
     }
     
     private void NotLoggedIn() {
-        // Redirect to Login Page
+        // Redirect if redirect is enabled
+        if (RedirectToAccessDenied) {
+            NavigationManager.NavigateTo("/accessdenied?page=" + Uri.EscapeDataString(NavigationManager.Uri));
+            return;
+        }
         if (RedirectToLogin) {
             NavigationManager.NavigateTo("/login?return_url=" + Uri.EscapeDataString(NavigationManager.Uri));
             return;
         }
         
-        // Or run callback with null user
+        // Otherwise run callback with null user
         Callback!.Invoke(null);
     }
 
