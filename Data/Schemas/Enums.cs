@@ -16,3 +16,9 @@ public enum AccountAccessLevel {
     Normal = 1,
     Admin = 2
 }
+
+public enum PageType {
+    Account,
+    NonAccount,
+    Admin
+}

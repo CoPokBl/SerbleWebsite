@@ -17,6 +17,18 @@
     
     [Parameter]
     public AccountAccessLevel RequiredAccessLevel { get; set; } = AccountAccessLevel.Normal;
+    
+    public PageType PageType => RequiredAccessLevel switch {
+        AccountAccessLevel.Normal => PageType.Account,
+        AccountAccessLevel.Admin => PageType.Admin,
+        _ => PageType.NonAccount
+    };
+
+    public void RunCheck(Func<User?, bool> callback) {
+        Callback = callback;
+        RedirectToLogin = false;
+        OnAfterRender(true);
+    }
 
     protected override async void OnAfterRender(bool firstRender) {
         if (!firstRender) return;
@@ -38,17 +50,19 @@
         Program.StorageService!.GetUser(claims["id"], out User? user);
         if (user == null) { NotLoggedIn(); return; }
         if (user.PermLevel < (int) RequiredAccessLevel) { NotLoggedIn(); return; }
-        // TODO: Lockdowns
-        // if (Program.AdminLockdown && RequiredAccessLevel == AccountAccessLevel.Admin) {
-        //     Logger.Warn(user.Username + " tried to access admin page while admin lockdown is enabled. Blocked access.");
-        //     NotLoggedIn(); 
-        //     return;
-        // }
-        // if (Program.UserLockdown && user.PermLevel < (int) AccountAccessLevel.Admin) {
-        //     Logger.Warn(user.Username + " tried to authenticate during user lockdown. Blocked access.");
-        //     NotLoggedIn(); 
-        //     return;
-        // }
+
+        // Lockdowns
+        if (Program.Lockdown != null && Program.Lockdown.LockedDownPageTypes.Contains(PageType)) {
+            // Site is in lockdown
+            Lockdown lc = Program.Lockdown;
+
+            if (!lc.ExceptedPermLevelInts.Contains(user.PermLevel)) {
+                // Page is in lockdown
+                Logger.Warn($"{user.Username} tried to access page (type: {PageType}) while locked down. Blocked access.");
+                LockedDown();
+                return;
+            }
+        }
 
         // If page returns false, then user is not allowed to access page
         if (!Callback!.Invoke(user)) {
@@ -69,6 +83,10 @@
         
         // Otherwise run callback with null user
         Callback!.Invoke(null);
+    }
+
+    private void LockedDown() {
+        NavigationManager.NavigateTo("/lockdown");
     }
 
 }

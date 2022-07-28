@@ -1,3 +1,4 @@
+@using SerbleWebsite.Data.Schemas
 @inject NavigationManager NavigationManager
 
 @code {
@@ -12,11 +13,22 @@
         if (!firstRender) return;
         
         // Check lockdown
-        
+        if (Program.Lockdown == null || !Program.Lockdown.LockedDownPageTypes.Contains(PageType.NonAccount)) return;
+        new RequireLogin().RunCheck(user => {
+            if (user == null) {
+                NotAllowed();
+                return true;
+            }
+            if (!Program.Lockdown.ExceptedPermLevelInts.Contains(user.PermLevel)) {
+                NotAllowed();
+            }
+            return true;
+        });
+        CheckCallback.Invoke(false);
     }
 
     private void NotAllowed() {
-        bool shouldRedirect = CheckCallback.Invoke(false);
+        bool shouldRedirect = CheckCallback.Invoke(true);
         if (DoNotRedirect || !shouldRedirect) return;
         NavigationManager.NavigateTo("/lockdown");
     }

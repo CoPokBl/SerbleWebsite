@@ -1,5 +1,7 @@
 @page "/admin/ControlBoard"
-@using GeneralPurposeLib
+@using SerbleWebsite.Data.Schemas
+
+<RequireLogin RequiredAccessLevel="AccountAccessLevel.Admin" RedirectToAccessDenied="true"></RequireLogin>
 
 <style>
     .button-element {
@@ -25,6 +27,19 @@
         <button class="btn-danger btn" @onclick="Restart">Restart</button>
         <label>Restart Server</label>
     </div>
+    
+    @if (Program.Lockdown == null) {
+        <div class="button-element">
+            <button class="btn-danger btn" @onclick="() => ToggleLockdown(true)">Lockdown</button>
+            <label>Start Lockdown</label>
+        </div>
+    }
+    else {
+        <div class="button-element">
+            <button class="btn-danger btn" @onclick="() => ToggleLockdown(false)">End Lockdown</button>
+            <label>End Lockdown</label>
+        </div>
+    }
 
 </AdminGui>
 
@@ -50,5 +65,22 @@
         Program.RunApp = false;
         _output.Add("Requested restart.");
         ReloadText();
+    }
+
+    private void ToggleLockdown(bool toggle) {
+        if (!toggle) {
+            Program.Lockdown = null;
+            _output.Add("Lockdown ended.");
+            return;
+        }
+        
+        _output.Add("Starting lockdown...");
+        Lockdown lockdown = new() {
+            LockedDownPageTypes = new [] {PageType.Account, PageType.NonAccount, PageType.Admin },
+            ExceptedPermLevels = new [] { AccountAccessLevel.Admin }
+        };
+        
+        Program.Lockdown = lockdown;
+        _output.Add("Lockdown started for all non admins.");
     }
 }

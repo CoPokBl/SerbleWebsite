@@ -48,6 +48,9 @@ public class Cookie {
     }
 
     private async Task<string> GetCookie() {
+        if (_jsRuntime == null) {
+            return "";
+        }
         return await _jsRuntime.InvokeAsync<string>("eval", $"document.cookie");
     }
 
