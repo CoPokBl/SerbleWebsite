@@ -16,9 +16,12 @@
     public bool RedirectToAccessDenied { get; set; }
     
     [Parameter]
-    public AccountAccessLevel RequiredAccessLevel { get; set; } = AccountAccessLevel.Normal;
+    public bool NoLockdownCheck { get; set; }
     
-    public PageType PageType => RequiredAccessLevel switch {
+    [Parameter]
+    public AccountAccessLevel RequiredAccessLevel { get; set; } = AccountAccessLevel.Normal;
+
+    private PageType PageType => RequiredAccessLevel switch {
         AccountAccessLevel.Normal => PageType.Account,
         AccountAccessLevel.Admin => PageType.Admin,
         _ => PageType.NonAccount
@@ -52,7 +55,7 @@
         if (user.PermLevel < (int) RequiredAccessLevel) { NotLoggedIn(); return; }
 
         // Lockdowns
-        if (Program.Lockdown != null && Program.Lockdown.LockedDownPageTypes.Contains(PageType)) {
+        if (!NoLockdownCheck && Program.Lockdown != null && Program.Lockdown.LockedDownPageTypes.Contains(PageType)) {
             // Site is in lockdown
             Lockdown lc = Program.Lockdown;
 

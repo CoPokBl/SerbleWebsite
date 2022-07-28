@@ -4,7 +4,7 @@
 @inject NavigationManager NavigationManager
 
 @if (!CustomCallBack) {
-    <RequireLogin RedirectToLogin="false" Callback="LoginProcessed"></RequireLogin>
+    <RequireLogin RedirectToLogin="false" Callback="LoginProcessed" NoLockdownCheck="true"></RequireLogin>
 }
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
