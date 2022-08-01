@@ -40,6 +40,10 @@
             <label>End Lockdown</label>
         </div>
     }
+    
+    <div class="button-element">
+       <button class="btn-danger btn" @onclick="Error">Throw Error</button> 
+    </div>
 
 </AdminGui>
 
@@ -82,5 +86,10 @@
         
         Program.Lockdown = lockdown;
         _output.Add("Lockdown started for all non admins.");
+    }
+    
+    private void Error() {
+        _output.Add("Throwing error...");
+        throw new Exception("This is an error");
     }
 }

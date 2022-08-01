@@ -10,5 +10,11 @@
   "mysql_ip": "mysql.example.com",
   "mysql_user": "coolperson",
   "mysql_password": "myverysecurepassword",
-  "mysql_database": "serble"
+  "mysql_database": "serble",
+  "smtp_username": "system@serble.net",
+  "smtp_password": "very secure password",
+  "smtp_host": "smtp.serble.net",
+  "smtp_port": "587",
+  "EmailAddress_System": "system@serble.net",
+  "EmailAddress_Newsletter": "newsletter@serble.net"
 }

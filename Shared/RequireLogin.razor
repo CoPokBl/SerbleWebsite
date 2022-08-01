@@ -5,6 +5,7 @@
 @inject IJSRuntime JsRuntime
 
 @code {
+    // TODO: Make it wrap around the whole page and display loading before login
 
     [Parameter]
     public Func<User?, bool>? Callback { get; set; } = _ => true; 

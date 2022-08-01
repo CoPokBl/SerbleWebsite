@@ -3,13 +3,13 @@ using GeneralPurposeLib;
 using MySql.Data.MySqlClient;
 using SerbleWebsite.Data.Schemas;
 
-namespace SerbleWebsite.Data; 
+namespace SerbleWebsite.Data.Storage; 
 
 public class MySqlStorageService : IStorageService {
     
     private MySqlConnection? _connection;  // MySQL Connection Object
     private string? _connectString;
-    
+
     private void CheckConnection() {
         if (_connection == null) {
             RepairConnection();
@@ -206,6 +206,14 @@ public class MySqlStorageService : IStorageService {
         };
         
         reader.Close();
+    }
+
+    public void CountUsers(out int userCount) {
+        CheckConnection();
+        using MySqlCommand cmd = new MySqlCommand();
+        cmd.Connection = _connection;
+        cmd.CommandText = @"SELECT COUNT(*) FROM serblesite_users";
+        userCount = (int)cmd.ExecuteScalar();
     }
 
     public void AddAuthorizedApp(string userId, AuthorizedApp app) {

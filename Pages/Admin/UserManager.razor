@@ -1,0 +1,74 @@
+@page "/Admin/usermanager"
+@using SerbleWebsite.Data.Schemas
+@using SerbleWebsite.Data
+@inject IJSRuntime JsRuntime
+
+<RequireLogin RequiredAccessLevel="AccountAccessLevel.Admin" RedirectToAccessDenied="true"></RequireLogin>
+
+<AdminGui Title="Admin" Page="AdminGui.CurrentPage.UserManager">
+    <h3>Users: @_userCount</h3>
+    
+    <hr/>
+    
+    <div>
+        <h1>Get User</h1>
+        <div>
+            <label>
+                Username
+                <input id="username-search" type="text"/>
+            </label>
+        </div>
+        <div>
+            <label>
+                Email
+                <input id="email-search" type="text"/>
+            </label>
+        </div>
+        <button class="btn-success btn" @onclick="Search">Search</button>
+    </div>
+    <hr/>
+    <div>
+        @if (_searchedUser == null) {
+            <h2>No User Found</h2>
+        }
+        else {
+            <h2>Found User:</h2>
+            <p>ID: @_searchedUser.Id</p>
+            <p>Username: @_searchedUser.Username</p>
+            <p>Email: @_searchedUser.Email</p>
+            <p>Access Level: @_searchedUser.PermLevel</p>
+            <p>Password Hash: @_searchedUser.PasswordHash</p>
+        }
+        
+    </div>
+</AdminGui>
+
+
+@code {
+    
+    private int _userCount;
+    private User? _searchedUser;
+
+    protected override void OnAfterRender(bool firstRender) {
+        if (!firstRender) return;
+        
+        Program.StorageService!.CountUsers(out _userCount);
+    }
+
+    private async void Search() {
+        HtmlInteractor htmlInteractor = new(JsRuntime);
+        string providedUsername = await htmlInteractor.GetValue("username-search");
+        if (providedUsername != "") {
+            Program.StorageService!.GetUserFromName(providedUsername, out _searchedUser);
+            ReloadText();
+            return;
+        }
+        _searchedUser = null;
+        ReloadText();
+    }
+    
+    private void ReloadText() {
+        InvokeAsync(StateHasChanged).Wait();
+    }
+
+}
