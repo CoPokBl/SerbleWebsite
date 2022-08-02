@@ -3,10 +3,10 @@ using GeneralPurposeLib;
 using MySql.Data.MySqlClient;
 using SerbleWebsite.Data.Schemas;
 
-namespace SerbleWebsite.Data.Storage; 
+namespace SerbleWebsite.Data.Storage;
 
 public class MySqlStorageService : IStorageService {
-    
+
     private MySqlConnection? _connection;  // MySQL Connection Object
     private string? _connectString;
 
@@ -24,9 +24,9 @@ public class MySqlStorageService : IStorageService {
         catch (Exception) {
             RepairConnection();
         }
-        
+
     }
-    
+
     private async void RepairConnection() {
         Logger.Warn("Repairing MySQL Connection");
         await _connection!.CloseAsync();
@@ -41,7 +41,7 @@ public class MySqlStorageService : IStorageService {
         }
         Logger.Info("MySQL Connection Repaired");
     }
-    
+
     public void Init() {
         Logger.Info("Connecting to MySQL...");
         _connectString = $"server={Program.Config!["mysql_ip"]};" +
@@ -77,14 +77,14 @@ public class MySqlStorageService : IStorageService {
     private void CreateTables() {
         SendMySqlStatement(@"CREATE TABLE IF NOT EXISTS serblesite_users(
                                 id VARCHAR(64) primary key,
-                                username VARCHAR(255), 
+                                username VARCHAR(255),
                                 email VARCHAR(64),
                                 password VARCHAR(64),
                                 permlevel INT,
                                 permstring VARCHAR(64))");
         SendMySqlStatement(@"CREATE TABLE IF NOT EXISTS serblesite_user_authorized_apps(
                                 userid VARCHAR(64),
-                                appid VARCHAR(64), 
+                                appid VARCHAR(64),
                                 scopes VARCHAR(128))");
         SendMySqlStatement(@"CREATE TABLE IF NOT EXISTS serblesite_apps(" +
                            "ownerid VARCHAR(64), " +
@@ -102,11 +102,11 @@ public class MySqlStorageService : IStorageService {
     }
 
     private void DatabaseConnectStateChanged(object obj, StateChangeEventArgs args) {
-        if (args.CurrentState != ConnectionState.Broken && 
+        if (args.CurrentState != ConnectionState.Broken &&
             args.CurrentState != ConnectionState.Closed) {
             return;
         }
-            
+
         // Reconnect
         try {
             _connection = new MySqlConnection(_connectString);
@@ -154,7 +154,7 @@ public class MySqlStorageService : IStorageService {
             PermLevel = reader.GetInt32("permlevel"),
             PermString = reader.GetString("permstring")
         };
-        
+
         reader.Close();
     }
 
@@ -179,7 +179,7 @@ public class MySqlStorageService : IStorageService {
         cmd.CommandText = @"DELETE FROM serblesite_users WHERE id=@id";
         cmd.Parameters.AddWithValue("@id", userId);
         cmd.ExecuteNonQuery();
-        
+
         // Delete all the authed app data
         cmd.CommandText = @"DELETE FROM serblesite_user_authorized_apps WHERE userid=@id";
         cmd.ExecuteNonQuery();
@@ -204,16 +204,16 @@ public class MySqlStorageService : IStorageService {
             PermLevel = reader.GetInt32("permlevel"),
             PermString = reader.GetString("permstring")
         };
-        
+
         reader.Close();
     }
 
-    public void CountUsers(out int userCount) {
+    public void CountUsers(out long userCount) {
         CheckConnection();
         using MySqlCommand cmd = new MySqlCommand();
         cmd.Connection = _connection;
         cmd.CommandText = @"SELECT COUNT(*) FROM serblesite_users";
-        userCount = (int)cmd.ExecuteScalar();
+        userCount = (long) cmd.ExecuteScalar();
     }
 
     public void AddAuthorizedApp(string userId, AuthorizedApp app) {
@@ -234,15 +234,15 @@ public class MySqlStorageService : IStorageService {
         cmd.CommandText = @"SELECT * FROM serblesite_user_authorized_apps WHERE userid=@id";
         cmd.Parameters.AddWithValue("@id", userId);
         using MySqlDataReader reader2 = cmd.ExecuteReader();
-        
+
         List<AuthorizedApp> authedApps = new ();
         while (reader2.Read()) {
             authedApps.Add(new AuthorizedApp(
-                reader2.GetString("appid"), 
+                reader2.GetString("appid"),
                 reader2.GetString("scopes")));
         }
         reader2.Close();
-        
+
         apps = authedApps.ToArray();
     }
 
@@ -286,7 +286,7 @@ public class MySqlStorageService : IStorageService {
             Description = reader.GetString("description"),
             ClientSecret = reader.GetString("clientsecret")
         };
-        
+
         reader.Close();
     }
 

@@ -7,9 +7,9 @@
 
 <AdminGui Title="Admin" Page="AdminGui.CurrentPage.UserManager">
     <h3>Users: @_userCount</h3>
-    
+
     <hr/>
-    
+
     <div>
         <h1>Get User</h1>
         <div>
@@ -39,20 +39,21 @@
             <p>Access Level: @_searchedUser.PermLevel</p>
             <p>Password Hash: @_searchedUser.PasswordHash</p>
         }
-        
+
     </div>
 </AdminGui>
 
 
 @code {
-    
-    private int _userCount;
+
+    private long _userCount = -1;
     private User? _searchedUser;
 
     protected override void OnAfterRender(bool firstRender) {
         if (!firstRender) return;
-        
+
         Program.StorageService!.CountUsers(out _userCount);
+        ReloadText();
     }
 
     private async void Search() {
@@ -66,7 +67,7 @@
         _searchedUser = null;
         ReloadText();
     }
-    
+
     private void ReloadText() {
         InvokeAsync(StateHasChanged).Wait();
     }

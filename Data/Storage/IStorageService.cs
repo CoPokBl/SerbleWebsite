@@ -1,17 +1,17 @@
 using SerbleWebsite.Data.Schemas;
 
-namespace SerbleWebsite.Data.Storage; 
+namespace SerbleWebsite.Data.Storage;
 
 public interface IStorageService {
     public void Init();
     public void Deinit();
-    
+
     public void AddUser(User userDetails, out User newUser);
     public void GetUser(string userId, out User? user);
     public void UpdateUser(User userDetails);
     public void DeleteUser(string userId);
     public void GetUserFromName(string userName, out User? user);
-    public void CountUsers(out int userCount);
+    public void CountUsers(out long userCount);
 
     public void AddAuthorizedApp(string userId, AuthorizedApp app);
     public void GetAuthorizedApps(string userId, out AuthorizedApp[] apps);
