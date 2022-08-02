@@ -2,6 +2,7 @@
 @using SerbleWebsite.Data.Schemas
 @using SerbleWebsite.Data
 @inject IJSRuntime JsRuntime
+@inject NavigationManager NavigationManager
 
 <RequireLogin RequiredAccessLevel="AccountAccessLevel.Admin" RedirectToAccessDenied="true"></RequireLogin>
 
@@ -38,6 +39,7 @@
             <p>Email: @_searchedUser.Email</p>
             <p>Access Level: @_searchedUser.PermLevel</p>
             <p>Password Hash: @_searchedUser.PasswordHash</p>
+            <button class="btn btn-outline-info" @onclick="LoginAsSearchedUser">Login As User</button>
         }
 
     </div>
@@ -70,6 +72,21 @@
 
     private void ReloadText() {
         InvokeAsync(StateHasChanged).Wait();
+    }
+
+    private async void LoginAsSearchedUser() {
+        if (_searchedUser == null) return;
+        
+        // Get token
+        string token = new TokenHandler(Program.Config!).GenerateToken(new Dictionary<string, string> {
+            { "scope", "1" },
+            { "id", _searchedUser.Id }
+        });
+        
+        // Set cookie
+        Cookie cookieService = new (JsRuntime);
+        await cookieService.SetValue("token", token, 1);
+        NavigationManager.NavigateTo("/");
     }
 
 }

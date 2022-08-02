@@ -18,7 +18,7 @@
     
     [Parameter]
     public bool NoLockdownCheck { get; set; }
-    
+
     [Parameter]
     public AccountAccessLevel RequiredAccessLevel { get; set; } = AccountAccessLevel.Normal;
 
@@ -53,7 +53,7 @@
         // Get User
         Program.StorageService!.GetUser(claims["id"], out User? user);
         if (user == null) { NotLoggedIn(); return; }
-        if (user.PermLevel < (int) RequiredAccessLevel) { NotLoggedIn(); return; }
+        if (user.PermLevel < (int) RequiredAccessLevel) { NotLoggedIn(user.PermLevel == 0); return; }
 
         // Lockdowns
         if (!NoLockdownCheck && Program.Lockdown != null && Program.Lockdown.LockedDownPageTypes.Contains(PageType)) {
@@ -74,10 +74,14 @@
         }
     }
     
-    private void NotLoggedIn() {
+    private void NotLoggedIn(bool disabledAccount = false) {
         // Redirect if redirect is enabled
         if (RedirectToAccessDenied) {
             NavigationManager.NavigateTo("/accessdenied?page=" + Uri.EscapeDataString(NavigationManager.Uri));
+            return;
+        }
+        if (disabledAccount) {
+            NavigationManager.NavigateTo("/accountdisabled");
             return;
         }
         if (RedirectToLogin) {
