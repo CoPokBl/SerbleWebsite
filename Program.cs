@@ -31,7 +31,10 @@ public static class Program {
         { "smtp_host", "smtp.serble.net" },
         { "smtp_port", "587" },
         { "EmailAddress_System", "system@serble.net" },
-        { "EmailAddress_Newsletter", "newsletter@serble.net" }
+        { "EmailAddress_Newsletter", "newsletter@serble.net" },
+        { "admin_contact_email", "admin@serble.net" },
+        { "google_recaptcha_site_key", "" },
+        { "google_recaptcha_secret_key", "" }
     };
     public static Dictionary<string, string>? Config;
     public static IStorageService? StorageService;
@@ -163,6 +166,7 @@ public static class Program {
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
             builder.Services.AddControllers();
+            builder.Services.AddHttpContextAccessor();
             builder.WebHost.UseUrls(Config["bind_url"]);
         }
         catch (Exception e) {

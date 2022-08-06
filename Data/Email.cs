@@ -33,17 +33,23 @@ public class Email {
         };
     }
 
-    public void Send() {
-        if (To.Any(string.IsNullOrEmpty)) {
-            throw new InvalidEmailException("To Email is not valid");
-        }
-        
+    public async Task SendAsync() => await GenerateClient().SendMailAsync(CollateMessage());
+    public void Send() => GenerateClient().Send(CollateMessage());
+
+    private static SmtpClient GenerateClient() {
         SmtpClient client = new (Program.Config!["smtp_host"]) {
             Port = int.Parse(Program.Config!["smtp_port"]),
             Credentials = new NetworkCredential(Program.Config["smtp_username"], Program.Config["smtp_password"]),
             EnableSsl = true
         };
+        return client;
+    }
 
+    private MailMessage CollateMessage() {
+        if (To.Any(string.IsNullOrEmpty)) {
+            throw new InvalidEmailException("To Email is not valid");
+        }
+        
         MailMessage msg = new();
         msg.From = new MailAddress(From, "Serble");
         foreach (string toAdr in To) {
@@ -51,8 +57,7 @@ public class Email {
         }
         msg.Subject = Subject;
         msg.Body = Body;
-
-        client.Send(msg);
+        return msg;
     }
     
 }

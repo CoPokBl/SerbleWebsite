@@ -5,12 +5,6 @@ It should be linked before all other scripts
 
 */
 
-(function () {
-    'use strict'
-
-    feather.replace({ 'aria-hidden': 'true' })
-})()
-
 // Replace all occurrences of the first string with the second string
 function replaceAll(str, find, replace) {
     return str.replace(new RegExp(find, 'g'), replace);
@@ -95,4 +89,9 @@ window.blazorExtensions = {
         }
         document.cookie = name + "=" + value + expires + "; path=/";
     }
+}
+
+window.getCaptcha = async function () {
+    await grecaptcha.ready(function() {});
+    return await grecaptcha.execute('XXX', {action: 'formSubmission'});
 }

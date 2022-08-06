@@ -22,13 +22,23 @@
             <li class="nav-item">
                 <a class="nav-link" href="/status">Status</a>
             </li>
+            
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="gameDrop" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Games
+                </a>
+                <div class="dropdown-menu" aria-labelledby="gameDrop">
+                    <a class="dropdown-item" href="/wordmaster">Word Master</a>
+                </div>
+            </li>
 
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link dropdown-toggle" href="#" id="infoDrop" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Info
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <div class="dropdown-menu" aria-labelledby="infoDrop">
                     <a class="dropdown-item" href="/discord">Discord</a>
+                    <a class="dropdown-item" href="/contact">Contact</a>
                 </div>
             </li>
         </ul>
@@ -52,6 +62,11 @@
             </ul>
         </div>
     }
+    else if (_loggingIn) {
+        <div class="dropdown text-end" style="padding-right: 180px;">
+            <p>Loading...</p>
+        </div>
+    }
     else {
         <div class="dropdown text-end" style="padding-right: 180px;">
             <button type="button" class="btn btn-outline-light" @onclick="Login">Login</button>
@@ -66,12 +81,14 @@
     public bool CustomCallBack { get; set; }
     
     private User? _user = null;
+    private bool _loggingIn = false;
 
     private bool LoginProcessed(User? user) {
         if (user == null) {
             return true;
         }
         _user = user;
+        _loggingIn = false;
         ReloadText();
         return true;
     }
