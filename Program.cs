@@ -2,6 +2,7 @@
 using System.Security;
 using GeneralPurposeLib;
 using SerbleWebsite.Data;
+using SerbleWebsite.Data.Raw;
 using SerbleWebsite.Data.Schemas;
 using SerbleWebsite.Data.Storage;
 using LogLevel = GeneralPurposeLib.LogLevel;
@@ -141,6 +142,18 @@ public static class Program {
                     return 1;
 
             }
+        }
+        
+        // Load Raw Data
+        Logger.Info("Loading raw data...");
+        try {
+            RawDataManager.LoadRawData();
+            Logger.Info("Raw data loaded.");
+        }
+        catch (Exception e) {
+            Logger.Error("Failed to load raw data");
+            Logger.Error(e);
+            return 1;
         }
 
         WebApplicationBuilder builder = WebApplication.CreateBuilder(args);

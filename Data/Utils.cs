@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.JSInterop;
@@ -13,6 +14,16 @@ public static class Utils {
         }
 
         return builder.ToString();
+    }
+
+    public static string ToFormat(this TimeSpan timeSpan, string format) {
+        string result = format;
+        result = result.Replace("{d}", timeSpan.Days.ToString());
+        result = result.Replace("{h}", timeSpan.Hours.ToString());
+        result = result.Replace("{m}", timeSpan.Minutes.ToString());
+        result = result.Replace("{s}", timeSpan.Seconds.ToString());
+        result = result.Replace("{ms}", timeSpan.Milliseconds.ToString());
+        return result;
     }
 
 }

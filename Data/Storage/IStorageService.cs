@@ -22,4 +22,7 @@ public interface IStorageService {
     public void UpdateOAuthApp(OAuthApp app);
     public void DeleteOAuthApp(string appId);
     public void GetOAuthAppsFromUser(string userId, out OAuthApp[] apps);
+    
+    public void BasicKvSet(string key, string value);
+    public void BasicKvGet(string key, out string? value);
 }

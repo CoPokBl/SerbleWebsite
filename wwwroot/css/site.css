@@ -24,6 +24,12 @@ a, .btn-link {
     padding-top: 1.1rem;
 }
 
+.omfg_just_center_already {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;
 }

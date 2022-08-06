@@ -17,11 +17,13 @@ public class FileStorageService : IStorageService {
     private List<OAuthApp> _apps = new();
     // (userid, appid, scopes)
     private List<(string, AuthorizedApp)> _authorizations = new();
+    private Dictionary<string, string> _kv = new();
 
     public void Init() {
         _users = new List<User>();
         _apps = new List<OAuthApp>();
         _authorizations = new List<(string, AuthorizedApp)>();
+        _kv = new Dictionary<string, string>();
         
         // Add dummy data
         _users.Add(new User {
@@ -39,10 +41,12 @@ public class FileStorageService : IStorageService {
         Logger.Info("Loading data from data.json...");
         if (File.Exists("data.json")) {
             string jsonData = File.ReadAllText("data.json");
-            (List<User>, List<OAuthApp>, List<(string, AuthorizedApp)>) data = JsonConvert.DeserializeObject<(List<User>, List<OAuthApp>, List<(string, AuthorizedApp)>)>(jsonData);
+            (List<User>, List<OAuthApp>, List<(string, AuthorizedApp)>, Dictionary<string, string>) data = 
+                JsonConvert.DeserializeObject<(List<User>, List<OAuthApp>, List<(string, AuthorizedApp)>, Dictionary<string, string>)>(jsonData);
             _users = data.Item1;
             _apps = data.Item2;
             _authorizations = data.Item3;
+            _kv = data.Item4 ?? new Dictionary<string, string>();
             Logger.Info("Loaded data from data.json");
         } else {
             Logger.Info("No data.json found, creating new data.json");
@@ -60,7 +64,7 @@ public class FileStorageService : IStorageService {
             string errorText = "Unspecified error";
             Logger.Info("Saving data to data.json...");
             try {
-                File.WriteAllText("data.json", JsonConvert.SerializeObject((_users, _apps, _authorizations)));
+                File.WriteAllText("data.json", JsonConvert.SerializeObject((_users, _apps, _authorizations, _kv)));
                 Logger.Info("Saved data to data.json");
             }
             catch (JsonException e) {
@@ -159,5 +163,13 @@ public class FileStorageService : IStorageService {
 
     public void GetOAuthAppsFromUser(string userId, out OAuthApp[] apps) {
         apps = _apps.Where(a => a.OwnerId == userId).ToArray();
+    }
+
+    public void BasicKvSet(string key, string value) {
+        _kv[key] = value;
+    }
+
+    public void BasicKvGet(string key, out string? value) {
+        value = _kv.TryGetValue(key, out string? v) ? v : null;
     }
 }

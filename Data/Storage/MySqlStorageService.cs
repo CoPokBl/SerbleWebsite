@@ -92,6 +92,9 @@ public class MySqlStorageService : IStorageService {
                            "name VARCHAR(64), " +
                            "description VARCHAR(1024), " +
                            "clientsecret VARCHAR(64))");
+        SendMySqlStatement(@"CREATE TABLE IF NOT EXISTS serblesite_kv(" +
+                            "k VARCHAR(64)," +
+                            "v VARCHAR(1024))");
     }
 
     private void SendMySqlStatement(string statement) {
@@ -330,5 +333,30 @@ public class MySqlStorageService : IStorageService {
         }
         reader.Close();
         apps = appsList.ToArray();
+    }
+
+    public void BasicKvSet(string key, string value) {
+        CheckConnection();
+        using MySqlCommand cmd = new MySqlCommand();
+        cmd.Connection = _connection;
+        cmd.CommandText = @"INSERT INTO serblesite_kv(k, v) VALUES(@key, @value)";
+        cmd.Parameters.AddWithValue("@key", key);
+        cmd.Parameters.AddWithValue("@value", value);
+        cmd.ExecuteNonQuery();
+    }
+
+    public void BasicKvGet(string key, out string? value) {
+        CheckConnection();
+        using MySqlCommand cmd = new MySqlCommand();
+        cmd.Connection = _connection;
+        cmd.CommandText = @"SELECT v FROM serblesite_kv WHERE k=@key";
+        cmd.Parameters.AddWithValue("@key", key);
+        using MySqlDataReader reader = cmd.ExecuteReader();
+        if (!reader.Read()) {
+            value = null;
+            return;
+        }
+        value = reader.GetString("v");
+        reader.Close();
     }
 }
