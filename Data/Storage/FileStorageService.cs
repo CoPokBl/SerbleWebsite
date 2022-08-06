@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using SerbleWebsite.Data.Schemas;
 using JsonException = System.Text.Json.JsonException;
 
-namespace SerbleWebsite.Data.Storage; 
+namespace SerbleWebsite.Data.Storage;
 
 /*
  * Dotnet's builtin JSON serializer does not seem to work with truples.
@@ -12,7 +12,7 @@ namespace SerbleWebsite.Data.Storage;
  */
 
 public class FileStorageService : IStorageService {
-    
+
     private List<User> _users = new();
     private List<OAuthApp> _apps = new();
     // (userid, appid, scopes)
@@ -126,8 +126,8 @@ public class FileStorageService : IStorageService {
         user = _users.FirstOrDefault(u => u.Username == userName);
     }
 
-    public void CountUsers(out int userCount) {
-        userCount = _users.Count;
+    public void CountUsers(out long userCount) {
+        userCount = (long) _users.Count;
     }
 
     public void AddAuthorizedApp(string userId, AuthorizedApp app) {
