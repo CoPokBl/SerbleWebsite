@@ -21,6 +21,13 @@ public static class ScopeHandler {
         "Account Information",
         "Control Of Authorized Applications"
     };
+    
+    public enum ScopesEnum {
+        FullAccess,
+        FileHost,
+        UserInfo,
+        AppsControl
+    }
 
     // id, name
     public static List<(string, string)> ScopeList => Scopes.Select((t, i) => (t, ScopeNames[i])).ToList();
@@ -52,6 +59,14 @@ public static class ScopeHandler {
     
     public static string GetDescriptionFromName(string name) {
         return ScopeDescriptions[Array.IndexOf(ScopeNames, name)];
+    }
+
+    public static IEnumerable<ScopesEnum> ScopesIdsToEnumArray(IEnumerable<string> scopes) {
+        return scopes.Select(t => (ScopesEnum)Enum.Parse(typeof(ScopesEnum), t));
+    }
+    
+    public static IEnumerable<string> ScopesEnumToIdsArray(IEnumerable<ScopesEnum> scopes) {
+        return scopes.Select(t => t.ToString());
     }
     
 }

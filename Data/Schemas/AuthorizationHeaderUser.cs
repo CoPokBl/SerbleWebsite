@@ -2,13 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace SerbleWebsite.Data.Schemas; 
 
-public class AuthorizationHeader {
+public class AuthorizationHeaderUser {
     
     [FromHeader]
-    // Format: "SECRET USERID"
+    // Format: "APPID SECRET"
     public string SerbleAuth { get; set; }
 
-    public bool Check(string appId, out string[]? scopes, out User? user, out string? msg) {
+    public bool Check(string userId, out string[]? scopes, out User? user, out string? msg) {
         scopes = null;
         user = null;
         msg = null;
@@ -19,12 +19,13 @@ public class AuthorizationHeader {
         }
 
         string[] parts = SerbleAuth.Split(' ');
-        if (parts.Length != 2) {
+        if (parts.Length != 3) {
             msg = "Header is not in the correct format";
             return false;
         }
-        string secret = parts[0];
-        string userId = parts[1];
+
+        string appId = parts[0];
+        string secret = parts[1];
 
         // Find app
         Program.StorageService!.GetOAuthApp(appId, out OAuthApp? app);
