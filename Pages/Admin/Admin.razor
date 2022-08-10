@@ -1,0 +1,17 @@
+@page "/Admin"
+@using SerbleWebsite.Data.Schemas
+
+<RequireLogin RequiredAccessLevel="AccountAccessLevel.Admin" RedirectToAccessDenied="true"></RequireLogin>
+
+<AdminGui Title="Admin" Page="AdminGui.CurrentPage.Dashboard">
+    <p>
+        Hello Administrator, you must be a very cool person because you have access to this! If you have access to this by mistake 
+        <a href="/">Click here</a> to go back to the home page and have your memory wiped, but before we wipe your memory please contact 
+        me using <a href="https://zaneharrison.com/contact">one of these</a>.
+    </p>
+</AdminGui>
+
+
+@code {
+    
+}

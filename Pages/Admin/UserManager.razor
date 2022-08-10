@@ -1,0 +1,184 @@
+@page "/Admin/usermanager"
+@using SerbleWebsite.Data.Schemas
+@using SerbleWebsite.Data
+@inject IJSRuntime JsRuntime
+@inject NavigationManager NavigationManager
+
+<RequireLogin RequiredAccessLevel="AccountAccessLevel.Admin" RedirectToAccessDenied="true"></RequireLogin>
+
+<AdminGui Title="Admin" Page="AdminGui.CurrentPage.UserManager">
+    <h3>Users: @_userCount</h3>
+
+    <hr/>
+
+    <div>
+        <h1>Get User</h1>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text bg-dark text-light" id="inputGroup-sizing-default">Username</span>
+          </div>
+          <input type="text" id="username-search" class="form-control bg-dark text-light" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text bg-dark text-light" id="inputGroup-sizing-default">Email (Not functional yet)</span>
+          </div>
+          <input type="text" id="email-search" class="form-control bg-dark text-light" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+        </div>
+        <button class="btn-success btn" @onclick="Search">Search</button>
+    </div>
+    <hr/>
+    <div>
+        @if (_searchedUser == null) {
+            <h2>No User Found</h2>
+        }
+        else {
+            <h2>Found User:</h2>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text bg-dark text-light" id="inputGroup-sizing-default">ID</span>
+                </div>
+                <input type="text" id="su_id" class="form-control bg-dark text-light" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text bg-dark text-light" id="inputGroup-sizing-default">Username</span>
+                </div>
+                <input type="text" id="su_username" class="form-control bg-dark text-light" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text bg-dark text-light" id="inputGroup-sizing-default">Email</span>
+                </div>
+                <input type="text" id="su_email" class="form-control bg-dark text-light" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text bg-dark text-light" id="inputGroup-sizing-default">Perm Level</span>
+                </div>
+                <input type="text" id="su_permlvl" class="form-control bg-dark text-light" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text bg-dark text-light" id="inputGroup-sizing-default">Password Hash</span>
+                </div>
+                <input type="text" id="su_passwordhash" class="form-control bg-dark text-light" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+            </div>
+            
+            <button class="btn btn-outline-success" @onclick="UpdateUser">Save</button>
+            
+            <hr/>
+            
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text bg-dark text-light" id="inputGroup-sizing-default">Set Password</span>
+                </div>
+                <input type="text" id="su_setpassword" class="form-control bg-dark text-light" aria-label="Default" aria-describedby="inputGroup-sizing-default">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-light" type="button" @onclick="UpdatePassword">Update</button>
+                </div>
+            </div>
+            
+            <div class="button-box">
+                <button class="btn btn-outline-info button-box-element" @onclick="LoginAsSearchedUser">Login As User</button>
+                @if (_searchedUser.PermLevel > 0) {
+                    <button class="btn btn-outline-danger button-box-element" @onclick="() => SetAccountActive(false)">Disable Account</button>
+                }
+                else {
+                    <button class="btn btn-outline-success button-box-element" @onclick="() => SetAccountActive(true)">Enable Account</button>
+                }
+                <button class="btn btn-outline-danger button-box-element" @onclick="DeleteAccount">Delete Account</button>
+            </div>
+
+        }
+
+    </div>
+</AdminGui>
+
+
+@code {
+
+    private long _userCount = -1;
+    private User? _searchedUser;
+
+    protected override void OnAfterRender(bool firstRender) {
+        if (!firstRender) return;
+
+        Program.StorageService!.CountUsers(out _userCount);
+        ReloadText();
+    }
+
+    private async void Search() {
+        HtmlInteractor htmlInteractor = new(JsRuntime);
+        string providedUsername = await htmlInteractor.GetValue("username-search");
+        if (providedUsername != "") {
+            Program.StorageService!.GetUserFromName(providedUsername, out _searchedUser);
+            ReloadText();
+            if (_searchedUser != null) {
+                UpdateSearchedUserInfo();
+            }
+            return;
+        }
+        _searchedUser = null;
+        ReloadText();
+    }
+
+    private void ReloadText() {
+        InvokeAsync(StateHasChanged).Wait();
+    }
+
+    private async void UpdateSearchedUserInfo() {
+        HtmlInteractor htmlInteractor = new(JsRuntime);
+        await htmlInteractor.SetValue("su_id", _searchedUser!.Id);
+        await htmlInteractor.SetValue("su_username", _searchedUser!.Username);
+        await htmlInteractor.SetValue("su_email", _searchedUser!.Email);
+        await htmlInteractor.SetValue("su_permlvl", _searchedUser!.PermLevel.ToString());
+        await htmlInteractor.SetValue("su_passwordhash", _searchedUser!.PasswordHash);
+        await htmlInteractor.SetValue("su_setpassword", "");
+    }
+
+    private void DeleteAccount() {
+        Program.StorageService!.DeleteUser(_searchedUser!.Id);
+        _searchedUser = null;
+        ReloadText();
+    }
+
+    private void SetAccountActive(bool active) {
+        _searchedUser!.PermLevel = active ? 1 : 0;
+        _searchedUser.RegisterChanges();
+        Search();
+    }
+
+    private async void UpdateUser() {
+        HtmlInteractor htmlInteractor = new(JsRuntime);
+        _searchedUser!.Id = await htmlInteractor.GetValue("su_id");
+        _searchedUser!.Username = await htmlInteractor.GetValue("su_username");
+        _searchedUser!.Email = await htmlInteractor.GetValue("su_email");
+        _searchedUser!.PermLevel = int.Parse(await htmlInteractor.GetValue("su_permlvl"));
+        _searchedUser!.PasswordHash = await htmlInteractor.GetValue("su_passwordhash");
+        _searchedUser.RegisterChanges();
+    }
+
+    private async void UpdatePassword() {
+        HtmlInteractor htmlInteractor = new(JsRuntime);
+        _searchedUser!.PasswordHash = Utils.Hash(await htmlInteractor.GetValue("su_setpassword"));
+        _searchedUser.RegisterChanges();
+        Search();
+    }
+
+    private async void LoginAsSearchedUser() {
+        if (_searchedUser == null) return;
+        
+        // Get token
+        string token = new TokenHandler(Program.Config!).GenerateToken(new Dictionary<string, string> {
+            { "scope", "1" },
+            { "id", _searchedUser.Id }
+        });
+        
+        // Set cookie
+        Cookie cookieService = new (JsRuntime);
+        await cookieService.SetValue("token", token, 1);
+        NavigationManager.NavigateTo("/account");
+    }
+
+}

@@ -1,0 +1,16 @@
+@page "/PleaseThrowAnError"
+@using SerbleWebsite.Data.Schemas
+
+<RequireLogin RequiredAccessLevel="AccountAccessLevel.Admin" RedirectToAccessDenied="true"></RequireLogin>
+
+<div class="text-center" style="padding: 30px">
+   <button class="btn-danger" style="padding: 50px" @onclick="Error">Throw Error</button> 
+</div>
+
+@code {
+
+    private void Error() {
+        throw new Exception("This is an error");
+    }
+
+}

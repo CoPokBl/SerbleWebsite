@@ -1,0 +1,84 @@
+@page "/AuthorizedApps"
+@using SerbleWebsite.Data.Schemas
+@using SerbleWebsite.Data
+@using GeneralPurposeLib
+@inject NavigationManager NavigationManager
+
+<RequireLogin Callback="LoginChecked"></RequireLogin>
+
+<div class="text-center">
+    <br/>
+    <h3>Authorized Applications</h3>
+    <hr/>
+</div>
+
+
+<div style="padding: 30px">
+    @if (_user == null) {
+        <h2>Loading...</h2>
+    }
+    else {
+        @for (int i = 0, x = 0; i < _authorizedApps!.Length / 2 + 1; i++) {
+            <div class="row align-items-md-stretch">
+                @for (int y = 0; y < 2; y++) {
+                    if (x > _authorizedApps.Length - 1) {
+                            continue;
+                    }
+                    AuthorizedApp app = _authorizedApps[x];
+                    Program.StorageService!.GetOAuthApp(app.AppId, out OAuthApp? oauthApp);
+                    if (oauthApp == null) {
+                        Logger.Debug("App not found: " + app.AppId);
+                        y--;
+                        x++;
+                        continue;
+                    }
+                    <div class="col-md-6">
+                        <div class="h-100 p-5 bg-dark border rounded-3">
+                            <h2>@oauthApp.Name</h2>
+                            <p>@oauthApp.Description</p>
+                            <h5>Scopes:</h5>
+                            <ul>
+                                @foreach (string scope in
+                                    ScopeHandler.ListOfScopeIdsToScopeNames(ScopeHandler.StringToListOfScopeIds(app.Scopes))) {
+                                    <li><a href="javascript: void(0)" data-bs-toggle="tooltip" data-bs-placement="left" title="@ScopeHandler.GetDescriptionFromName(scope)">@scope</a></li>
+                                }
+                            </ul>
+                            <button class="btn btn-outline-danger" type="button" @onclick="_ => RevokeApp(oauthApp.Id)">Revoke Access</button>
+                        </div>
+                    </div>
+                    x++;
+                }
+            </div>
+        }
+    }
+</div>
+
+
+@code {
+    private User? _user;
+    private AuthorizedApp[]? _authorizedApps;
+
+    private bool LoginChecked(User user) {
+        _authorizedApps = user.AuthorizedApps;
+        _user = user;
+        foreach (AuthorizedApp app in _authorizedApps) {
+            Logger.Debug("App ID Obtained: " + app.AppId);
+        }
+        ReloadText();
+        return true;
+    }
+    
+    private void ReloadText() {
+        InvokeAsync(StateHasChanged).Wait();
+    }
+    
+    private void RevokeApp(string app) {
+        if (_user == null) return;
+        List<AuthorizedApp> authedAppsList = _user.AuthorizedApps.ToList();
+        authedAppsList.RemoveAll(x => x.AppId == app);
+        _user.AuthorizedApps = authedAppsList.ToArray();
+        _user.RegisterChanges();
+        NavigationManager.NavigateTo(NavigationManager.Uri, true);
+    }
+    
+}

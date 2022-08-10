@@ -1,0 +1,100 @@
+@using SerbleWebsite.Data
+@using SerbleWebsite.Data.Schemas
+@using GeneralPurposeLib
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
+
+@code {
+    // TODO: Make it wrap around the whole page and display loading before login
+
+    [Parameter]
+    public Func<User?, bool>? Callback { get; set; } = _ => true; 
+
+    [Parameter]
+    public bool RedirectToLogin { get; set; } = true;
+    
+    [Parameter]
+    public bool RedirectToAccessDenied { get; set; }
+    
+    [Parameter]
+    public bool NoLockdownCheck { get; set; }
+
+    [Parameter]
+    public AccountAccessLevel RequiredAccessLevel { get; set; } = AccountAccessLevel.Normal;
+
+    private PageType PageType => RequiredAccessLevel switch {
+        AccountAccessLevel.Normal => PageType.Account,
+        AccountAccessLevel.Admin => PageType.Admin,
+        _ => PageType.NonAccount
+    };
+
+    public void RunCheck(Func<User?, bool> callback) {
+        Callback = callback;
+        RedirectToLogin = false;
+        OnAfterRender(true);
+    }
+
+    protected override async void OnAfterRender(bool firstRender) {
+        if (!firstRender) return;
+        Cookie cookieHandler = new (JsRuntime);
+
+        // Attempt Login
+        string tokenCookie = await cookieHandler.GetValue("token");
+        if (tokenCookie == "") {
+            NotLoggedIn();
+        }
+        
+        if (!new TokenHandler(Program.Config!).ValidateCurrentToken(tokenCookie, out Dictionary<string, string>? claims, out _)) {
+            NotLoggedIn();
+            return;
+        }
+        if (claims == null) { throw new Exception("Claims are null"); }
+        
+        // Get User
+        Program.StorageService!.GetUser(claims["id"], out User? user);
+        if (user == null) { NotLoggedIn(); return; }
+        if (user.PermLevel < (int) RequiredAccessLevel) { NotLoggedIn(user.PermLevel == 0); return; }
+
+        // Lockdowns
+        if (!NoLockdownCheck && Program.Lockdown != null && Program.Lockdown.LockedDownPageTypes.Contains(PageType)) {
+            // Site is in lockdown
+            Lockdown lc = Program.Lockdown;
+
+            if (!lc.ExceptedPermLevelInts.Contains(user.PermLevel)) {
+                // Page is in lockdown
+                Logger.Warn($"{user.Username} tried to access page (type: {PageType}) while locked down. Blocked access.");
+                LockedDown();
+                return;
+            }
+        }
+
+        // If page returns false, then user is not allowed to access page
+        if (!Callback!.Invoke(user)) {
+            NotLoggedIn();
+        }
+    }
+    
+    private void NotLoggedIn(bool disabledAccount = false) {
+        // Redirect if redirect is enabled
+        if (RedirectToAccessDenied) {
+            NavigationManager.NavigateTo("/accessdenied?page=" + Uri.EscapeDataString(NavigationManager.Uri));
+            return;
+        }
+        if (disabledAccount) {
+            NavigationManager.NavigateTo("/accountdisabled");
+            return;
+        }
+        if (RedirectToLogin) {
+            NavigationManager.NavigateTo("/login?return_url=" + Uri.EscapeDataString(NavigationManager.Uri));
+            return;
+        }
+        
+        // Otherwise run callback with null user
+        Callback!.Invoke(null);
+    }
+
+    private void LockedDown() {
+        NavigationManager.NavigateTo("/lockdown");
+    }
+
+}
