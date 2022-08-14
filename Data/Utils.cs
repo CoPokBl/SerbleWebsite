@@ -1,6 +1,9 @@
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
+using System.Web;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
 namespace SerbleWebsite.Data; 
@@ -24,6 +27,16 @@ public static class Utils {
         result = result.Replace("{s}", timeSpan.Seconds.ToString());
         result = result.Replace("{ms}", timeSpan.Milliseconds.ToString());
         return result;
+    }
+    
+    // get all query values
+    public static NameValueCollection GetQueryStrings(this NavigationManager navigationManager) {
+        return HttpUtility.ParseQueryString(new Uri(navigationManager.Uri).Query);
+    }
+
+    // get single querystring value with specified key
+    public static string? GetQueryStrings(this NavigationManager navigationManager, string key) {
+        return navigationManager.GetQueryStrings()[key];
     }
 
 }

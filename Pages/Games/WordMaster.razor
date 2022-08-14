@@ -1,0 +1,134 @@
+@page "/WordMaster"
+@using SerbleWebsite.Data
+@inject IJSRuntime JsRuntime
+@inject HttpClient Http
+
+<div class="text-center">
+<h1>Word Master</h1>
+
+<div id="game" class="container border border-info border-3 rounded bg-dark p-5">
+<div>
+    <div>
+        <div class="d-flex flex-row justify-content-center">
+            <h3 style="padding-right: 50px; padding-left: 50px">Words: @_words.Count(word => word.Item1)</h3>
+            @if (_finished) {
+                <h3 class="text-danger">Game Over</h3>
+            }
+            else {
+                <h3>Time Left: @_secondsRemaining</h3>
+            }
+        </div>
+        <h3 class="text-danger text-center">@StrikesString</h3>
+    </div>
+
+    @if (_words.Count == 0) {
+        <p>Enter a word to begin...</p>
+    }
+    else {
+        @if (_words.Last().Item1) {
+            <p class="text-success">@_words.Last().Item2</p>
+        }
+        else {
+            <p class="text-danger">@_words.Last().Item2</p>
+        }
+    }
+</div>
+
+    <form onsubmit="return false" class="d-flex flex-row justify-content-center">
+        @if (_finished) {
+            <input type="text" class="form-control w-25 text-center" id="word-input" placeholder="Enter A Word" readonly/>
+        }
+        else {
+            <input type="text" class="form-control w-25 text-center" id="word-input" placeholder="Enter A Word"/>
+        }
+
+        @if (_finished) {
+            <button class="btn btn-danger" @onclick="Reset">Reset</button>
+        }
+        else {
+            <button class="btn btn-primary" @onclick="AddWord">Submit</button>
+        }
+    </form>
+    @if (_newWr) {
+        <h3>NEW RECORD: @_record</h3>
+    }
+    else {
+        <h3>Record: @(_record == -1 ? "Loading..." : _record)</h3>
+    }
+</div>
+    
+</div>
+
+@code {
+    private readonly List<(bool, string)> _words = new();
+    private int _strikes;
+    private string StrikesString => string.Join("", Enumerable.Repeat("X", _strikes));
+    private Timer? _stopwatch;
+    private int _secondsRemaining = 30;
+    private bool _finished;
+    private int _record = -1;
+    private string[]? _englishWords;
+    private bool _newWr;
+
+    private async void AddWord() {
+        _stopwatch ??= new Timer(CountdownCallback, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
+        if (_finished) return;
+        
+        HtmlInteractor interactor = new (JsRuntime);
+        string guess = await interactor.GetValue("word-input");
+        await interactor.SetValue("word-input", "");
+        bool correct = _englishWords!.Contains(guess.ToUpper()) && _words.All(word => word.Item2 != guess);
+        _words.Add((correct, guess));
+        if (!correct) _strikes++;
+        if (_strikes == 3) {
+            _finished = true;
+            await _stopwatch.DisposeAsync();
+            _stopwatch = null;
+            RecordCheck();
+        }
+        ReloadText();
+    }
+    
+    private void ReloadText() {
+        InvokeAsync(StateHasChanged).Wait();
+    }
+    
+    private void Reset() {
+        _words.Clear();
+        _strikes = 0;
+        _stopwatch = null;
+        _secondsRemaining = 30;
+        _finished = false;
+        _newWr = false;
+        ReloadText();
+    }
+    
+    private async void RecordCheck() {
+        int words = _words.Count(word => word.Item1);
+        if (words <= _record) return;
+        _record = words;
+        Cookie cookie = new (JsRuntime);
+        await cookie.SetValue("wordmaster-record", words.ToString(), 8760);
+        _newWr = true;
+        ReloadText();
+    }
+    
+    private void CountdownCallback(object? o) {
+        _secondsRemaining--;
+        if (_secondsRemaining == 0) {
+            _stopwatch!.Dispose();
+            _stopwatch = null;
+            _finished = true;
+            RecordCheck();
+        }
+        ReloadText();
+    }
+
+    protected override async Task OnInitializedAsync() {
+        _englishWords = (await Http.GetFromJsonAsync<string[]>(Constants.SerbleApiUrl + "raw/dictionary"))!;
+        Cookie cookie = new (JsRuntime);
+        int.TryParse(await cookie.GetValue("wordmaster-record", "0"), out _record);
+    }
+    
+    
+}

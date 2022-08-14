@@ -1,0 +1,105 @@
+@page "/register"
+@using SerbleWebsite.Data
+@using SerbleWebsite.Data.Schemas
+@inject IJSRuntime JsRuntime
+@inject NavigationManager NavigationManager
+
+<PublicPage></PublicPage>
+
+<LoginStyles></LoginStyles>
+
+<div class="text-center form-signin">
+    <div>
+        <img class="mb-4" src="assets/images/icon.png" alt="" width="72" height="72">
+        <h1 class="h3 mb-3 fw-normal">Register</h1>
+
+        <p style="color: red;">
+            @switch (_error) {
+
+                case Error.None:
+                    break;
+
+                case Error.NullFields:
+                    <p>Username and password are required</p>
+                    break;
+
+                case Error.UserExists:
+                    <p>User already exists, <a href="/login">trying to login?</a></p>
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        </p>
+
+        <div class="form-floating">
+            <input
+                @bind="_username"
+                @oninput="ui => _username = ui.Value?.ToString()"
+                type="text"
+                class="form-control"
+                id="floatingInput"
+                placeholder="EpicGamer9000"
+                style="background-color: rgb(34, 34, 34); color: #ffffff">
+          <label for="floatingInput">Username</label>
+        </div>
+        <div class="form-floating">
+            <input
+                @bind="_password"
+                @oninput="ui => _password = ui.Value?.ToString()"
+                type="password"
+                class="form-control"
+                id="floatingPassword"
+                placeholder="Password"
+                style="background-color: rgb(34, 34, 34); color: #ffffff">
+          <label for="floatingPassword">Password</label>
+        </div>
+
+        <button class="w-100 btn btn-lg btn-primary" @onclick="Submit" style="padding-bottom: 10px">Register</button>
+        <p>Want to login? <a href="/login">Go here</a></p>
+    </div>
+</div>
+
+@code {
+    private string? _username;
+    private string? _password;
+    private Error _error = Error.None;
+
+    // OnAfterRender is called after the component is rendered.
+    protected override async void OnAfterRender(bool firstRender) {
+        if (!firstRender) return;
+        
+    }
+
+    protected override async void OnInitialized() {
+        Cookie cookieService = new (JsRuntime);
+        Console.WriteLine("Token: " + await cookieService.GetValue("token"));
+    }
+
+    private async void Submit() {
+
+        if (_username == null || _password == null) {
+            _error = Error.NullFields;
+            return;
+        }
+
+        // Register
+        _error = Error.None;
+        
+        SerbleApiResponse<User> response = await SerbleApiHandler.RegisterUser(_username, _password);
+        if (!response.Success) {
+            _error = Error.UserExists;
+            return;
+        }
+
+        NavigationManager.NavigateTo("/login");
+
+    }
+
+    enum Error {
+        None,
+        NullFields,
+        UserExists
+    }
+
+}

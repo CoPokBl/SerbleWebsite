@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
@@ -7,21 +7,80 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="GeneralPurposeLib" Version="1.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.5" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.5" PrivateAssets="all" />
+    </ItemGroup>
+
+    <ItemGroup>
       <Reference Include="GeneralPurposeLib">
         <HintPath>GeneralPurposeLib.dll</HintPath>
       </Reference>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="MySql.Data" Version="8.0.29" />
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.2-beta1" />
-      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.21.0" />
+      <Compile Remove="Old-Website\**" />
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="Data\Raw\words.txt">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
+      <EmbeddedResource Remove="Old-Website\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Old-Website\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="Old-Website\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Old-Website\Pages\Error.cshtml" />
+      <_ContentIncludedByDefault Remove="Old-Website\Pages\_Host.cshtml" />
+      <_ContentIncludedByDefault Remove="Old-Website\Pages\_Layout.cshtml" />
+      <_ContentIncludedByDefault Remove="Old-Website\App.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Pages\AccessDenied.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Pages\Account.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Pages\AccountDisabled.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Pages\Admin\Admin.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Pages\Admin\ControlBoard.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Pages\Admin\UserManager.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Pages\Auth.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Pages\AuthorizedApps.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Pages\Contact.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Pages\Counter.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Pages\Index.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Pages\InvalidOAuth.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Pages\Lockdown.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Pages\NewOAuthApp.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Pages\NoRedirect.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Pages\OAuthApps.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Pages\PleaseThrowAnError.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Pages\Register.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Pages\Status.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Pages\WordMaster.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Shared\AdminGui.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Shared\Footer.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Shared\Icon.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Shared\LoginStyles.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Shared\MainLayout.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Shared\Modal.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Shared\NavMenu.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Shared\PublicPage.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Shared\RequireLogin.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\Shared\SurveyPrompt.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\_Imports.razor" />
+      <_ContentIncludedByDefault Remove="Old-Website\appsettings.Development.json" />
+      <_ContentIncludedByDefault Remove="Old-Website\appsettings.json" />
+      <_ContentIncludedByDefault Remove="Old-Website\config.json" />
+      <_ContentIncludedByDefault Remove="Old-Website\data.json" />
+      <_ContentIncludedByDefault Remove="Old-Website\obj\Debug\net6.0\staticwebassets.build.json" />
+      <_ContentIncludedByDefault Remove="Old-Website\obj\Debug\net6.0\staticwebassets.development.json" />
+      <_ContentIncludedByDefault Remove="Old-Website\obj\project.assets.json" />
+      <_ContentIncludedByDefault Remove="Old-Website\obj\project.packagespec.json" />
+      <_ContentIncludedByDefault Remove="Old-Website\obj\SerbleWebsite.csproj.nuget.dgspec.json" />
+      <_ContentIncludedByDefault Remove="Old-Website\Properties\launchSettings.json" />
+      <_ContentIncludedByDefault Remove="Old-Website\Services.json" />
     </ItemGroup>
 
 </Project>
