@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace SerbleWebsite.Data.Schemas; 
 
 public class AccountEditRequest {

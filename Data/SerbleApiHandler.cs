@@ -1,8 +1,6 @@
 using System.Net;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using GeneralPurposeLib;
 using SerbleWebsite.Data.Schemas;
 
@@ -135,7 +133,64 @@ public static class SerbleApiHandler {
         }
         return new SerbleApiResponse<User>(user);
     }
+
+    public static async Task<SerbleApiResponse<PublicOAuthApp>> GetPublicAppInfo(string appId) {
+        // Send HTTP request to API
+        HttpClient client = new();
+        HttpResponseMessage response;
+        try {
+            response = await client.GetAsync($"{Constants.SerbleApiUrl}app/{appId}/public");
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<PublicOAuthApp>(false, "Failed: " + e);
+        }
+        if (!response.IsSuccessStatusCode) {
+            string flag = "unknown";
+            string responseContent = await response.Content.ReadAsStringAsync();
+            if (response.StatusCode == HttpStatusCode.NotFound) {
+                flag = "not-found";
+            }
+            Console.WriteLine(responseContent);
+            return new SerbleApiResponse<PublicOAuthApp>(false, $"Failed: {response.StatusCode} ({await response.Content.ReadAsStringAsync()})", flag);
+        }
+        // Parse response
+        string json = await response.Content.ReadAsStringAsync();
+        PublicOAuthApp app;
+        try {
+            app = JsonSerializer.Deserialize<PublicOAuthApp>(json).ThrowIfNull();
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<PublicOAuthApp>(false, $"Failed to parse response: {e.Message}");
+        }
+        return new SerbleApiResponse<PublicOAuthApp>(app);
+    }
     
+    public static async Task<SerbleApiResponse<string>> AuthorizeApp(string token, string appId, string scopeString) {
+        // Send HTTP request to API
+        HttpClient client = new();
+        client.DefaultRequestHeaders.Add("SerbleAuth", "User " + token);
+        HttpResponseMessage response;
+        string jsonInp = new AuthorizedApp(appId, scopeString).ToJson();
+        try {
+            response = await client.PostAsync($"{Constants.SerbleApiUrl}account/authorizedApps", 
+                new StringContent(jsonInp, Encoding.UTF8, 
+                "application/json"));
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<string>(false, "Failed: " + e);
+        }
+
+        if (response.IsSuccessStatusCode)
+            return new SerbleApiResponse<string>(await response.Content.ReadAsStringAsync());
+        string flag = "unknown";
+        string responseContent = await response.Content.ReadAsStringAsync();
+        if (response.StatusCode == HttpStatusCode.BadRequest) {
+            flag = "bad-app";
+        }
+        Console.WriteLine(responseContent);
+        return new SerbleApiResponse<string>(false, $"Failed: {response.StatusCode} ({await response.Content.ReadAsStringAsync()})", flag);
+    }
+
 }
 
 public class SerbleApiResponse<T> {

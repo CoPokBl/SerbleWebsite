@@ -1,0 +1,23 @@
+@page "/error"
+@using SerbleWebsite.Data
+@inject NavigationManager NavigationManager
+
+<PublicPage></PublicPage>
+
+<div class="text-center" style="padding-top: 10px">
+    <h3>Oops!</h3>
+    <p>
+        If you were sent here by the website then some error has occured. Please contact 
+        admin at <a href="mailto:admin@serble.net">admin@serble.net</a>.
+        <p>Error: @_errorMessage</p>
+    </p>
+</div>
+
+@code {
+    private string _errorMessage = "Loading message...";
+    
+    protected override Task OnInitializedAsync() {
+        _errorMessage = NavigationManager.GetQueryStrings("msg") ?? "Unknown error";
+        return Task.CompletedTask;
+    }
+}

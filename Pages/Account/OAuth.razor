@@ -1,343 +1,137 @@
-@* @page "/auth" *@
-@* @page "/login" *@
-@* @page "/appauth" *@
-@* @using SerbleWebsite.Data *@
-@* @using Microsoft.AspNetCore.WebUtilities *@
-@* @using Microsoft.Extensions.Primitives *@
-@* @using SerbleWebsite.Data.Schemas *@
-@* @using GeneralPurposeLib *@
-@* @inject IJSRuntime JsRuntime *@
-@* @inject NavigationManager NavigationManager *@
-@* *@
-@* <PublicPage></PublicPage> *@
-@* *@
-@* <LoginStyles></LoginStyles> *@
-@* *@
-@* <div class="text-center form-signin"> *@
-@*      *@
-@*     @if (_loading) { *@
-@*         <h3>Loading...</h3> *@
-@*     } *@
-@*     else { *@
-@*         @if (_askAccess && _isAppAuth) { *@
-@*              *@
-@*             <h1>@_appName</h1> *@
-@*             <p> *@
-@*                 @if (_user!.AuthorizedAppIds.Contains(_app!.Id)) { *@
-@*                     // Already authorized, they want more permissions probably *@
-@*                     <div> *@
-@*                         @_appName has already been authorized to access your account. They are trying to change the permissions. *@
-@*                         They are requesting the following scopes: *@
-@*                     </div> *@
-@*                 } *@
-@*                 else { *@
-@*                     <div> *@
-@*                         @_appName would like access to your account. They CANNOT access your password.  *@
-@*                         Do not click Allow unless you were sent here by @_appName and you *@
-@*                         trust them. They are requesting access to the following scopes: *@
-@*                     </div> *@
-@*                 } *@
-@*              *@
-@*                 <p> *@
-@*                 <br/> *@
-@*                 <ul style="text-align: left"> *@
-@*                     @foreach (string scope in  *@
-@*                         ScopeHandler.ListOfScopeIdsToScopeNames( *@
-@*                             ScopeHandler.FilterInvalidScopes( *@
-@*                                 _queryValues!["scope"] *@
-@*                                     .First() *@
-@*                                     .Split(' ')))) { *@
-@*                         <li><a href="javascript: void(0)" data-bs-toggle="tooltip" data-bs-placement="left" title="@ScopeHandler.GetDescriptionFromName(scope)">@scope</a></li> *@
-@*                     } *@
-@*                 </ul> *@
-@*                 </p> *@
-@*                 <b>IF YOU DON'T UNDERSTAND THEN CLICK DENY</b> *@
-@*             </p> *@
-@*             <div class="d-flex" style=""> *@
-@*                 <button class="w-100 btn btn-lg btn-primary" @onclick="_ => AuthorizeApp(true)" style="margin-right: 10px">Allow</button> *@
-@*                 <button class="w-100 btn btn-lg btn-danger" @onclick="_ => AuthorizeApp(false)" style="padding-bottom: 10px">Deny</button> *@
-@*             </div> *@
-@*         } *@
-@*         else { *@
-@*             <form onsubmit="return false"> *@
-@*                 <img class="mb-4" src="assets/images/icon.png" alt="" width="72" height="72"> *@
-@*                 @if (_isAppAuth) { *@
-@*                     <h1 class="h3 mb-3 fw-normal">Sign In to @_appName</h1> *@
-@*                 } *@
-@*                 else { *@
-@*                     <h1 class="h3 mb-3 fw-normal">Sign In</h1> *@
-@*                 } *@
-@* *@
-@*                 <div style="color: red;"> *@
-@*                     @switch (_error) { *@
-@* *@
-@*                         case Error.None: *@
-@*                             break; *@
-@* *@
-@*                         case Error.NullFields: *@
-@*                             <p>Username and password are required</p> *@
-@*                             break; *@
-@* *@
-@*                         case Error.InvalidUser: *@
-@*                             <p>User not found, need account? <a href="/register">Register</a></p> *@
-@*                             break; *@
-@* *@
-@*                         case Error.InvalidPassword: *@
-@*                             <p>Incorrect password, need an account? <a href="/register">Register</a></p> *@
-@*                             break; *@
-@*                              *@
-@*                         case Error.AccountDisabled: *@
-@*                             <p>That account is disabled</p> *@
-@*                             break; *@
-@* *@
-@*                         default: *@
-@*                             throw new ArgumentOutOfRangeException(); *@
-@*                     } *@
-@*                 </div> *@
-@* *@
-@*                 <div class="form-floating"> *@
-@*                     <input *@
-@*                         type="text" *@
-@*                         class="form-control" *@
-@*                         id="floatingUsername" *@
-@*                         placeholder="EpicGamer9000" *@
-@*                         style="background-color: rgb(34, 34, 34); color: #ffffff"> *@
-@*                     <label for="floatingUsername">Username</label> *@
-@*                 </div> *@
-@*                 <div class="form-floating"> *@
-@*                     <input *@
-@*                         type="password" *@
-@*                         class="form-control" *@
-@*                         id="floatingPassword" *@
-@*                         placeholder="Password" *@
-@*                         style="background-color: rgb(34, 34, 34); color: #ffffff"> *@
-@*                     <label for="floatingPassword">Password</label> *@
-@*                 </div> *@
-@* *@
-@*                 <div class="checkbox mb-3"> *@
-@*                     <label> *@
-@*                         <input *@
-@*                             type="checkbox" *@
-@*                             value="remember-me" *@
-@*                             @bind="_rememberMe" *@
-@*                             @oninput="ui => _rememberMe = bool.Parse(ui.Value?.ToString()!.ToLower()!)"> Remember me *@
-@*                     </label> *@
-@*                 </div> *@
-@*                 <button class="w-100 btn btn-lg btn-primary" @onclick="Login" style="padding-bottom: 10px">Sign in</button> *@
-@*                 <p>Don't have an account? <a href="/register">Register for free</a></p> *@
-@*             </form> *@
-@*         } *@
-@*     } *@
-@* *@
-@* </div> *@
-@* *@
-@* @code { *@
-@*     private bool _rememberMe; *@
-@*     private bool _appRequestAuth; *@
-@*     private Error _error = Error.None; *@
-@*     private Dictionary<string, StringValues>? _queryValues; *@
-@*     private bool _isAppAuth; *@
-@*     private OAuthApp? _app; *@
-@*     private string _appName = ""; *@
-@*     private bool _askAccess; *@
-@*     private User? _user; *@
-@*     private bool _loading = true; *@
-@* *@
-@*     private readonly string[] _requiredQueryValues = { *@
-@*         "redirect_uri", *@
-@*         "client_id", *@
-@*         "response_type", *@
-@*         "scope", *@
-@*         "state" *@
-@*     }; *@
-@* *@
-@*     protected override async void OnAfterRender(bool firstRender) { *@
-@*         if (!firstRender) return; *@
-@*         Uri absoluteUri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri); *@
-@*         _queryValues = QueryHelpers.ParseQuery(absoluteUri.Query); *@
-@*         Cookie cookieService = new (JsRuntime); *@
-@*          *@
-@*         if (absoluteUri.LocalPath == "/appauth") { *@
-@*             _isAppAuth = true; *@
-@*              *@
-@*             // Check required query parameters *@
-@*             if (_requiredQueryValues.Any(requiredQueryValue => !_queryValues.ContainsKey(requiredQueryValue))) { *@
-@*                 NavigationManager.NavigateTo("/invalidoauth"); *@
-@*                 return; *@
-@*             } *@
-@* *@
-@*             // Get information *@
-@*             Program.StorageService!.GetOAuthApp(_queryValues["client_id"], out OAuthApp? app); *@
-@*             if (app == null) { *@
-@*                 NavigationManager.NavigateTo("/invalidoauth"); *@
-@*                 return; *@
-@*             } *@
-@*             _appName = app.Name; *@
-@*             _app = app; *@
-@*             _loading = false; *@
-@*             ReloadText(); *@
-@*         } *@
-@*          *@
-@*         // Check if user is logged in. *@
-@*         string token = await cookieService.GetValue("token"); *@
-@*         if (token == "") { *@
-@*             _loading = false; *@
-@*             ReloadText(); *@
-@*             return; *@
-@*         } *@
-@*         if (!new TokenHandler(Program.Config!).ValidateCurrentToken(token, out Dictionary<string, string>? claims, out _)) { *@
-@*             _loading = false; *@
-@*             ReloadText(); *@
-@*             return; *@
-@*         } *@
-@*         if (claims == null) { *@
-@*             _loading = false; *@
-@*             ReloadText(); *@
-@*             return; *@
-@*         } *@
-@*         Program.StorageService!.GetUser(claims["id"], out User? user); *@
-@*         if (user == null) { *@
-@*             _loading = false; *@
-@*             ReloadText(); *@
-@*             return; *@
-@*         } *@
-@*         _user = user; *@
-@*         _loading = false; *@
-@*         LoginSuccess(); *@
-@*     } *@
-@* *@
-@*     private void ReloadText() { *@
-@*         InvokeAsync(StateHasChanged).Wait(); *@
-@*     } *@
-@* *@
-@*     private void Login() { *@
-@*         _loading = true; *@
-@*         ReloadText(); *@
-@*         LoginMain(); *@
-@*         _loading = false; *@
-@*         ReloadText(); *@
-@*     } *@
-@* *@
-@*     private async void LoginMain() { *@
-@*         HtmlInteractor htmlInteractor = new(JsRuntime); *@
-@*         string username = await htmlInteractor.GetValue("floatingUsername"); *@
-@*         string password = await htmlInteractor.GetValue("floatingPassword"); *@
-@* *@
-@*         // Attempt login *@
-@*         Program.StorageService!.GetUserFromName(username, out User? user); *@
-@*          *@
-@*         if (user == null) { *@
-@*             _error = Error.InvalidUser; *@
-@*             ReloadText(); *@
-@*             return; *@
-@*         } *@
-@* *@
-@*         if (user.PasswordHash != Utils.Hash(password)) { *@
-@*             _error = Error.InvalidPassword; *@
-@*             ReloadText(); *@
-@*             return; *@
-@*         } *@
-@* *@
-@*         if (user.PermLevel < (int) AccountAccessLevel.Normal) { *@
-@*             _error = Error.AccountDisabled; *@
-@*             ReloadText(); *@
-@*             return; *@
-@*         } *@
-@*          *@
-@*         // Login successful *@
-@*         _user = user; *@
-@*         _error = Error.None; *@
-@*          *@
-@*         // Get token *@
-@*         string token = new TokenHandler(Program.Config!).GenerateToken(new Dictionary<string, string> { *@
-@*             { "scope", "1" }, *@
-@*             { "id", user.Id } *@
-@*         }, _isAppAuth ? _app : null); *@
-@*          *@
-@*         // Set cookie *@
-@*         Cookie cookieService = new (JsRuntime); *@
-@*         await cookieService.SetValue("token", token, _rememberMe ? 365 : 1); *@
-@*         Logger.Debug("Logged in: " + user.Username); *@
-@*         LoginSuccess(); *@
-@*     } *@
-@* *@
-@*     private void LoginSuccess() { *@
-@*         if (!_isAppAuth) { *@
-@*             // Normal login *@
-@*             NavigationManager.NavigateTo(_queryValues!.ContainsKey("return_url") ? _queryValues["return_url"] : "/account", true); *@
-@*             return; *@
-@*         } *@
-@*          *@
-@*         // App authentication *@
-@*         // Check if they are already authorized and they didn't send a request for more perms *@
-@*         bool alreadyAuthorized = _user!.AuthorizedAppIds.Contains(_app!.Id); *@
-@*         if (_user.AuthorizedApps.Any(authedApp => authedApp.AppId == _app!.Id) &&  *@
-@*             _user.AuthorizedApps *@
-@*                 .First(authedApp => authedApp.AppId == _app!.Id).Scopes  *@
-@*                 != ScopeHandler *@
-@*                     .ListOfScopeIdsToString(ScopeHandler *@
-@*                         .FilterInvalidScopes( *@
-@*                             _queryValues!["scope"] *@
-@*                                 .First() *@
-@*                                 .Split(' ')))) { *@
-@*             alreadyAuthorized = false; *@
-@*             _appRequestAuth = true; *@
-@*         } *@
-@*         if (alreadyAuthorized) { *@
-@*             // They are already authorized *@
-@*             string newUri = _queryValues!["redirect_uri"]; *@
-@*             newUri = QueryHelpers.AddQueryString(newUri, "authorized", "true"); *@
-@*             newUri = QueryHelpers.AddQueryString(newUri, "state", _queryValues["state"]); *@
-@*             newUri = QueryHelpers.AddQueryString(newUri, "userid", _user!.Id); *@
-@*             NavigationManager.NavigateTo(newUri); *@
-@*             return; *@
-@*         } *@
-@*         _askAccess = true; *@
-@*         ReloadText(); *@
-@*     } *@
-@* *@
-@*     private void AuthorizeApp(bool authorize) { *@
-@*         _loading = true; *@
-@*         if (!_queryValues!.ContainsKey("redirect_uri")) { *@
-@*             NavigationManager.NavigateTo("/noredirect"); *@
-@*             return; *@
-@*         } *@
-@*         if (!Uri.TryCreate(_queryValues["redirect_uri"], UriKind.Absolute, out _)) { *@
-@*             NavigationManager.NavigateTo("/noredirect"); *@
-@*             return; *@
-@*         } *@
-@*         string newUri = _queryValues["redirect_uri"]; *@
-@* *@
-@*         if (authorize) { *@
-@*             // Make token *@
-@*             string scopeString = ScopeHandler.ListOfScopeIdsToString(ScopeHandler.FilterInvalidScopes( *@
-@*                 _queryValues!["scope"] *@
-@*                     .First() *@
-@*                     .Split(' '))); *@
-@* *@
-@*             // Add app as authorized app *@
-@*             List<AuthorizedApp> newAuthed = _user!.AuthorizedApps.ToList(); *@
-@*             if (_appRequestAuth) { *@
-@*                 // Remove app as authorized app *@
-@*                 AuthorizedApp entry = newAuthed.First(e => e.AppId == _app!.Id); *@
-@*                 newAuthed.Remove(entry); *@
-@*             } *@
-@*             newAuthed.Add(new AuthorizedApp(_app!.Id, scopeString)); *@
-@*             _user.AuthorizedApps = newAuthed.ToArray(); *@
-@*             _user.RegisterChanges(); *@
-@*         } *@
-@*         newUri = QueryHelpers.AddQueryString(newUri, "authorized", authorize ? "true" : "false"); *@
-@*         newUri = QueryHelpers.AddQueryString(newUri, "state", _queryValues["state"]); *@
-@*         newUri = QueryHelpers.AddQueryString(newUri, "userid", _user!.Id); *@
-@*         NavigationManager.NavigateTo(newUri); *@
-@*     } *@
-@* *@
-@*     enum Error { *@
-@*         None, *@
-@*         NullFields, *@
-@*         InvalidUser, *@
-@*         InvalidPassword, *@
-@*         AccountDisabled *@
-@*     } *@
-@* *@
-@* } *@
+@page "/oauth/authorize"
+@using SerbleWebsite.Data
+@using SerbleWebsite.Data.Schemas
+@using SerbleAPI.Data
+@using System.Collections.Specialized
+@inject NavigationManager NavigationManager
+
+<RequireLogin Callback="LoginCallback"></RequireLogin>
+
+<LoginStyles></LoginStyles>
+
+<div class="text-center form-signin">
+
+    @if (_loading) {
+        <h3>Loading...</h3>
+    }
+    else {
+        <h1>@_appName</h1>
+        <p>
+            <div>
+                @_appName would like access to your account. They CANNOT access your password.
+                Do not click Allow unless you were sent here by @_appName and you
+                trust them. They are requesting access to the following scopes:
+            </div>
+
+            <p>
+                <br/>
+                <ul style="text-align: left">
+                    @foreach (string scope in
+                        ScopeHandler.ListOfScopeIdsToScopeNames(
+                            ScopeHandler.FilterInvalidScopes(
+                                ScopeHandler.StringToListOfScopeIds(_queryValues!["scope"]!)))) {
+                        <li><a href="javascript: void(0)" data-bs-toggle="tooltip" data-bs-placement="left" title="@ScopeHandler.GetDescriptionFromName(scope)">@scope</a></li>
+                    }
+                </ul>
+            </p>
+            <b>IF YOU DON'T UNDERSTAND THEN CLICK DENY</b>
+        </p>
+        <div class="d-flex" style="">
+            <button class="w-100 btn btn-lg btn-primary" @onclick="_ => AuthorizeApp(true)" style="margin-right: 10px">Allow</button>
+            <button class="w-100 btn btn-lg btn-danger" @onclick="_ => AuthorizeApp(false)" style="padding-bottom: 10px">Deny</button>
+        </div>
+    }
+
+</div>
+
+@code {
+    private NameValueCollection? _queryValues;
+    private PublicOAuthApp? _app;
+    private string _appName = "";
+    private string? _token;
+    private bool _loading = true;
+
+    private readonly string[] _requiredQueryValues = {
+        "redirect_uri",
+        "client_id",
+        "response_type",
+        "scope",
+        "state"
+    };
+
+    public bool LoginCallback((User?, string) data) {
+        _token = data.Item2;
+        LoginCallbackVoid();
+        _loading = false;
+        return true;
+    }
+
+    public async void LoginCallbackVoid() {
+        _queryValues = NavigationManager.GetQueryStrings();
+
+        // Check required query parameters
+        if (_requiredQueryValues.Any(requiredQueryValue => !_queryValues!.AllKeys.Contains(requiredQueryValue))) {
+            NavigationManager.NavigateTo("/invalidoauth");
+            return;
+        }
+
+        // Get information
+        SerbleApiResponse<PublicOAuthApp> response = await SerbleApiHandler.GetPublicAppInfo(_queryValues["client_id"]!);
+        if (!response.Success) {
+            if (response.ErrorFlag == "not-found") {
+                NavigationManager.NavigateTo("/invalidoauth");
+                return;
+            }
+            // Unknown error
+            Console.WriteLine("Unknown error: " + response.ErrorMessage);
+            NavigationManager.NavigateTo("/error?msg=" + response.ErrorMessage);
+            return;
+        }
+        PublicOAuthApp app = response.ResponseObject!;
+        _appName = app.Name;
+        _app = app;
+        _loading = false;
+        ReloadText();
+    }
+
+    private void ReloadText() {
+        InvokeAsync(StateHasChanged).Wait();
+    }
+    
+    private async void AuthorizeApp(bool authorize) {
+        _loading = true;
+        if (!Uri.TryCreate(_queryValues!["redirect_uri"], UriKind.Absolute, out _)) {
+            NavigationManager.NavigateTo("/noredirect");
+            return;
+        }
+        string newUri = _queryValues["redirect_uri"]!;
+        string state = _queryValues["state"]!;
+        // Check if state contains symbols
+        if (state.Any(c => !char.IsLetterOrDigit(c))) {
+            NavigationManager.NavigateTo("/invalidoauth");
+            return;
+        }
+
+        string? authCode = null;
+        if (authorize) {
+            // Get token
+            string scopeString = ScopeHandler.ListOfScopeIdsToString(_queryValues!["scope"]!.Split(' '));
+            SerbleApiResponse<string> response = await SerbleApiHandler.AuthorizeApp(_token!, _app!.Id, scopeString);
+            if (!response.Success) {
+                if (response.ErrorFlag == "bad-app") {
+                    NavigationManager.NavigateTo("/invalidoauth");
+                    return;
+                }
+                Console.WriteLine("Unknown error: " + response.ErrorMessage);
+                NavigationManager.NavigateTo("/error?msg=" + response.ErrorMessage);
+                return;
+            }
+            authCode = response.ResponseObject!;
+        }
+        newUri += "?state=" + state;
+        newUri += authCode == null ? "" : "&code=" + authCode;
+        newUri += "&authorized=" + (authorize ? "true" : "false");
+        NavigationManager.NavigateTo(newUri);
+    }
+
+}

@@ -1,5 +1,3 @@
-using GeneralPurposeLib;
-
 namespace SerbleWebsite.Data.Schemas; 
 
 // DO NOT REMOVE SETTERS OR MAKE THEM PRIVATE, IT BREAKS THE JSON SERIALIZATION
