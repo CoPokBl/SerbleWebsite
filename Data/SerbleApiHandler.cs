@@ -190,6 +190,28 @@ public static class SerbleApiHandler {
         Console.WriteLine(responseContent);
         return new SerbleApiResponse<string>(false, $"Failed: {response.StatusCode} ({await response.Content.ReadAsStringAsync()})", flag);
     }
+    
+    public static async Task<SerbleApiResponse<double>> CheckReCaptcha(string token) {
+        // Send HTTP request to API
+        HttpClient client = new();
+        HttpResponseMessage response;
+        string url = $"{Constants.SerbleApiUrl}recaptcha";
+        url += "?token=" + token;
+        try {
+            response = await client.PostAsync(url, null);
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<double>(false, "Failed: " + e);
+        }
+        if (!response.IsSuccessStatusCode) {
+            Console.WriteLine("Response: " + await response.Content.ReadAsStringAsync());
+            return new SerbleApiResponse<double>(false, $"Failed: {response.StatusCode}");
+        }
+        // Parse response
+        string responseStr = await response.Content.ReadAsStringAsync();
+        Console.WriteLine("Server ReCaptcha Response: " + responseStr);
+        return new SerbleApiResponse<double>(double.Parse(responseStr));
+    }
 
 }
 

@@ -1,0 +1,10 @@
+@inject IJSRuntime JsRuntime
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        // invoke script loader
+        Console.WriteLine("Loading Google ReCaptcha");
+        await JsRuntime.InvokeVoidAsync("loadScript", "https://www.google.com/recaptcha/api.js?render=6Le7pVAhAAAAANwwG02GCFHlbKif9yVJwPC0WdQZ");
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}
