@@ -5,7 +5,7 @@
 @inject NavigationManager NavigationManager
 
 <PublicPage></PublicPage>
-
+<ReCaptcha></ReCaptcha>
 <LoginStyles></LoginStyles>
 
 <div class="text-center form-signin">
@@ -55,7 +55,7 @@
           <label for="floatingPassword">Password</label>
         </div>
 
-        <button class="w-100 btn btn-lg btn-primary" @onclick="Submit" style="padding-bottom: 10px">Register</button>
+        <button class="w-100 btn btn-lg btn-primary" onclick="onReCaptcha('register', 'RegisterSubmit')" style="padding-bottom: 10px">Register</button>
         <p>Want to login? <a href="/login">Go here</a></p>
     </div>
 </div>
@@ -65,35 +65,30 @@
     private string? _password;
     private Error _error = Error.None;
 
-    // OnAfterRender is called after the component is rendered.
-    protected override async void OnAfterRender(bool firstRender) {
-        if (!firstRender) return;
-        
-    }
-
     protected override async void OnInitialized() {
+        RegisterStaticHandler.Register = this;
         Cookie cookieService = new (JsRuntime);
         Console.WriteLine("Token: " + await cookieService.GetValue("token"));
     }
 
-    private async void Submit() {
-
-        if (_username == null || _password == null) {
-            _error = Error.NullFields;
+    [JSInvokable("RegisterSubmit")]
+    public static async void OnSubmit(string recaptchaToken) {
+        Console.WriteLine("Registering...");
+        Console.WriteLine("ReCaptcha: " + recaptchaToken);
+        if (RegisterStaticHandler.Register!._username == null || RegisterStaticHandler.Register._password == null) {
+            RegisterStaticHandler.Register!._error = Error.NullFields;
             return;
         }
 
         // Register
-        _error = Error.None;
+        RegisterStaticHandler.Register!._error = Error.None;
         
-        SerbleApiResponse<User> response = await SerbleApiHandler.RegisterUser(_username, _password);
+        SerbleApiResponse<User> response = await SerbleApiHandler.RegisterUser(RegisterStaticHandler.Register!._username, RegisterStaticHandler.Register!._password, recaptchaToken);
         if (!response.Success) {
-            _error = Error.UserExists;
+            RegisterStaticHandler.Register!._error = Error.UserExists;
             return;
         }
-
-        NavigationManager.NavigateTo("/login");
-
+        RegisterStaticHandler.Register.NavigationManager.NavigateTo("/login");
     }
 
     enum Error {

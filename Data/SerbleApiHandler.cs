@@ -64,9 +64,10 @@ public static class SerbleApiHandler {
         return new SerbleApiResponse<string>(token);
     }
     
-    public static async Task<SerbleApiResponse<User>> RegisterUser(string username, string password) {
+    public static async Task<SerbleApiResponse<User>> RegisterUser(string username, string password, string recaptchaToken) {
         // Send HTTP request to API
         HttpClient client = new();
+        client.DefaultRequestHeaders.Add("SerbleAntiSpam", $"recaptcha {recaptchaToken}");
         HttpResponseMessage response;
         try {
             response = await client.PostAsync(Constants.SerbleApiUrl + "account", new StringContent(new {

@@ -96,12 +96,14 @@ window.getCaptcha = async function () {
     return await grecaptcha.execute('XXX', {action: 'formSubmission'});
 }
 
-function onReCaptcha(action) {
+let token = "";
+
+function onReCaptcha(action, functionName) {
     grecaptcha.ready(function() {
         //                  SITE KEY
         grecaptcha.execute('6Le7pVAhAAAAANwwG02GCFHlbKif9yVJwPC0WdQZ', {action: action}).then(function(token) {
             // Add your logic to submit to your backend server here.
-            DotNet.invokeMethodAsync('SerbleWebsite', 'OnSubmit', token);
+            DotNet.invokeMethodAsync('SerbleWebsite', functionName, token);
         });
     });
 }
