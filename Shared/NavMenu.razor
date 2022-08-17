@@ -78,15 +78,15 @@
     private User? _user = null;
     private bool _loggingIn = false;
 
-    private bool LoginProcessed((User?, string) data) {
+    private Task LoginProcessed((User?, string) data) {
         User? user = data.Item1;
         if (user == null) {
-            return true;
+            return Task.CompletedTask;
         }
         _user = user;
         _loggingIn = false;
         ReloadText();
-        return true;
+        return Task.CompletedTask;
     }
     
     private void ReloadText() {

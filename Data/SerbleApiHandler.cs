@@ -214,6 +214,32 @@ public static class SerbleApiHandler {
         return new SerbleApiResponse<double>(double.Parse(responseStr));
     }
 
+    public static async Task<SerbleApiResponse<OAuthApp[]>> GetUsersApps(string token) {
+        // Send HTTP request to API
+        HttpClient client = new();
+        HttpResponseMessage response;
+        client.DefaultRequestHeaders.Add("SerbleAuth", "User " + token);
+        try {
+            response = await client.GetAsync($"{Constants.SerbleApiUrl}app");
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<OAuthApp[]>(false, "Failed: " + e);
+        }
+        if (!response.IsSuccessStatusCode) {
+            Console.WriteLine("Response: " + await response.Content.ReadAsStringAsync());
+            return new SerbleApiResponse<OAuthApp[]>(false, $"Failed: {response.StatusCode}");
+        }
+        // Parse response
+        string responseStr = await response.Content.ReadAsStringAsync();
+        try {
+            return new SerbleApiResponse<OAuthApp[]>(JsonSerializer.Deserialize<OAuthApp[]>(responseStr).ThrowIfNull());
+        }
+        catch (Exception e) {
+            Console.WriteLine(e);
+            return new SerbleApiResponse<OAuthApp[]>(false, $"Failed to parse response: {e.Message}");
+        }
+    }
+
 }
 
 public class SerbleApiResponse<T> {

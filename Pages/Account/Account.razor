@@ -71,14 +71,14 @@ else {
       InvokeAsync(StateHasChanged).Wait();
    }
 
-   private bool LoginChecked((User?, string) info) {
+   private Task LoginChecked((User?, string) info) {
       _user = info.Item1;
       _token = info.Item2;
       _verifiedEmail = _user!.VerifiedEmail;
       Console.WriteLine($"{_user!.Username} is logged in");
       _accountType = ((AccountAccessLevel) Enum.ToObject(typeof(AccountAccessLevel), _user.PermLevel ?? 1)).ToString();
       ReloadText();
-      return true;
+      return Task.CompletedTask;
    }
 
    private async void Logout() {

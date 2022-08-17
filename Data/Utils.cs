@@ -18,6 +18,24 @@ public static class Utils {
         return builder.ToString();
     }
 
+    public static TR? IfNotNull<T, TR>(this T? value, Func<T, TR?> func) {
+        return value == null ? default : func.Invoke(value);
+    }
+
+    public static T RunTaskSync<T>(this Task<T> task) {
+        while (!task.IsCompleted) {
+            // Just wait
+        }
+        return task.Result;
+    }
+
+    public static T? DefaultIfFalse<T>(this T? value, Func<T?, bool> condition) {
+        if (value == null) {
+            return default;
+        }
+        return condition.Invoke(value) ? value : default;
+    }
+
     public static string ToFormat(this TimeSpan timeSpan, string format) {
         string result = format;
         result = result.Replace("{d}", timeSpan.Days.ToString());

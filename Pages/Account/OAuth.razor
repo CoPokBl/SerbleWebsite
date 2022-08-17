@@ -59,11 +59,11 @@
         "state"
     };
 
-    public bool LoginCallback((User?, string) data) {
+    public Task LoginCallback((User?, string) data) {
         _token = data.Item2;
         LoginCallbackVoid();
         _loading = false;
-        return true;
+        return Task.CompletedTask;
     }
 
     public async void LoginCallbackVoid() {

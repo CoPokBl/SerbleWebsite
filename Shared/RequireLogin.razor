@@ -8,7 +8,7 @@
 @code {
 
     [Parameter]
-    public Func<(User?, string), bool>? Callback { get; set; } = _ => true; 
+    public Func<(User?, string), Task>? Callback { get; set; } = _ => Task.CompletedTask; 
 
     [Parameter]
     public bool RedirectToLogin { get; set; } = true;
@@ -28,7 +28,7 @@
         _ => PageType.NonAccount
     };
 
-    public void RunCheck(Func<(User?, string), bool> callback) {
+    public void RunCheck(Func<(User?, string), Task> callback) {
         Callback = callback;
         RedirectToLogin = false;
         OnAfterRender(true);
@@ -54,10 +54,8 @@
             return;
         }
 
-        // If page returns false, then user is not allowed to access page
-        if (!Callback!.Invoke((response.ResponseObject, tokenCookie))) {
-            NotLoggedIn();
-        }
+        // Callback
+        Callback!.Invoke((response.ResponseObject, tokenCookie));
     }
     
     private void NotLoggedIn(bool disabledAccount = false) {
