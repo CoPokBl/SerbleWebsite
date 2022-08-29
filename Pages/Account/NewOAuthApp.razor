@@ -1,0 +1,104 @@
+@page "/OAuthApps/new"
+@using SerbleWebsite.Data.Schemas
+@using SerbleWebsite.Data
+@inject IJSRuntime JsRuntime
+@inject NavigationManager NavigationManager
+
+<RequireLogin Callback="OnLoad"></RequireLogin>
+<LoginStyles></LoginStyles>
+
+<div class="text-center form-signin">
+    <div>
+        <h1 class="h3 mb-3 fw-normal">New OAuth Application</h1>
+
+        <p style="color: red;">
+            @switch (_error) {
+
+                case Error.None:
+                    break;
+
+                case Error.NullFields:
+                    <p>You must fill out all fields</p>
+                    break;
+
+               case Error.Wait:
+                    <p>Please try again in 5 seconds...</p>
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        </p>
+
+        <div class="form-floating">
+            <input
+                type="text"
+                class="form-control"
+                id="name"
+                placeholder="App Name"
+                maxlength="255"
+                style="background-color: rgb(34, 34, 34); color: #ffffff">
+          <label for="name">Application Name</label>
+        </div>
+        <div class="form-floating" style="padding-top: 10px; padding-bottom: 10px">
+            <textarea
+                class="form-control"
+                id="desc"
+                placeholder="App Description"
+                maxlength="1024"
+                style="background-color: rgb(34, 34, 34); color: #ffffff"></textarea>
+            <label for="desc">Description</label>
+        </div>
+
+        <br/>
+
+        <button class="w-100 btn btn-lg btn-primary" @onclick="Submit" style="padding-top: 10px">Create</button>
+    </div>
+</div>
+
+
+@code {
+
+    private Error _error = Error.None;
+    private string? _userId;
+    private string _token = "";
+
+    private Task OnLoad((User?, string) data) {
+        _userId = data.Item1!.Id;
+        _token = data.Item2;
+        return Task.CompletedTask;
+    }
+
+    // WHY?????????? idk
+    private async void Submit() {
+        if (_userId == null) {
+            _error = Error.Wait;
+            return;
+        }
+        HtmlInteractor interactor = new(JsRuntime);
+        string name = await interactor.GetValue("name");
+        string desc = await interactor.GetValue("desc");
+
+        // Mek da app
+        SerbleApiResponse<bool> apiResponse = await SerbleApiHandler.CreateOAuthApp(_token, new PublicOAuthApp {
+            Name = name, Description = desc
+        });
+
+        // If no workey then tell mr user that bad happened
+        if (!apiResponse.Success) {
+            _error = Error.Wait;  // Maybe I should make it display an actually appropriate error message
+            return;
+        }
+        
+        // yay! we did it guys
+        _error = Error.None;
+        NavigationManager.NavigateTo("/OAuthApps");
+    }
+
+    enum Error {  // Errors
+        None,
+        NullFields,
+        Wait
+    }
+
+}

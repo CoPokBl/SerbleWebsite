@@ -1,11 +1,9 @@
-﻿@using SerbleWebsite.Data.Schemas
-@using SerbleWebsite.Data
+﻿@using SerbleWebsite.Data
+@using SerbleWebsite.Data.Schemas
 @inject IJSRuntime JsRuntime
 @inject NavigationManager NavigationManager
 
-@if (!CustomCallBack) {
-    <RequireLogin RedirectToLogin="false" Callback="LoginProcessed" NoLockdownCheck="true" RequiredAccessLevel="AccountAccessLevel.Disabled"></RequireLogin>
-}
+<RequireLogin RedirectToLogin="false" Callback="LoginProcessed" NoLockdownCheck="true" RequiredAccessLevel="AccountAccessLevel.Disabled"></RequireLogin>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
     <a class="navbar-brand" href="/" style="padding-left: 20px"><img src="/assets/images/icon.png" width="41" height="41" alt="Serble Logo"></a>
@@ -77,20 +75,18 @@
 
 @code {
 
-    [Parameter]
-    public bool CustomCallBack { get; set; }
-    
     private User? _user = null;
     private bool _loggingIn = false;
 
-    private bool LoginProcessed(User? user) {
+    private Task LoginProcessed((User?, string) data) {
+        User? user = data.Item1;
         if (user == null) {
-            return true;
+            return Task.CompletedTask;
         }
         _user = user;
         _loggingIn = false;
         ReloadText();
-        return true;
+        return Task.CompletedTask;
     }
     
     private void ReloadText() {

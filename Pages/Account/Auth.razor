@@ -1,0 +1,158 @@
+@page "/auth"
+@page "/login"
+@using SerbleWebsite.Data
+@using SerbleWebsite.Data.Schemas
+@using GeneralPurposeLib
+@using System.Collections.Specialized
+@inject IJSRuntime JsRuntime
+@inject NavigationManager NavigationManager
+
+<PublicPage></PublicPage>
+<LoginStyles></LoginStyles>
+
+<div class="text-center form-signin">
+    
+    @if (_loading) {
+        <h3>Loading...</h3>
+    }
+    else {
+        <form onsubmit="return false">
+            <img class="mb-4" src="assets/images/icon.png" alt="" width="72" height="72">
+            <h1 class="h3 mb-3 fw-normal">Sign In</h1>
+
+            <div style="color: red;">
+                @switch (_error) {
+
+                    case Error.None:
+                        break;
+
+                    case Error.NullFields:
+                        <p>Username and password are required</p>
+                        break;
+
+                    case Error.InvalidCredentials:
+                        <p>Invalid credentials, need an account? <a href="/register">Register</a></p>
+                        break;
+
+                    case Error.AccountDisabled:
+                        <p>That account is disabled</p>
+                        break;
+
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            </div>
+
+            <div class="form-floating">
+                <input
+                    type="text"
+                    class="form-control"
+                    id="floatingUsername"
+                    placeholder="EpicGamer9000"
+                    style="background-color: rgb(34, 34, 34); color: #ffffff">
+                <label for="floatingUsername">Username</label>
+            </div>
+            <div class="form-floating">
+                <input
+                    type="password"
+                    class="form-control"
+                    id="floatingPassword"
+                    placeholder="Password"
+                    style="background-color: rgb(34, 34, 34); color: #ffffff">
+                <label for="floatingPassword">Password</label>
+            </div>
+
+            <div class="checkbox mb-3">
+                <label>
+                    <input
+                        type="checkbox"
+                        value="remember-me"
+                        @bind="_rememberMe"
+                        @oninput="ui => _rememberMe = bool.Parse(ui.Value?.ToString()!.ToLower()!)"> Remember me
+                </label>
+            </div>
+            <button class="w-100 btn btn-lg btn-primary" @onclick="Login" style="padding-bottom: 10px">Sign in</button>
+            <p>Don't have an account? <a href="/register">Register for free</a></p>
+        </form>
+    }
+
+</div>
+
+@code {
+    private bool _rememberMe;
+    private Error _error = Error.None;
+    private bool _loading = true;
+
+    protected override async void OnAfterRender(bool firstRender) {
+        if (!firstRender) return;
+        Cookie cookieService = new (JsRuntime);
+
+        // Check if user is logged in.
+        string token = await cookieService.GetValue("token");
+        if (token == "") {
+            _loading = false;
+            ReloadText();
+            return;
+        }
+
+        // Check login
+        SerbleApiResponse<User> response = await SerbleApiHandler.GetUser(token);
+        if (!response.Success) {
+            _loading = false;
+            ReloadText();
+            return;
+        }
+        _loading = false;
+        LoginSuccess();
+    }
+
+    private void ReloadText() {
+        InvokeAsync(StateHasChanged).Wait();
+    }
+
+    private void Login() {
+        _loading = true;
+        ReloadText();
+        LoginMain();
+        _loading = false;
+        ReloadText();
+    }
+
+    private async void LoginMain() {
+        HtmlInteractor htmlInteractor = new(JsRuntime);
+        string username = await htmlInteractor.GetValue("floatingUsername");
+        string password = await htmlInteractor.GetValue("floatingPassword");
+
+        // Attempt login
+        SerbleApiResponse<string> response = await SerbleApiHandler.LoginUser(username, password);
+        if (!response.Success) {
+            Console.WriteLine(response.ErrorMessage);
+            _error = Error.InvalidCredentials;
+            ReloadText();
+            return;
+        }
+
+        // Login successful
+        string token = response.ResponseObject.ThrowIfNull();
+
+        // Set cookie
+        Cookie cookieService = new (JsRuntime);
+        await cookieService.SetValue("token", token, _rememberMe ? 365 : 1);
+        Console.WriteLine("Logged in!");
+        LoginSuccess();
+    }
+
+    private void LoginSuccess() {
+        // Normal login
+        NameValueCollection queryValues = NavigationManager.GetQueryStrings();
+        NavigationManager.NavigateTo(queryValues.AllKeys.Contains("return_url") ? queryValues.Get("return_url").ThrowIfNull() : "/account", true);
+    }
+
+    enum Error {
+        None,
+        NullFields,
+        InvalidCredentials,
+        AccountDisabled
+    }
+
+}

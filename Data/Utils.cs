@@ -1,6 +1,8 @@
-using System.Diagnostics;
+using System.Collections.Specialized;
 using System.Security.Cryptography;
 using System.Text;
+using System.Web;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
 namespace SerbleWebsite.Data; 
@@ -16,6 +18,24 @@ public static class Utils {
         return builder.ToString();
     }
 
+    public static TR? IfNotNull<T, TR>(this T? value, Func<T, TR?> func) {
+        return value == null ? default : func.Invoke(value);
+    }
+
+    public static T RunTaskSync<T>(this Task<T> task) {
+        while (!task.IsCompleted) {
+            // Just wait
+        }
+        return task.Result;
+    }
+
+    public static T? DefaultIfFalse<T>(this T? value, Func<T?, bool> condition) {
+        if (value == null) {
+            return default;
+        }
+        return condition.Invoke(value) ? value : default;
+    }
+
     public static string ToFormat(this TimeSpan timeSpan, string format) {
         string result = format;
         result = result.Replace("{d}", timeSpan.Days.ToString());
@@ -24,6 +44,16 @@ public static class Utils {
         result = result.Replace("{s}", timeSpan.Seconds.ToString());
         result = result.Replace("{ms}", timeSpan.Milliseconds.ToString());
         return result;
+    }
+    
+    // get all query values
+    public static NameValueCollection GetQueryStrings(this NavigationManager navigationManager) {
+        return HttpUtility.ParseQueryString(new Uri(navigationManager.Uri).Query);
+    }
+
+    // get single querystring value with specified key
+    public static string? GetQueryStrings(this NavigationManager navigationManager, string key) {
+        return navigationManager.GetQueryStrings()[key];
     }
 
 }

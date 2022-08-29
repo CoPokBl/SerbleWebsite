@@ -1,7 +1,13 @@
+using System.Text.Json.Serialization;
+
 namespace SerbleWebsite.Data.Schemas; 
 
 public class AuthorizedApp {
+    
+    [JsonPropertyName("appId")]
     public string AppId { get; }
+    
+    [JsonPropertyName("scopes")]
     public string Scopes { get; }
     
     public AuthorizedApp(string appId, string scopes) {

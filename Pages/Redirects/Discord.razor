@@ -1,0 +1,12 @@
+@page "/Discord"
+@using SerbleWebsite.Data
+@inject NavigationManager NavigationManager
+<h3>Discord</h3>
+<p>Is your browser not redirecting you? <a href="@Constants.DiscordInvite">Click here</a></p>
+
+@code {
+    protected override Task OnInitializedAsync() {
+        NavigationManager.NavigateTo(Constants.DiscordInvite);
+        return Task.CompletedTask;
+    }
+}
