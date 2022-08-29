@@ -2,6 +2,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using GeneralPurposeLib;
+using Microsoft.VisualBasic;
 using SerbleWebsite.Data.Schemas;
 
 namespace SerbleWebsite.Data;
@@ -240,11 +241,31 @@ public static class SerbleApiHandler {
         }
     }
 
+    public static async Task<SerbleApiResponse<bool>> CreateOAuthApp(string token, PublicOAuthApp app) {
+        // Send HTTP request to API
+        HttpClient client = new();
+        HttpResponseMessage response;
+        client.DefaultRequestHeaders.Add("SerbleAuth", "User " + token);
+        string jsonInp = new { app.Name, app.Description }.ToJson();
+        try {
+            response = await client.PostAsync($"{Constants.SerbleApiUrl}app", new StringContent(jsonInp, Encoding.UTF8, "application/json"));
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<bool>(false, "Failed: " + e);
+        }
+        if (!response.IsSuccessStatusCode) {
+            Console.WriteLine("Response: " + await response.Content.ReadAsStringAsync());
+            return new SerbleApiResponse<bool>(false, $"Failed: {response.StatusCode}");
+        }
+        // Don't parse response
+        return new SerbleApiResponse<bool>(true);
+    }
+
 }
 
 public class SerbleApiResponse<T> {
     
-    public bool Success { get; set; }
+    public bool Success { get; }
     public T? ResponseObject { get; }
     public string ErrorMessage { get; }
     public string ErrorFlag { get; }
