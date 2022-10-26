@@ -23,6 +23,9 @@ public class User {
     [JsonPropertyName("permString")]
     public string? PermString { get; set; }
     
+    [JsonPropertyName("premiumLevel")]
+    public int PremiumLevel { get; set; }
+    
     [JsonPropertyName("authorizedApps")]
     public AuthorizedApp[]? AuthorizedApps { get; set; }
 

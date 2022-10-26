@@ -1,4 +1,7 @@
 @page "/Store/Success"
+@using SerbleWebsite.Data
+@inject NavigationManager NavigationManager
+
 <h3>Store Success</h3>
 
 <section>
@@ -12,15 +15,22 @@
       </g>
   </svg>
   <div class="description Box-root">
-    <h3>Subscription to Starter plan successful!</h3>
+      <h3>Purchase Success!</h3>
+      <p>Go to your <a href="../../account">account page</a></p>
   </div>
 </div>
-<form action="/create-portal-session" method="POST">
-  <input type="hidden" id="session-id" name="session_id" value="" />
+<form action="@(Constants.SerbleApiUrl + "payments/portal")" method="POST">
+  <input type="hidden" id="session-id" name="session_id" value="@_sessionId" />
   <button id="checkout-and-portal-button" type="submit">Manage your billing information</button>
 </form>
 </section>
 
 @code {
+    private string? _sessionId;
     
+    // Get session id from query string on initial load
+    protected override void OnInitialized() {
+        _sessionId = NavigationManager.GetQueryStrings("msg") ?? "Unknown error";
+    }
+
 }
