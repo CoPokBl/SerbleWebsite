@@ -1,6 +1,8 @@
 @page "/Store"
 @using SerbleWebsite.Data
+@using SerbleWebsite.Data.Schemas
 
+<RequireLogin Callback="LoginCallback"></RequireLogin>
 <PageTitle>Serble - Store</PageTitle>
 <LoadScript Script="https://js.stripe.com/v3/"></LoadScript>
 <LoadScript Script="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></LoadScript>
@@ -21,7 +23,7 @@
       <h5>$0.50 / month</h5>
     </div>
   </div>
-  <form action="@(Constants.SerbleApiUrl + "payments/checkout")" method="POST">
+  <form action="@(Constants.SerbleApiUrl + "payments/checkout?user_id=" + _userId)" method="POST">
     <!-- Price lookup key -->
     <input type="hidden" name="lookup_key" value="serble_premium_price" />
     <button id="checkout-and-portal-button" type="submit">Checkout</button>
@@ -29,5 +31,10 @@
 </section>
 
 @code {
-    
+    private string _userId = "";
+
+    private Task LoginCallback((User, string) data) {
+        _userId = data.Item1.Id!;
+        return Task.CompletedTask;
+    }
 }
