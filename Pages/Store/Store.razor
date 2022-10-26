@@ -35,6 +35,8 @@
 
     private Task LoginCallback((User, string) data) {
         _userId = data.Item1.Id!;
+        Console.WriteLine("User logged in: " + _userId);
+        StateHasChanged();
         return Task.CompletedTask;
     }
 }
