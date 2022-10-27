@@ -35,7 +35,7 @@ else {
                }
             </div>
             <div class="row mt-3">
-               <div class="col-md-12"><label class="labels">Email @(_verifiedEmail ? "(Verified)" : "")</label><input style="background-color: rgb(34, 34, 34); color: #ffffff" type="text" class="form-control" placeholder="Email" value="@_user.Email" id="email"></div>
+               <div class="col-md-12"><label class="labels">Email @(_verifiedEmail ? "(Verified)" : "(Not verified, Check your email!)")</label><input style="background-color: rgb(34, 34, 34); color: #ffffff" type="text" class="form-control" placeholder="Email" value="@_user.Email" id="email"></div>
                @if (_errors.Contains(Error.EmailInvalid)) {
                   <p style="color: red; font-size: 13px">Invalid Email</p>
                }
