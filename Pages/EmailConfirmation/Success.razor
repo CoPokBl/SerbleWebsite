@@ -1,12 +1,17 @@
 @page "/emailconfirm/success"
 
 <div class="text-center">
-    <h3>Success!</h3>
+    <h1>Success!</h1>
     
-    <p>You have successfully verified your email!</p>
-    <form action="/login">
-        <input class="btn btn-success" type="submit" value="Login"/>
+    <div class="flex-row">
+        <p>You have successfully verified your email!</p>
+        <GreenTick Height="128" Width="128"></GreenTick>
+    </div>
+    <br/>
+    <form action="/account">
+        <input class="btn btn-success" type="submit" value="Account Page"/>
     </form>
+    <br/>
 </div>
 
 @code {

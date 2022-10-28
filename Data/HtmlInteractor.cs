@@ -28,5 +28,9 @@ public class HtmlInteractor {
     public async Task SetHtml(string id, string value) {
         await _jsRuntime.InvokeVoidAsync("eval", "document.getElementById('" + id + "').innerHTML = '" + value + "'");
     }
+    
+    public async Task SubmitForm(string id) {
+        await _jsRuntime.InvokeVoidAsync("eval", "document.getElementById('" + id + "').submit()");
+    }
 
 }

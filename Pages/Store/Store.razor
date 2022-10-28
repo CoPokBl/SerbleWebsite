@@ -1,11 +1,6 @@
 @page "/Store"
-@using SerbleWebsite.Data
-@using SerbleWebsite.Data.Schemas
 
-<RequireLogin Callback="LoginCallback"></RequireLogin>
 <PageTitle>Serble - Store</PageTitle>
-<LoadScript Script="https://js.stripe.com/v3/"></LoadScript>
-<LoadScript Script="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></LoadScript>
 
 <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
   <h1 class="display-4 fw-normal">Serble Paid Plans</h1>
@@ -67,11 +62,7 @@
             <li>-</li>
             <li>-</li>
           </ul>
-          <form action="@(Constants.SerbleApiUrl + "payments/checkout?user_id=" + _userId)" method="POST">
-            <!-- Price lookup key -->
-            <input type="hidden" name="lookup_key" value="serble_premium_price" />
-            <button id="checkout-and-portal-button" class="w-100 btn btn-lg btn-primary" type="submit">Subscribe</button>
-          </form>
+          <a href="/store/purchase?lookup_key=serble_premium_price" id="checkout-and-portal-button" class="w-100 btn btn-lg btn-primary" type="submit">Subscribe</a>
         </div>
       </div>
     </div>
@@ -109,12 +100,5 @@
 
 
 @code {
-    private string _userId = "";
-
-    private Task LoginCallback((User, string) data) {
-        _userId = data.Item1.Id!;
-        Console.WriteLine("User logged in: " + _userId);
-        StateHasChanged();
-        return Task.CompletedTask;
-    }
+  
 }

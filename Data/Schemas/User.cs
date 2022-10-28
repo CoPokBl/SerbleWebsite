@@ -28,5 +28,8 @@ public class User {
     
     [JsonPropertyName("authorizedApps")]
     public AuthorizedApp[]? AuthorizedApps { get; set; }
+    
+    [JsonPropertyName("stripeCustomerId")]
+    public string? StripeCustomerId { get; set; }
 
 }

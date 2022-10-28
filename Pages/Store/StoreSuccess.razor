@@ -1,6 +1,9 @@
 @page "/Store/Success"
 @using SerbleWebsite.Data
+@using SerbleWebsite.Data.Schemas
 @inject NavigationManager NavigationManager
+
+<RequireLogin Callback="LoginCallback" RedirectToLogin="false"></RequireLogin>
 
 <h3>Store Success</h3>
 
@@ -20,17 +23,26 @@
   </div>
 </div>
 <form action="@(Constants.SerbleApiUrl + "payments/portal")" method="POST">
-  <input type="hidden" id="session-id" name="session_id" value="@_sessionId" />
+  <input type="hidden" id="customer_id" name="customer_id" value="@_customerId" />
   <button id="checkout-and-portal-button" type="submit">Manage your billing information</button>
 </form>
 </section>
 
 @code {
-    private string? _sessionId;
+    private string? _customerId;
     
     // Get session id from query string on initial load
-    protected override void OnInitialized() {
-        _sessionId = NavigationManager.GetQueryStrings("msg") ?? "Unknown error";
+    // protected override void OnInitialized() {
+    //     _sessionId = NavigationManager.GetQueryStrings("msg") ?? "Unknown error";
+    // }
+
+    private async Task LoginCallback((User?, string) data) {
+        if (data.Item1 == null) {
+            return;
+        }
+        _customerId = data.Item1.StripeCustomerId;
+        Console.WriteLine("Loaded customer id: " + _customerId);
+        StateHasChanged();
     }
 
 }
