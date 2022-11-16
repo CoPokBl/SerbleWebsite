@@ -26,11 +26,18 @@
             <p>
                 <br/>
                 <ul style="text-align: left">
+                    @code {
+                        bool _any;
+                    }
                     @foreach (string scope in
                         ScopeHandler.ListOfScopeIdsToScopeNames(
                             ScopeHandler.FilterInvalidScopes(
-                                ScopeHandler.StringToListOfScopeIds(_queryValues!["scope"]!)))) {
+                                _queryValues!["scope"]!.Split(' ')))) {
+                        _any = true;
                         <li><a href="javascript: void(0)" data-bs-toggle="tooltip" data-bs-placement="left" title="@ScopeHandler.GetDescriptionFromName(scope)">@scope</a></li>
+                    }
+                    @if(!_any) {
+                        <li>None</li>
                     }
                 </ul>
             </p>
