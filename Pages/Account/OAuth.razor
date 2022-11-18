@@ -57,6 +57,7 @@
     private string _appName = "";
     private string? _token;
     private bool _loading = true;
+    private User? _user;
 
     private readonly string[] _requiredQueryValues = {
         "redirect_uri",
@@ -68,6 +69,7 @@
 
     public Task LoginCallback((User?, string) data) {
         _token = data.Item2;
+        _user = data.Item1;
         LoginCallbackVoid();
         _loading = false;
         return Task.CompletedTask;
@@ -97,6 +99,16 @@
         PublicOAuthApp app = response.ResponseObject!;
         _appName = app.Name;
         _app = app;
+        
+        // Check if app is already authorized
+        if (_user == null) {
+            throw new Exception("User is null");
+        }
+        if (_user!.AuthorizedApps!.Any(authedApp => authedApp.AppId == app.Id)) {
+            AuthorizeApp(true);
+            return;
+        }
+        
         _loading = false;
         ReloadText();
     }
