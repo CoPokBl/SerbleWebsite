@@ -51,11 +51,13 @@
 
 @code {
     private User? _user;
+    private string _token = "";
     private AuthorizedApp[]? _authorizedApps;
     private readonly List<(PublicOAuthApp, string)> _publicApps = new();
 
     private async Task LoginChecked((User?, string) data) {
         User user = data.Item1!;
+        _token = data.Item2;
         _authorizedApps = user.AuthorizedApps;
         _user = user;
         foreach (AuthorizedApp authorizedApp in _authorizedApps!) {
@@ -75,9 +77,11 @@
         InvokeAsync(StateHasChanged).Wait();
     }
     
-    private void RevokeApp(string app) {
+    private async Task RevokeApp(string app) {
         if (_user == null) return;
         // Revoke the app, duh
+        await SerbleApiHandler.DeAuthorizeApp(_token, app);
+        Console.WriteLine("Revoked app " + app);
         NavigationManager.NavigateTo(NavigationManager.Uri, true);
     }
     

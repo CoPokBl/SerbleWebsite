@@ -193,6 +193,29 @@ public static class SerbleApiHandler {
         return new SerbleApiResponse<string>(false, $"Failed: {response.StatusCode} ({await response.Content.ReadAsStringAsync()})", flag);
     }
     
+    public static async Task<SerbleApiResponse<string>> DeAuthorizeApp(string token, string appId) {
+        // Send HTTP request to API
+        HttpClient client = new();
+        client.DefaultRequestHeaders.Add("SerbleAuth", "User " + token);
+        HttpResponseMessage response;
+        try {
+            response = await client.DeleteAsync($"{Constants.SerbleApiUrl}account/authorizedApps?appId={appId}");
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<string>(false, "Failed: " + e);
+        }
+
+        if (response.IsSuccessStatusCode)
+            return new SerbleApiResponse<string>(await response.Content.ReadAsStringAsync());
+        string flag = "unknown";
+        string responseContent = await response.Content.ReadAsStringAsync();
+        if (response.StatusCode == HttpStatusCode.BadRequest) {
+            flag = "bad-app";
+        }
+        Console.WriteLine(responseContent);
+        return new SerbleApiResponse<string>(false, $"Failed: {response.StatusCode} ({await response.Content.ReadAsStringAsync()})", flag);
+    }
+    
     public static async Task<SerbleApiResponse<double>> CheckReCaptcha(string token) {
         // Send HTTP request to API
         HttpClient client = new();
