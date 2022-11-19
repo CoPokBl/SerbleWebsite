@@ -56,6 +56,9 @@
     private readonly List<(PublicOAuthApp, string)> _publicApps = new();
 
     private async Task LoginChecked((User?, string) data) {
+        if (data.Item1 == null) {
+            throw new Exception("User is null");
+        }
         User user = data.Item1!;
         _token = data.Item2;
         _authorizedApps = user.AuthorizedApps;
@@ -80,7 +83,11 @@
     private async Task RevokeApp(string app) {
         if (_user == null) return;
         // Revoke the app, duh
-        await SerbleApiHandler.DeAuthorizeApp(_token, app);
+        SerbleApiResponse<string> response = await SerbleApiHandler.DeAuthorizeApp(_token, app);
+        if (!response.Success) {
+            Console.WriteLine("Failed to revoke app: " + response.ErrorMessage);
+            return;
+        }
         Console.WriteLine("Revoked app " + app);
         NavigationManager.NavigateTo(NavigationManager.Uri, true);
     }

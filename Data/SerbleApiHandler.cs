@@ -199,7 +199,7 @@ public static class SerbleApiHandler {
         client.DefaultRequestHeaders.Add("SerbleAuth", "User " + token);
         HttpResponseMessage response;
         try {
-            response = await client.DeleteAsync($"{Constants.SerbleApiUrl}account/authorizedApps?appId={appId}");
+            response = await client.DeleteAsync($"{Constants.SerbleApiUrl}account/authorizedApps/{appId}");
         }
         catch (Exception e) {
             return new SerbleApiResponse<string>(false, "Failed: " + e);
