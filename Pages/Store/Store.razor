@@ -1,5 +1,7 @@
 @page "/Store"
+@using SerbleWebsite.Data.Schemas
 
+<RequireLogin RedirectToLogin="false" Callback="LoginCallback"></RequireLogin>
 <PageTitle>Serble - Store</PageTitle>
 
 <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
@@ -58,7 +60,7 @@
           <ul class="list-unstyled mt-3 mb-4">
             <li>Everything From Free Plan</li>
             <li>File Hosting Up To 100mb</li>
-            <li>-</li>
+            <li>50,000 Monthly SerbleAI Tokens</li>
             <li>-</li>
             <li>-</li>
           </ul>
@@ -88,10 +90,10 @@
           <td>100 MB</td>
         </tr>
         <tr>
-          <th scope="row" class="text-start">Private</th>
-          <td></td>
+          <th scope="row" class="text-start">SerbleAI Tokens</th>
+          <td>2000</td>
           <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
-          <td><svg class="bi" width="24" height="24"><use xlink:href="#check"/></svg></td>
+          <td>50,000</td>
         </tr>
       </tbody>
     </table>
@@ -100,5 +102,10 @@
 
 
 @code {
+
+  private Task LoginCallback((User?, string) data) {
+    User user = data.Item1!;
+    return Task.CompletedTask;
+  }
   
 }
