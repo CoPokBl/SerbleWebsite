@@ -1,48 +1,26 @@
 @page "/Store/Success"
-@using SerbleWebsite.Data
-@using SerbleWebsite.Data.Schemas
-@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
 
-<RequireLogin Callback="LoginCallback" RedirectToLogin="false"></RequireLogin>
-
-<h3>Store Success</h3>
-
-<section>
-<div class="product Box-root">
-  <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="14px" height="16px" viewBox="0 0 14 16" version="1.1">
-      <defs/>
-      <g id="Flow" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-          <g id="0-Default" transform="translate(-121.000000, -40.000000)" fill="#E184DF">
-              <path d="M127,50 L126,50 C123.238576,50 121,47.7614237 121,45 C121,42.2385763 123.238576,40 126,40 L135,40 L135,56 L133,56 L133,42 L129,42 L129,56 L127,56 L127,50 Z M127,48 L127,42 L126,42 C124.343146,42 123,43.3431458 123,45 C123,46.6568542 124.343146,48 126,48 L127,48 Z" id="Pilcrow"/>
-          </g>
-      </g>
-  </svg>
-  <div class="description Box-root">
-      <h3>Purchase Success!</h3>
-      <p>Go to your <a href="../../account">account page</a></p>
-  </div>
+<div class="text-center">
+    <h1>Purchase Complete!</h1>
+    <div class="d-flex justify-content-center">
+        <img width="498" height="224" alt="Minions happy with caption 'AWESOME'" src="assets/images/awesome-minions.gif"/>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col"><a href="/account" class="btn btn-success">Account Page</a></div>
+        <div class="col"><a href="/account/paymentportal" class="btn btn-success">Manage Subscription</a></div>
+        <div class="col"><a href="/store" class="btn btn-success">View Store</a></div>
+    </div>
 </div>
-<form action="@(Constants.SerbleApiUrl + "payments/portal")" method="POST">
-  <input type="hidden" id="customer_id" name="customer_id" value="@_customerId" />
-  <button id="checkout-and-portal-button" type="submit">Manage your billing information</button>
-</form>
-</section>
 
 @code {
-    private string? _customerId;
     
-    // Get session id from query string on initial load
-    // protected override void OnInitialized() {
-    //     _sessionId = NavigationManager.GetQueryStrings("msg") ?? "Unknown error";
-    // }
-
-    private async Task LoginCallback((User?, string) data) {
-        if (data.Item1 == null) {
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if (!firstRender) {
             return;
         }
-        _customerId = data.Item1.StripeCustomerId;
-        Console.WriteLine("Loaded customer id: " + _customerId);
-        StateHasChanged();
+        await JsRuntime.InvokeVoidAsync("confetti", false, true);
     }
 
 }

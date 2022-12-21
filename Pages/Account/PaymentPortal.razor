@@ -1,0 +1,42 @@
+@page "/account/PaymentPortal"
+@using SerbleWebsite.Data.Schemas
+@using SerbleWebsite.Data
+@inject NavigationManager NavigationManager
+<RequireLogin Callback="LoginCallback"></RequireLogin>
+
+<div>
+    <h3>Payment Portal</h3>
+    @if (_notCustomer) {
+        <p>You cannot access this page unless you have purchased something from our <a href="/store">store</a>.</p>
+    }
+    else {
+        <p>Loading...</p>
+    }
+</div>
+
+
+@code {
+
+    private bool _notCustomer;
+
+    private async Task LoginCallback((User?, string) data) {
+        SerbleApiResponse<string> urlResp = await SerbleApiHandler.GetPaymentPortalUrl(data.Item2);
+        if (!urlResp.Success) {
+            if (urlResp.ErrorFlag == "not-customer") {
+                // User is not a customer
+                _notCustomer = true;
+                StateHasChanged();
+                return;
+            }
+            // Error
+            string msg = "An error occurred while loading the payment portal url: " + urlResp.ErrorMessage;
+            msg = System.Net.WebUtility.UrlEncode(msg);
+            NavigationManager.NavigateTo("/error?msg=" + msg);
+            return;
+        }
+        
+        // Redirect to payment portal
+        NavigationManager.NavigateTo(urlResp!);
+    }
+    
+}

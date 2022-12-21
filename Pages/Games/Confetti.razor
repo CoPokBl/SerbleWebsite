@@ -1,0 +1,12 @@
+@page "/Confetti"
+@inject IJSRuntime JSRuntime
+<h3>Confetti</h3>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if (!firstRender) {
+            return;
+        }
+        await JSRuntime.InvokeVoidAsync("confetti", true, true);
+    }
+}

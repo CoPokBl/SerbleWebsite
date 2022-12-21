@@ -14,6 +14,6 @@ try {
     await builder.Build().RunAsync();
 }
 catch (Exception e) {
-    Console.WriteLine("Sorry, an error has occured: " + e.Message);
-    Console.WriteLine(e);
+    Console.Error.WriteLine("Sorry, an error has occured: " + e.Message);
+    Console.Error.WriteLine(e);
 }

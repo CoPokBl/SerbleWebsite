@@ -30,6 +30,7 @@ public class User {
     public AuthorizedApp[]? AuthorizedApps { get; set; }
     
     [JsonPropertyName("stripeCustomerId")]
+    [Obsolete("This is no longer provided.")]
     public string? StripeCustomerId { get; set; }
 
 }

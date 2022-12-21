@@ -33,4 +33,12 @@ public class HtmlInteractor {
         await _jsRuntime.InvokeVoidAsync("eval", "document.getElementById('" + id + "').submit()");
     }
 
+    public async Task Confetti(bool runOnClick) {
+        await _jsRuntime.InvokeVoidAsync("eval", $"confetti({runOnClick.ToString().ToLower()})");
+    }
+    
+    public async Task InvokeCode(string code) {
+        await _jsRuntime.InvokeVoidAsync("eval", code);
+    }
+
 }
