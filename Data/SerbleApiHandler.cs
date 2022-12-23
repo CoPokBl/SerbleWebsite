@@ -318,6 +318,25 @@ public static class SerbleApiHandler {
         // Don't parse response
         return new SerbleApiResponse<bool>(true);
     }
+    
+    public static async Task<SerbleApiResponse<bool>> DeleteOAuthApp(string token, string appId) {
+        // Send HTTP request to API
+        HttpClient client = new();
+        HttpResponseMessage response;
+        client.DefaultRequestHeaders.Add("SerbleAuth", "User " + token);
+        try {
+            response = await client.DeleteAsync($"{Constants.SerbleApiUrl}app/{appId}");
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<bool>(false, "Failed: " + e);
+        }
+        if (!response.IsSuccessStatusCode) {
+            Console.WriteLine("Response: " + await response.Content.ReadAsStringAsync());
+            return new SerbleApiResponse<bool>(false, $"Failed: {response.StatusCode}");
+        }
+        // Don't parse response
+        return new SerbleApiResponse<bool>(true);
+    }
 
 }
 

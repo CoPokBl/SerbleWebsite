@@ -6,7 +6,7 @@
 <RequireLogin Callback="OnLoad"></RequireLogin>
 
 <div class="text-center">
-    <h3>OAuthApps</h3>
+    <h3>Your OAuth Applications</h3>
     
     @if (_apps == null) {
         <p>Loading apps...</p>
@@ -15,13 +15,34 @@
         @if (_apps.Length == 0) {
             <p>No Apps</p>
         }
-        @foreach (OAuthApp app in _apps) {
-            <p>
-                <b>Name: @app.Name</b><br/>
-                ID: @app.Id<br/>
-                Description: @app.Description<br/>
-                ClientSecret: @app.ClientSecret<br/>
-            </p>
+        else {
+            
+            <div style="padding-left: 50px; padding-right: 50px;">
+                @for (int i = 0, x = 0; i < _apps.Length / 2 + 1; i++) {
+                    <div class="row align-items-md-stretch" style="padding-bottom: 20px">
+                        @for (int y = 0; y < 2; y++) {
+                            if (x > _apps.Length - 1) {
+                                continue;
+                            }
+                            OAuthApp app = _apps[x];
+                        
+                            <div class="col-md-6">
+                                <div class="h-100 p-5 bg-dark border rounded-3">
+                                    <h2>@app.Name</h2>
+                                    <p>@app.Description</p>
+                                    <p>ID: @app.Id</p>
+                                    <p>Client Secret: <button class="btn btn-link" onclick="navigator.clipboard.writeText('@app.ClientSecret'); console.log('Copied!');">Click to copy</button></p>
+                                    <button class="btn btn-outline-danger" type="button" @onclick="_ => DeleteApp(app.Id)">Delete</button>
+                                </div>
+                            </div>
+                            x++;
+                        }
+                    </div>
+                }
+            </div>
+            
+            
+            
         }
         <button
             class="btn btn-lg btn-success"
@@ -36,9 +57,10 @@
 @code {
     
     private OAuthApp[]? _apps;
+    string token;
 
     private async Task OnLoad((User?, string) data) {
-        User user = data.Item1!;
+        token = data.Item2;
         SerbleApiResponse<OAuthApp[]> response = await SerbleApiHandler.GetUsersApps(data.Item2);
         if (!response.Success) {
             Console.WriteLine("Error: " + response.ErrorMessage);
@@ -50,6 +72,16 @@
 
     private void ReloadText() {
         InvokeAsync(StateHasChanged).Wait();
+    }
+
+    private async void DeleteApp(string id) {
+        SerbleApiResponse<bool> response = await SerbleApiHandler.DeleteOAuthApp(token, id);
+        if (!response.Success) {
+            await Console.Error.WriteLineAsync("Error: " + response.ErrorMessage);
+            return;
+        }
+        
+        NavigationManager.NavigateTo(NavigationManager.Uri, true);
     }
     
 }
