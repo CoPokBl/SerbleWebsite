@@ -1,5 +1,5 @@
 @page "/Confetti"
-@inject IJSRuntime JSRuntime
+@inject IJSRuntime JsRuntime
 <h3>Confetti</h3>
 
 @code {
@@ -7,6 +7,6 @@
         if (!firstRender) {
             return;
         }
-        await JSRuntime.InvokeVoidAsync("confetti", true, true);
+        await JsRuntime.InvokeVoidAsync("confetti", true, true);
     }
 }

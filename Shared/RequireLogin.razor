@@ -55,7 +55,7 @@
         }
 
         // Callback
-        Callback!.Invoke((response.ResponseObject, tokenCookie));
+        await Callback!.Invoke((response.ResponseObject, tokenCookie));
     }
     
     private void NotLoggedIn(bool disabledAccount = false) {

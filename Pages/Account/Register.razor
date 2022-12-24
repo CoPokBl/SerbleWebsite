@@ -1,6 +1,7 @@
 @page "/register"
 @using SerbleWebsite.Data
 @using SerbleWebsite.Data.Schemas
+@using System.Collections.Specialized
 @inject IJSRuntime JsRuntime
 @inject NavigationManager NavigationManager
 
@@ -51,7 +52,7 @@
           <label for="password">Password</label>
         </div>
 
-        <button class="w-100 btn btn-lg btn-primary" onclick="onReCaptcha('register', 'RegisterSubmit')" style="padding-bottom: 10px">Register</button>
+        <button class="w-100 btn btn-lg btn-primary" onclick="this.innerHTML = 'Loading...';this.setAttribute('disabled', '');onReCaptcha('register', 'RegisterSubmit')" style="padding-bottom: 10px">Register</button>
         <p>Want to login? <a href="/login">Go here</a></p>
     </div>
 </div>
@@ -90,7 +91,8 @@
             Console.WriteLine(response.ErrorMessage);
             return;
         }
-        RegisterStaticHandler.Register.NavigationManager.NavigateTo("/login");
+        NameValueCollection queryValues = RegisterStaticHandler.Register.NavigationManager.GetQueryStrings();
+        RegisterStaticHandler.Register.NavigationManager.NavigateTo("/login" + (queryValues.AllKeys.Contains("return_url") ? "?return_url=" + queryValues["return_url"] : ""));
     }
 
     enum Error {

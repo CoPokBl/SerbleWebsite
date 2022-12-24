@@ -55,6 +55,10 @@ public static class Utils {
     public static string? GetQueryStrings(this NavigationManager navigationManager, string key) {
         return navigationManager.GetQueryStrings()[key];
     }
+    
+    public static MarkupString MarkupString(this string str) {
+        return (MarkupString) str;
+    }
 
 }
 

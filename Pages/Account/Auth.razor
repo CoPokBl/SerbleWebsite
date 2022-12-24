@@ -31,7 +31,7 @@
                         break;
 
                     case Error.InvalidCredentials:
-                        <p>Invalid credentials, need an account? <a href="/register">Register</a></p>
+                        <p>Invalid credentials, need an account? <a href="/register" onclick="window.location='register'+window.location.search;">Register</a></p>
                         break;
 
                     case Error.AccountDisabled:
@@ -72,11 +72,13 @@
                 </label>
             </div>
             <button class="w-100 btn btn-lg btn-primary" @onclick="Login" style="padding-bottom: 10px">Sign in</button>
-            <p>Don't have an account? <a href="/register">Register for free</a></p>
+            <p>Don't have an account? <a href="/register" onclick="window.location='register'+window.location.search;">Register for free</a></p>
         </form>
     }
 
 </div>
+
+<FixerUpper></FixerUpper>
 
 @code {
     private bool _rememberMe;
@@ -137,7 +139,7 @@
 
         // Set cookie
         Cookie cookieService = new (JsRuntime);
-        await cookieService.SetValue("token", token, _rememberMe ? 365 : 1);
+        await cookieService.SetValue("token", token, _rememberMe ? 24 * 365 : 1);
         Console.WriteLine("Logged in!");
         LoginSuccess();
     }
