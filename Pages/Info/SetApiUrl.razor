@@ -1,0 +1,25 @@
+@page "/SetApiUrl"
+@using SerbleWebsite.Data
+@using GeneralPurposeLib
+@inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
+
+<h3>Set Api Url</h3>
+<p id="info">Loading...</p>
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        HtmlInteractor interactor = new(JSRuntime);
+        Cookie cookie = new(JSRuntime);
+        string newUrl = NavigationManager.GetQueryStrings("url").DefaultIfNull(Constants.DefaultSerbleApiUrl);
+        if (newUrl == "") {
+            newUrl = Constants.DefaultSerbleApiUrl;
+        }
+        
+        await cookie.SetValue("apiUrl", newUrl, 24 * 365);
+        await interactor.SetValue("info", $"Current Api Url: {newUrl}");
+        Console.WriteLine("Set Api Url: " + newUrl);
+    }
+
+}

@@ -1,7 +1,20 @@
-﻿@inherits LayoutComponentBase
+﻿@using SerbleWebsite.Data
+@inherits LayoutComponentBase
+@inject IJSRuntime JSRuntime
 
 <PageTitle>Serble</PageTitle>
 
 <NavMenu></NavMenu>
 @Body
 <Footer></Footer>
+
+@code {
+
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        Cookie cookie = new(JSRuntime);
+        string apiUrl = await cookie.GetValue("apiUrl", Constants.DefaultSerbleApiUrl);
+        Constants.SerbleApiUrl = apiUrl;
+        Console.WriteLine("apiUrl: " + apiUrl);
+    }
+
+}
