@@ -17,35 +17,37 @@
     
     <br/>
     <h5>Debug Info (Ignore this):</h5>
-    <p>Lookup Key: @_lookupKey</p>
+    <p>Lookup Key: @_product</p>
     <p>User ID: @_userId</p>
 </div>
 
 <form action="@(Constants.SerbleApiUrl + "payments/checkout?user_id=" + _userId)" method="POST" id="checkout-form">
     <!-- Price lookup key -->
-    <input type="hidden" name="lookup_key" value="@_lookupKey"/>
+    <input type="hidden" name="lookup_key" value="@_product"/>
     <button hidden id="checkout-and-portal-button" class="w-100 btn btn-lg btn-primary" type="submit">Subscribe</button>
 </form>
 
 @code {
     private string _userId = "";
-    private string _lookupKey = "";
+    private string _product = "";
 
     private async Task LoginCallback((User?, string) data) {
         Console.WriteLine($"Logged in {data.Item1!.Username} for purchase");
-        
+
         NameValueCollection queryValues = NavigationManager.GetQueryStrings();
-        _lookupKey = queryValues["lookup_key"] ?? throw new Exception("No lookup key provided");
+        _product = queryValues["product"] ?? throw new Exception("No lookup key provided");
 
         _userId = data.Item1!.Id!;
         Console.WriteLine("User id: " + _userId);
+
+        SerbleApiResponse<string> checkoutResp = await SerbleApiHandler.GetCheckoutUrl(data.Item2, new []{ _product });
+        if (!checkoutResp.Success) {
+            Console.WriteLine(checkoutResp.ErrorMessage);
+            return;
+        }
         
-        Console.WriteLine("Rerendering to have html contain userid and lookupkey");
-        StateHasChanged();
-        
-        Console.WriteLine("Submitting form");
-        HtmlInteractor html = new(JsRuntime);
-        await html.SubmitForm("checkout-form");
+        Console.WriteLine("Checkout URL: " + checkoutResp.ResponseObject);
+        NavigationManager.NavigateTo(checkoutResp.ResponseObject!);
     }
     
 }
