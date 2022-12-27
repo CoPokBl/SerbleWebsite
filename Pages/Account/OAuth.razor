@@ -97,7 +97,7 @@
             return;
         }
         PublicOAuthApp app = response.ResponseObject!;
-        _appName = app.Name;
+        _appName = app.Name!;
         _app = app;
         
         // Check if app is already authorized
@@ -135,7 +135,7 @@
         if (authorize) {
             // Get token
             string scopeString = ScopeHandler.ListOfScopeIdsToString(_queryValues!["scope"]!.Split(' '));
-            SerbleApiResponse<string> response = await SerbleApiHandler.AuthorizeApp(_token!, _app!.Id, scopeString);
+            SerbleApiResponse<string> response = await SerbleApiHandler.AuthorizeApp(_token!, _app!.Id!, scopeString);
             if (!response.Success) {
                 if (response.ErrorFlag == "bad-app") {
                     NavigationManager.NavigateTo("/invalidoauth");

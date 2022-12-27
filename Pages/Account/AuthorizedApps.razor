@@ -38,7 +38,7 @@
                                     <li><a href="javascript: void(0)" data-bs-toggle="tooltip" data-bs-placement="left" title="@ScopeHandler.GetDescriptionFromName(scope)">@scope</a></li>
                                 }
                             </ul>
-                            <button class="btn btn-outline-danger" type="button" @onclick="_ => RevokeApp(app.Item1.Id)">Revoke Access</button>
+                            <button class="btn btn-outline-danger" type="button" @onclick="_ => RevokeApp(app.Item1.Id!)">Revoke Access</button>
                         </div>
                     </div>
                     x++;

@@ -9,7 +9,7 @@
     [Parameter]
     public Func<bool, bool> CheckCallback { get; set; } = _ => true;
 
-    protected override async void OnAfterRender(bool firstRender) {
+    protected override void OnAfterRender(bool firstRender) {
         if (!firstRender) return;
         
         // Check lockdown

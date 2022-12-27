@@ -57,10 +57,10 @@
 @code {
     
     private OAuthApp[]? _apps;
-    string token;
+    private string _token = null!;
 
     private async Task OnLoad((User?, string) data) {
-        token = data.Item2;
+        _token = data.Item2;
         SerbleApiResponse<OAuthApp[]> response = await SerbleApiHandler.GetUsersApps(data.Item2);
         if (!response.Success) {
             Console.WriteLine("Error: " + response.ErrorMessage);
@@ -75,7 +75,7 @@
     }
 
     private async void DeleteApp(string id) {
-        SerbleApiResponse<bool> response = await SerbleApiHandler.DeleteOAuthApp(token, id);
+        SerbleApiResponse<bool> response = await SerbleApiHandler.DeleteOAuthApp(_token, id);
         if (!response.Success) {
             await Console.Error.WriteLineAsync("Error: " + response.ErrorMessage);
             return;

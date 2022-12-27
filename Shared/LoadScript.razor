@@ -2,8 +2,8 @@
 
 @code {
     [Parameter]
-    public string Script { get; set; }
-    
+    public string Script { get; set; } = null!;
+
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         // invoke script loader
         Console.WriteLine("Loading Script: " + Script);
