@@ -1,22 +1,22 @@
 @page "/AuthorizedApps"
 @using SerbleWebsite.Data.Schemas
 @using SerbleWebsite.Data
-@using GeneralPurposeLib
 @using SerbleAPI.Data
 @inject NavigationManager NavigationManager
+@inject Localiser Localiser
 
 <RequireLogin Callback="LoginChecked"></RequireLogin>
 
 <div class="text-center">
     <br/>
-    <h3>Authorized Applications</h3>
+    <h3>@Localiser["authorized-applications"]</h3>
     <hr/>
 </div>
 
 
 <div style="padding: 30px">
     @if (_user == null) {
-        <h2>Loading...</h2>
+        <h2>@Localiser["loading"]</h2>
     }
     else {
         @for (int i = 0, x = 0; i < _publicApps.Count / 2 + 1; i++) {
@@ -31,14 +31,14 @@
                         <div class="h-100 p-5 bg-dark border rounded-3">
                             <h2>@app.Item1.Name</h2>
                             <p>@app.Item1.Description</p>
-                            <h5>Scopes:</h5>
+                            <h5>@Localiser["scopes"]</h5>
                             <ul>
                                 @foreach (string scope in
                                     ScopeHandler.ListOfScopeIdsToScopeNames(ScopeHandler.StringToListOfScopeIds(app.Item2))) {
                                     <li><a href="javascript: void(0)" data-bs-toggle="tooltip" data-bs-placement="left" title="@ScopeHandler.GetDescriptionFromName(scope)">@scope</a></li>
                                 }
                             </ul>
-                            <button class="btn btn-outline-danger" type="button" @onclick="_ => RevokeApp(app.Item1.Id!)">Revoke Access</button>
+                            <button class="btn btn-outline-danger" type="button" @onclick="_ => RevokeApp(app.Item1.Id!)">@Localiser["revoke-access"]</button>
                         </div>
                     </div>
                     x++;

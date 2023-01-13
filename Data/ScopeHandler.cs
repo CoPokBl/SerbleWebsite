@@ -12,31 +12,44 @@ public static class ScopeHandler {
         "full_access",
         "file_host",
         "user_info",
-        "apps_control"
+        "apps_control",
+        "payment_info",
+        "manage_account",
+        "manage_apps"
     };
     
     public static readonly string[] ScopeNames = {
         "Full Account Access",
         "File Host",
         "Account Information",
-        "Control Of Authorized Applications"
+        "Control Of Authorized Applications",
+        "Payment Information",
+        "Account Management",
+        "OAuth App Management"
     };
     
     public enum ScopesEnum {
         FullAccess,
         FileHost,
         UserInfo,
-        AppsControl
+        AppsControl,
+        PaymentInfo,
+        ManageAccount,
+        ManageApps
     }
 
     // id, name
     public static List<(string, string)> ScopeList => Scopes.Select((t, i) => (t, ScopeNames[i])).ToList();
 
-    public static string[] ScopeDescriptions = {
+    public static readonly string[] ScopeDescriptions = {
         "Allows full access to the account.",
         "Allows access the file host.",
         "Allows access to the account's information (Eg. Username, Email).",
-        "Allows control over authorized applications."
+        "Allows control over authorized applications.",
+        "Allows access to a user's list of purchased products and allows them to manage their subscriptions, " +
+        "including viewing the last 4 digits of their credit card and viewing purchase history.",
+        "Grants the ability to control the user's account, including changing their email, and username. Only you can change your password.",
+        "Allows management over all of your OAuth application, this does not allow the authorization of apps."
     };
 
     public static string ListOfScopeIdsToString(IEnumerable<string> scopeIds) {

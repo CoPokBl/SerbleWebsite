@@ -2,15 +2,17 @@
 @using SerbleWebsite.Data.Schemas
 @using SerbleWebsite.Data
 @inject NavigationManager NavigationManager
+@inject Localiser Localiser
+
 <RequireLogin Callback="LoginCallback"></RequireLogin>
 
 <div>
-    <h3>Payment Portal</h3>
+    <h3>@Localiser["payment-portal"]</h3>
     @if (_notCustomer) {
-        <p>You cannot access this page unless you have purchased something from our <a href="/store">store</a>.</p>
+        <p>@Localiser["payment-portal"].Replace("[", "<a href=\"/store\">").Replace("]", "</a>").MarkupString()</p>
     }
     else {
-        <p>Loading...</p>
+        <p>@Localiser["loading"]</p>
     }
 </div>
 

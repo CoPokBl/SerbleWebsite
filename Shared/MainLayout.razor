@@ -1,8 +1,9 @@
 ﻿@using SerbleWebsite.Data
 @inherits LayoutComponentBase
-@inject IJSRuntime JSRuntime
+@inject IJSRuntime JsRuntime
+@inject Localiser Localiser
 
-<PageTitle>Serble</PageTitle>
+<PageTitle>@Localiser["serble"]</PageTitle>
 
 <NavMenu></NavMenu>
 @Body
@@ -11,7 +12,7 @@
 @code {
 
     protected override async Task OnAfterRenderAsync(bool firstRender) {
-        Cookie cookie = new(JSRuntime);
+        Cookie cookie = new(JsRuntime);
         string apiUrl = await cookie.GetValue("apiUrl", Constants.DefaultSerbleApiUrl);
         Constants.SerbleApiUrl = apiUrl;
         Console.WriteLine("apiUrl: " + apiUrl);

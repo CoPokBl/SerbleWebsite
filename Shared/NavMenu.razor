@@ -2,6 +2,7 @@
 @using SerbleWebsite.Data.Schemas
 @inject IJSRuntime JsRuntime
 @inject NavigationManager NavigationManager
+@inject Localiser Localiser
 
 <RequireLogin RedirectToLogin="false" Callback="LoginProcessed" NoLockdownCheck="true" RequiredAccessLevel="AccountAccessLevel.Disabled"></RequireLogin>
 
@@ -14,33 +15,33 @@
         <ul class="navbar-nav mr-auto">
 
             <li class="nav-item">
-                <a class="nav-link" href="/">Home</a>
+                <a class="nav-link" href="/">@Localiser["home"]</a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="https://status.serble.net">Status</a>
+                <a class="nav-link" href="https://status.serble.net">@Localiser["status"]</a>
             </li>
             
             <li class="nav-item">
-                <a class="nav-link" href="/store">Store</a>
+                <a class="nav-link" href="/store">@Localiser["store"]</a>
             </li>
             
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="gameDrop" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Games
+                    @Localiser["games"]
                 </a>
                 <div class="dropdown-menu" aria-labelledby="gameDrop">
-                    <a class="dropdown-item" href="/wordmaster">Word Master</a>
+                    <a class="dropdown-item" href="/wordmaster">@Localiser["word-master"]</a>
                 </div>
             </li>
 
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="infoDrop" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Info
+                    @Localiser["info"]
                 </a>
                 <div class="dropdown-menu" aria-labelledby="infoDrop">
                     <a class="dropdown-item" href="/discord">Discord</a>
-                    <a class="dropdown-item" href="/contact">Contact</a>
+                    <a class="dropdown-item" href="/contact">@Localiser["contact"]</a>
                 </div>
             </li>
         </ul>
@@ -53,26 +54,26 @@
                 @* <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle"> *@
             </a>
             <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
-                <li><a class="dropdown-item" href="/oauthapps">My Applications</a></li>
-                <li><a class="dropdown-item" href="/authorizedapps">Authorized Applications</a></li>
-                <li><a class="dropdown-item" href="/account">Account</a></li>
-                <li><a class="dropdown-item" href="/account/paymentportal">Manage Payments</a></li>
+                <li><a class="dropdown-item" href="/oauthapps">@Localiser["my-applications"]</a></li>
+                <li><a class="dropdown-item" href="/authorizedapps">@Localiser["authorized-applications"]</a></li>
+                <li><a class="dropdown-item" href="/account">@Localiser["account"]</a></li>
+                <li><a class="dropdown-item" href="/account/paymentportal">@Localiser["manage-payments"]</a></li>
                 @if (_user.PermLevel > 1) {
-                    <li><a class="dropdown-item" href="/admin">Admin Dashboard</a></li>
+                    <li><a class="dropdown-item" href="/admin">@Localiser["admin-dashboard"]</a></li>
                 }
                 <li><hr class="dropdown-divider"></li>
-                <li><button class="dropdown-item" type="button" @onclick="Logout">Logout</button></li>
+                <li><button class="dropdown-item" type="button" @onclick="Logout">@Localiser["logout"]</button></li>
             </ul>
         </div>
     }
     else if (_loggingIn) {
         <div class="dropdown text-end" style="padding-right: 180px;">
-            <p>Loading...</p>
+            <p>@Localiser["loading"]</p>
         </div>
     }
     else {
         <div class="dropdown text-end" style="padding-right: 180px;">
-            <button type="button" class="btn btn-outline-light" @onclick="Login">Login</button>
+            <button type="button" class="btn btn-outline-light" @onclick="Login">@Localiser["login"]</button>
         </div>
     }
     

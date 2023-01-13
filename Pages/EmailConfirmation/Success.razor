@@ -1,16 +1,18 @@
 @page "/emailconfirm/success"
 @using SerbleWebsite.Shared.Icons
+@using SerbleWebsite.Data
+@inject Localiser Localiser
 
 <div class="text-center">
-    <h1>Success!</h1>
+    <h1>@Localiser["success"]</h1>
     
     <div class="flex-row">
-        <p>You have successfully verified your email!</p>
+        <p>@Localiser["email-verified"]</p>
         <GreenTick Height="128" Width="128"></GreenTick>
     </div>
     <br/>
     <form action="/account">
-        <input class="btn btn-success" type="submit" value="Account Page"/>
+        <input class="btn btn-success" type="submit" value="@Localiser["account-page"]"/>
     </form>
     <br/>
 </div>

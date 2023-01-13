@@ -4,12 +4,13 @@
 @using System.Text.RegularExpressions
 @inject IJSRuntime JsRuntime
 @inject NavigationManager NavigationManager
+@inject Localiser Localiser
 
 <RequireLogin Callback="LoginChecked"></RequireLogin>
 
 @if (_user == null) {
    <div class="text-center">
-      <h1>Loading...</h1>
+      <h1>@Localiser["loading"]</h1>
    </div>
 }
 else {
@@ -21,49 +22,60 @@ else {
       <div class="col-md-5 border-right">
          <div class="p-3 py-5">
             <div class="d-flex justify-content-between align-items-center mb-3">
-               <h4 class="text-right">Profile Settings</h4>
+               <h4 class="text-right">@Localiser["profile-settings"]</h4>
             </div>
             <div class="row mt-2">
-               <div class="col-md-6"><label class="labels">Username</label><input style="background-color: rgb(34, 34, 34); color: #ffffff" type="text" class="form-control" placeholder="Username" value="@_user.Username" id="username"></div>
+               <div class="col-md-6"><label class="labels">@Localiser["username"]</label><input style="background-color: rgb(34, 34, 34); color: #ffffff" type="text" class="form-control" placeholder="@Localiser["username"]" value="@_user.Username" id="username"></div>
                @if (_errors.Contains(Error.UsernameInvalid)) {
-                  <p style="color: red; font-size: 13px">Invalid Username</p>
+                  <p style="color: red; font-size: 13px">@Localiser["invalid-username"]</p>
                }
                else {
                   if (_errors.Contains(Error.UsernameTaken)) {
-                     <p style="color: red; font-size: 13px">That username is already taken</p>
+                     <p style="color: red; font-size: 13px">@Localiser["username-taken"]</p>
                   }
                }
             </div>
             <div class="row mt-3">
                <div class="col-md-12">
                   <label class="labels">
-                     Email @((string.IsNullOrWhiteSpace(_user.Email) ?
-                              "" :
-                              _verifiedEmail ?
-                                 "<span class='text-success'>(Verified)</span>" :
-                                 "<span class='text-warning'>(Not verified, Check your email!)</span>").MarkupString())
-                  </label><input style="background-color: rgb(34, 34, 34); color: #ffffff" type="text" class="form-control" placeholder="Email" value="@_user.Email" id="email">
+                     @Localiser["email"] @((string.IsNullOrWhiteSpace(_user.Email) ?
+                                            "" :
+                                            _verifiedEmail ?
+                                               $"<span class='text-success'>({Localiser["verified"]})</span>" :
+                                               $"<span class='text-warning'>({Localiser["verified"]})</span>").MarkupString())
+                  </label><input style="background-color: rgb(34, 34, 34); color: #ffffff" type="text" class="form-control" placeholder="@Localiser["email"]" value="@_user.Email" id="email">
                </div>
                @if (_errors.Contains(Error.EmailInvalid)) {
-                  <p style="color: red; font-size: 13px">Invalid Email</p>
+                  <p style="color: red; font-size: 13px">@Localiser["invalid-email"]</p>
                }
                <div style="padding-top: 20px"></div>
+               
+               @* TODO: *@
+               @* <div class="row mt-2"> *@
+               @*    <div class="col-md-6"> *@
+               @*       <label class="labels">@Localiser["language"]</label> *@
+               @*       <LanguageDropdown DefaultValue="@_user.Language" Placeholder="Choose Language" Class="form-control text-white" Style="background-color: rgb(34, 34, 34); color: #ffffff" Id="language"></LanguageDropdown> *@
+               @*    </div> *@
+               @* </div> *@
                <hr/>
-               <h4>Change Password</h4>
-               <div class="col-md-12"><label class="labels">Password</label><input style="background-color: rgb(34, 34, 34); color: #ffffff" id="password" type="password" class="form-control" placeholder="***********" value=""></div>
-               <div class="col-md-12"><label class="labels">Confirm Password</label><input style="background-color: rgb(34, 34, 34); color: #ffffff" id="confirmPassword" type="password" class="form-control" placeholder="***********" value=""></div>
+               
+               <h4>@Localiser["change-password"]</h4>
+               <div class="col-md-12"><label class="labels">@Localiser["password"]</label><input style="background-color: rgb(34, 34, 34); color: #ffffff" id="password" type="password" class="form-control" placeholder="***********" value=""></div>
+               <div class="col-md-12"><label class="labels">@Localiser["confirm-password"]</label><input style="background-color: rgb(34, 34, 34); color: #ffffff" id="confirmPassword" type="password" class="form-control" placeholder="***********" value=""></div>
                @if (_errors.Contains(Error.PasswordDifferent)) {
-                  <p style="color: red; font-size: 13px">Passwords don't match</p>
+                  <p style="color: red; font-size: 13px">@Localiser["passwords-dont-match"]</p>
                }
                <div style="padding-top: 20px"></div>
                <hr/>
+               
             </div>
+
             <div class="row mt-3">
-               <div class="col-md-6"><label class="labels">ID</label><input type="text" style="background-color: rgb(34, 34, 34); color: #ffffff" class="form-control" placeholder="ID" value="@_user.Id" readonly></div>
-               <div class="col-md-6"><label class="labels">Account Type</label><input type="text" style="background-color: rgb(34, 34, 34); color: #ffffff" class="form-control" placeholder="Normal" value="@(((AccountAccessLevel) Enum.ToObject(typeof(AccountAccessLevel), _user.PermLevel ?? 1)).ToString())" readonly></div>
-               <div class="col-md-6"><label class="labels">Premium Level</label><input type="text" style="background-color: rgb(34, 34, 34); color: #ffffff" class="form-control" placeholder="Normal" value="@(SerbleValueNamesHandler.GetNameOfPremiumLevel(_user.PremiumLevel))" readonly></div>
+               <div class="col-md-6"><label class="labels">@Localiser["id"]</label><input type="text" style="background-color: rgb(34, 34, 34); color: #ffffff" class="form-control" placeholder="@Localiser["id"]" value="@_user.Id" readonly></div>
+               <div class="col-md-6"><label class="labels">@Localiser["account-type"]</label><input type="text" style="background-color: rgb(34, 34, 34); color: #ffffff" class="form-control" placeholder="Normal" value="@(((AccountAccessLevel) Enum.ToObject(typeof(AccountAccessLevel), _user.PermLevel ?? 1)).ToString())" readonly></div>
+               <div class="col-md-6"><label class="labels">@Localiser["premium-level"]</label><input type="text" style="background-color: rgb(34, 34, 34); color: #ffffff" class="form-control" placeholder="Normal" value="@(SerbleValueNamesHandler.GetNameOfPremiumLevel(_user.PremiumLevel))" readonly></div>
             </div>
-            <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button" @onclick="Save">Save Changes</button></div>
+            <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button" @onclick="Save">@Localiser["save-changes"]</button></div>
          </div>
       </div>
    </div>

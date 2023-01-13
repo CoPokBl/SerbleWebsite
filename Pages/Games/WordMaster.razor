@@ -1,28 +1,31 @@
+@* TODO: Use dictionary of the user's chosen language *@
+
 @page "/WordMaster"
 @using SerbleWebsite.Data
 @inject IJSRuntime JsRuntime
 @inject HttpClient Http
+@inject Localiser Localiser
 
 <div class="text-center">
-<h1>Word Master</h1>
+<h1>@Localiser["word-master"]</h1>
 
 <div id="game" class="container border border-info border-3 rounded bg-dark p-5">
 <div>
     <div>
         <div class="d-flex flex-row justify-content-center">
-            <h3 style="padding-right: 50px; padding-left: 50px">Words: @_words.Count(word => word.Item1)</h3>
+            <h3 style="padding-right: 50px; padding-left: 50px">@Localiser["words"] @_words.Count(word => word.Item1)</h3>
             @if (_finished) {
-                <h3 class="text-danger">Game Over</h3>
+                <h3 class="text-danger">@Localiser["game-over"]</h3>
             }
             else {
-                <h3>Time Left: @_secondsRemaining</h3>
+                <h3>@Localiser["time-left"] @_secondsRemaining</h3>
             }
         </div>
         <h3 class="text-danger text-center">@StrikesString</h3>
     </div>
 
     @if (_words.Count == 0) {
-        <p>Enter a word to begin...</p>
+        <p>@Localiser["enter-word-to-being"]</p>
     }
     else {
         @if (_words.Last().Item1) {
@@ -36,24 +39,24 @@
 
     <form onsubmit="return false" class="d-flex flex-row justify-content-center">
         @if (_finished) {
-            <input type="text" class="form-control w-25 text-center" id="word-input" placeholder="Enter A Word" readonly/>
+            <input type="text" class="form-control w-25 text-center" id="word-input" placeholder="@Localiser["enter-word"]" readonly/>
         }
         else {
-            <input type="text" class="form-control w-25 text-center" id="word-input" placeholder="Enter A Word"/>
+            <input type="text" class="form-control w-25 text-center" id="word-input" placeholder="@Localiser["enter-word"]"/>
         }
 
         @if (_finished) {
-            <button class="btn btn-danger" @onclick="Reset">Reset</button>
+            <button class="btn btn-danger" @onclick="Reset">@Localiser["reset"]</button>
         }
         else {
-            <button class="btn btn-primary" @onclick="AddWord">Submit</button>
+            <button class="btn btn-primary" @onclick="AddWord">@Localiser["submit"]</button>
         }
     </form>
     @if (_newWr) {
-        <h3>NEW RECORD: @_record</h3>
+        <h3>@Localiser["new-record"] @_record</h3>
     }
     else {
-        <h3>Record: @(_record == -1 ? "Loading..." : _record)</h3>
+        <h3>@Localiser["record"] @(_record == -1 ? Localiser["loading"] : _record)</h3>
     }
 </div>
     

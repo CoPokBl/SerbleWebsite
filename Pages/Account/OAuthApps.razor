@@ -2,21 +2,21 @@
 @using SerbleWebsite.Data.Schemas
 @using SerbleWebsite.Data
 @inject NavigationManager NavigationManager
+@inject Localiser Localiser
 
 <RequireLogin Callback="OnLoad"></RequireLogin>
 
 <div class="text-center">
-    <h3>Your OAuth Applications</h3>
+    <h3>@Localiser["your-oauth-apps"]</h3>
     
     @if (_apps == null) {
-        <p>Loading apps...</p>
+        <p>@Localiser["loading"]</p>
     }
     else {
         @if (_apps.Length == 0) {
-            <p>No Apps</p>
+            <p>@Localiser["no-apps"]</p>
         }
         else {
-            
             <div style="padding-left: 50px; padding-right: 50px;">
                 @for (int i = 0, x = 0; i < _apps.Length / 2 + 1; i++) {
                     <div class="row align-items-md-stretch" style="padding-bottom: 20px">
@@ -30,9 +30,9 @@
                                 <div class="h-100 p-5 bg-dark border rounded-3">
                                     <h2>@app.Name</h2>
                                     <p>@app.Description</p>
-                                    <p>ID: @app.Id</p>
-                                    <p>Client Secret: <button class="btn btn-link" onclick="navigator.clipboard.writeText('@app.ClientSecret'); console.log('Copied!');">Click to copy</button></p>
-                                    <button class="btn btn-outline-danger" type="button" @onclick="_ => DeleteApp(app.Id)">Delete</button>
+                                    <p>@Localiser["id"]: @app.Id</p>
+                                    <p>@Localiser["client-secret"]: <button class="btn btn-link" onclick="navigator.clipboard.writeText('@app.ClientSecret'); console.log('Copied!');">@Localiser["click-to-copy"]</button></p>
+                                    <button class="btn btn-outline-danger" type="button" @onclick="_ => DeleteApp(app.Id)">@Localiser["delete"]</button>
                                 </div>
                             </div>
                             x++;
@@ -47,7 +47,7 @@
         <button
             class="btn btn-lg btn-success"
             @onclick='() => NavigationManager.NavigateTo("/oauthapps/new")'>
-            New App
+            @Localiser["new-app"]
         </button>
     }
 </div>

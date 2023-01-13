@@ -1,24 +1,22 @@
 ﻿@page "/"
+@using SerbleWebsite.Data
+@inject Localiser Localiser
 
 <PublicPage></PublicPage>
-<PageTitle>Serble</PageTitle>
+<PageTitle>@Localiser["serble"]</PageTitle>
 
 <div class="jumbotron jumbotron-fluid text-center" style="background-color: #333339;color: #ffffff">
-   <h1 class="display-4">Serble</h1>
+   <h1 class="display-4">@Localiser["serble"]</h1>
    <p class="lead" style="padding-left: 100px; padding-right: 100px">
-       Welcome to Serble! Serble is a collection of services, most of which I have created.
-       Not all the projects are publicly available, but you can find them all here. I would like to increase the number of
-       projects that are available to the public, so if you have any suggestions for new projects, or any feedback,
-       please contact me through <a href="/contact">one of these methods</a>.
+       @Localiser["welcome-to-serble"].Replace("[", "<a href=\"/contact\">").Replace("]", "</a>").MarkupString()
    </p>
    <br>
     <p class="lead" style="padding-left: 100px; padding-right: 100px">
-        Looking for the old Minecraft server website?
-        <a href="https://old.serble.net">Go here</a>.
+        @Localiser["looking-for-mc-server"].Replace("[", "<a href=\"https://old.serble.net\">").Replace("]", "</a>").MarkupString()
     </p>
    <hr class="my-4">
    <p class="lead" style="padding-bottom: 10px">
-      <a class="btn btn-primary btn-lg" href="/discord/" role="button" style="margin-right: 5px;">Serble Discord</a>
-      <a class="btn btn-primary btn-lg" href="https://status.serble.net" role="button" style="margin-left: 5px;">Uptime Monitor</a>
+      <a class="btn btn-primary btn-lg" href="/discord/" role="button" style="margin-right: 5px;">@Localiser["serble-discord"]</a>
+      <a class="btn btn-primary btn-lg" href="https://status.serble.net" role="button" style="margin-left: 5px;">@Localiser["uptime-monitor"]</a>
    </p>
 </div>

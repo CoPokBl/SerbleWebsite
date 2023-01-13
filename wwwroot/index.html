@@ -21,6 +21,7 @@
     <script src="/assets/js/bootstrap.bundle.min.js"></script>
     <script src="/assets/js/global.js"></script>
     <script src="/assets/js/confetti.js"></script>
+    <script src="/assets/js/localisation.js"></script>
 </head>
 
 <body style="background-color: #222222;color: #ffffff">
@@ -35,8 +36,8 @@
     </main>
 
     <div id="blazor-error-ui" class="bg-dark" style="color: white">
-        An unhandled error has occurred.
-        <a href="" class="reload">Reload</a>
+        <span id="blazor-unhandled-error">An unhandled error has occurred.</span>
+        <a id="blazor-reload-link" href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
     

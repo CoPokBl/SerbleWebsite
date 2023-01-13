@@ -1,0 +1,17 @@
+@page "/Language"
+@using SerbleWebsite.Data
+@inject Localiser Localiser
+
+<h3>@Localiser["language"]</h3>
+
+<p>@Localiser["current-lang"]</p>
+
+<ul>
+@foreach(string lang in new[] { "en","tok", "fr", "test" }) {
+    <li><a href="#" onclick="(localStorage.setItem('lang','@lang'),window.location.reload())();">@lang</a></li>
+}
+</ul>
+
+@code {
+    
+}

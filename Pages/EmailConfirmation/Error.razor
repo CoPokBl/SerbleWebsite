@@ -1,13 +1,15 @@
 @page "/emailconfirm/error"
 @using SerbleWebsite.Shared.Icons
+@using SerbleWebsite.Data
+@inject Localiser Localiser
 
 <div class="text-center">
-    <h3>An Error Has Occured</h3>
-    <p>Your email could not be verified.</p>
+    <h3>@Localiser["an-error-occured"]</h3>
+    <p>@Localiser["email-not-verified"]</p>
     <RedCross Width="128" Height="128"></RedCross>
     <br/>
     <form action="/account">
-        <input class="btn btn-success" type="submit" value="Account Page"/>
+        <input class="btn btn-success" type="submit" value="@Localiser["account-page"]"/>
     </form>
     <br/>
 </div>

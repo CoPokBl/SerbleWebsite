@@ -4,6 +4,7 @@
 @using System.Collections.Specialized
 @inject IJSRuntime JsRuntime
 @inject NavigationManager NavigationManager
+@inject Localiser Localiser
 
 <PublicPage></PublicPage>
 <ReCaptcha></ReCaptcha>
@@ -12,7 +13,7 @@
 <div class="text-center form-signin">
     <div>
         <img class="mb-4" src="assets/images/icon.png" alt="" width="72" height="72">
-        <h1 class="h3 mb-3 fw-normal">Register</h1>
+        <h1 class="h3 mb-3 fw-normal">@Localiser["register"]</h1>
 
         <p style="color: red;">
             @switch (_error) {
@@ -21,11 +22,11 @@
                     break;
 
                 case Error.NullFields:
-                    <p>Username and password are required</p>
+                    <p>@Localiser["username-password-required"]</p>
                     break;
 
                 case Error.UserExists:
-                    <p>User already exists, <a href="/login">trying to login?</a></p>
+                    <p>@Localiser["user-exists-trying-to-login"].Replace("[", "<a href=\"/login\">").Replace("]", "</a>").MarkupString()</p>
                     break;
 
                 default:
@@ -40,7 +41,7 @@
                 id="username"
                 placeholder="EpicGamer9000"
                 style="background-color: rgb(34, 34, 34); color: #ffffff">
-          <label for="username">Username</label>
+          <label for="username">@Localiser["username"]</label>
         </div>
         <div class="form-floating">
             <input
@@ -49,11 +50,11 @@
                 id="password"
                 placeholder="Password"
                 style="background-color: rgb(34, 34, 34); color: #ffffff">
-          <label for="password">Password</label>
+          <label for="password">@Localiser["password"]</label>
         </div>
 
         <button class="w-100 btn btn-lg btn-primary" onclick="this.innerHTML = 'Loading...';this.setAttribute('disabled', '');onReCaptcha('register', 'RegisterSubmit')" style="padding-bottom: 10px">Register</button>
-        <p>Want to login? <a href="/login">Go here</a></p>
+        <p>@Localiser["want-login-go-here"].Replace("[", "<a href=\"/login\">").Replace("]", "</a>").MarkupString()</p>
     </div>
 </div>
 

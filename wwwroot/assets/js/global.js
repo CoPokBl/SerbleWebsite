@@ -152,3 +152,7 @@ window.loadScript = function (scriptPath) {
 }
 // store list of what scripts we've loaded
 loaded = [];
+
+window.addAttribute = (elementId, attributeName, attributeValue) => {
+    document.getElementById(elementId).setAttribute(attributeName, attributeValue);
+}

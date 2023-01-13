@@ -1,0 +1,10 @@
+@page "/ThrowError"
+<h3>ThrowError</h3>
+
+@code {
+
+    protected override void OnInitialized() {
+        throw new Exception("This is an error");
+    }
+
+}

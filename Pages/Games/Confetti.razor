@@ -1,6 +1,9 @@
 @page "/Confetti"
+@using SerbleWebsite.Data
 @inject IJSRuntime JsRuntime
-<h3>Confetti</h3>
+@inject Localiser Localiser
+
+<h3>@Localiser["confetti"]</h3>
 
 @code {
     protected override async Task OnAfterRenderAsync(bool firstRender) {

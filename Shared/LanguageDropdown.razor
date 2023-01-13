@@ -1,0 +1,37 @@
+@using SerbleWebsite.Data
+@inject IJSRuntime JsRuntime
+
+<select id="@Id" style="@Style" class="@Class" name="languages">
+    <option>@Placeholder</option>
+    <option id="en" value="en">English</option>
+    <option id="tok" value="tok">toki pona</option>
+</select>
+
+@code {
+    
+    [Parameter]
+    public string Id { get; set; }
+    
+    [Parameter]
+    public string Class { get; set; }
+    
+    [Parameter]
+    public string Style { get; set; }
+    
+    [Parameter]
+    public string Placeholder { get; set; }
+    
+    [Parameter]
+    public string DefaultValue { get; set; }
+
+    protected override async void OnAfterRender(bool firstRender) {
+        if (firstRender) {
+            return;
+        }
+
+        HtmlInteractor interactor = new(JsRuntime);
+        await interactor.InvokeCode($"addAttribute('{DefaultValue}', 'selected', '')");
+        await interactor.InvokeCode("console.log('Set default value')");
+    }
+
+}

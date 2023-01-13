@@ -72,8 +72,15 @@ public class Cookie {
     }
 
     public async Task SetValue(string key, string value, int? hours = null) {
-        string curExp = hours != null ? hours > 0 ? DateToUTC(hours.Value) : "" : _expires;
-        await SetCookie($"{key}={value}; expires={curExp}; path=/");
+        string curExp = hours != null ? hours > 0 ? DateToUtc(hours.Value) : "" : _expires;
+        try {
+            await SetCookie($"{key}={value}; expires={curExp}; path=/");
+        }
+        catch (Exception) {
+            Console.WriteLine("Failed to set cookie");
+            Console.WriteLine("Data: " + $"{key}={value}; expires={curExp}; path=/");
+            throw;
+        }
     }
 
     public async Task<string> GetValue(string key, string def = "") {
@@ -100,8 +107,8 @@ public class Cookie {
     }
 
     public int ExpireDays {
-        set => _expires = DateToUTC(value);
+        set => _expires = DateToUtc(value);
     }
 
-    private static string DateToUTC(int h) => DateTime.Now.AddHours(h).ToUniversalTime().ToString("R");
+    private static string DateToUtc(int h) => DateTime.Now.AddHours(h).ToUniversalTime().ToString("R");
 }

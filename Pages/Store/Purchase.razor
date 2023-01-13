@@ -2,18 +2,17 @@
 @using SerbleWebsite.Data.Schemas
 @using SerbleWebsite.Data
 @using System.Collections.Specialized
-
-@inject IJSRuntime JsRuntime
 @inject NavigationManager NavigationManager
+@inject Localiser Localiser
 
 <RequireLogin Callback="LoginCallback"></RequireLogin>
 <LoadScript Script="https://js.stripe.com/v3/"></LoadScript>
 <LoadScript Script="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></LoadScript>
 
 <div class="text-center">
-    <h3>Please wait while we get you logged in</h3>
+    <h3>@Localiser["wait-while-login"]</h3>
     
-    <p>Stuck? Click <a href="/store">here</a> to go back to the store.</p>
+    <p>@Localiser["stuck-go-back-to-store"].Replace("[", "<a href=\"/store\">").Replace("]", "</a>").MarkupString()</p>
     
     <br/>
     <h5>Debug Info (Ignore this):</h5>

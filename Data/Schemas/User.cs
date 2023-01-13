@@ -32,5 +32,8 @@ public class User {
     [JsonPropertyName("stripeCustomerId")]
     [Obsolete("This is no longer provided.")]
     public string? StripeCustomerId { get; set; }
+    
+    [JsonPropertyName("language")]
+    public string? Language { get; set; }
 
 }

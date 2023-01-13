@@ -40,5 +40,13 @@ public class HtmlInteractor {
     public async Task InvokeCode(string code) {
         await _jsRuntime.InvokeVoidAsync("eval", code);
     }
+    
+    public async Task GetLanguage() {
+        await _jsRuntime.InvokeVoidAsync("eval", "window.getCultureLang()");
+    }
+    
+    public async Task SetLanguage(string lang) {
+        await _jsRuntime.InvokeVoidAsync("eval", $"localStorage.setItem('lang','{lang}')");
+    }
 
 }

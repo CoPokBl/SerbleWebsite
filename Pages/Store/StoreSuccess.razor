@@ -1,16 +1,18 @@
 @page "/Store/Success"
+@using SerbleWebsite.Data
 @inject IJSRuntime JsRuntime
+@inject Localiser Localiser
 
 <div class="text-center">
-    <h1>Purchase Complete!</h1>
+    <h1>@Localiser["purchase-complete"]</h1>
     <div class="d-flex justify-content-center">
         <img width="498" height="224" alt="Minions happy with caption 'AWESOME'" src="assets/images/awesome-minions.gif"/>
     </div>
     <br/>
     <div class="row">
-        <div class="col"><a href="/account" class="btn btn-success">Account Page</a></div>
-        <div class="col"><a href="/account/paymentportal" class="btn btn-success">Manage Subscription</a></div>
-        <div class="col"><a href="/store" class="btn btn-success">View Store</a></div>
+        <div class="col"><a href="/account" class="btn btn-success">@Localiser["account-page"]</a></div>
+        <div class="col"><a href="/account/paymentportal" class="btn btn-success">@Localiser["manage-subscription"]</a></div>
+        <div class="col"><a href="/store" class="btn btn-success">@Localiser["store"]</a></div>
     </div>
 </div>
 

@@ -1,8 +1,10 @@
 @page "/Discord"
 @using SerbleWebsite.Data
 @inject NavigationManager NavigationManager
+@inject Localiser Localiser
+
 <h3>Discord</h3>
-<p>Is your browser not redirecting you? <a href="@Constants.DiscordInvite">Click here</a></p>
+<p>@Localiser["browser-not-redirecting"].Replace("[", $"<a href=\"{Constants.DiscordInvite}\">").Replace("]", "</a>").MarkupString()</p>
 
 @code {
     protected override Task OnInitializedAsync() {

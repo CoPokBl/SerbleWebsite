@@ -1,17 +1,18 @@
 @page "/SetApiUrl"
 @using SerbleWebsite.Data
 @using GeneralPurposeLib
-@inject IJSRuntime JSRuntime
+@inject IJSRuntime JsRuntime
 @inject NavigationManager NavigationManager
+@inject Localiser Localiser
 
-<h3>Set Api Url</h3>
-<p id="info">Loading...</p>
+<h3>@Localiser["set-api-url"]</h3>
+<p id="info">@Localiser["loading"]</p>
 
 @code {
 
     protected override async Task OnAfterRenderAsync(bool firstRender) {
-        HtmlInteractor interactor = new(JSRuntime);
-        Cookie cookie = new(JSRuntime);
+        HtmlInteractor interactor = new(JsRuntime);
+        Cookie cookie = new(JsRuntime);
         string newUrl = NavigationManager.GetQueryStrings("url").DefaultIfNull(Constants.DefaultSerbleApiUrl);
         if (newUrl == "") {
             newUrl = Constants.DefaultSerbleApiUrl;

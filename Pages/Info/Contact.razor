@@ -1,17 +1,18 @@
 @page "/Contact"
-
+@using SerbleWebsite.Data
+@inject Localiser Localiser
 
 <div class="row text-center" style="background-color: rgba(83,78,75,0.95); width: 100%">
-    <h2>Contact Us</h2>
+    <h2>@Localiser["contact-us"]</h2>
 </div>
 
 <div class="row">
     <div class="col"></div>
     <div class="col">
         <ul class="p-5">
-            <li>Admin Email: <a href="mailto:admin@serble.net">admin@serble.net</a></li>
-            <li>Support Email: <a href="mailto:support@serble.net">support@serble.net</a></li>
-            <li>Discord Invite: <a href="/discord">fzvcNhW</a></li>
+            <li>@Localiser["admin-email"] <a href="mailto:admin@serble.net">admin@serble.net</a></li>
+            <li>@Localiser["support-email"] <a href="mailto:support@serble.net">support@serble.net</a></li>
+            <li>@Localiser["discord-invite"] <a href="/discord">fzvcNhW</a></li>
         </ul>
     </div>
     <div class="col"></div>

@@ -3,13 +3,14 @@
 @using SerbleWebsite.Data
 @inject IJSRuntime JsRuntime
 @inject NavigationManager NavigationManager
+@inject Localiser Localiser
 
 <RequireLogin Callback="OnLoad"></RequireLogin>
 <LoginStyles></LoginStyles>
 
 <div class="text-center form-signin">
     <div>
-        <h1 class="h3 mb-3 fw-normal">New OAuth Application</h1>
+        <h1 class="h3 mb-3 fw-normal">@Localiser["new-oauth-application"]</h1>
 
         <p style="color: red;">
             @switch (_error) {
@@ -18,11 +19,11 @@
                     break;
 
                 case Error.NullFields:
-                    <p>You must fill out all fields</p>
+                    <p>@Localiser["null-fields"]</p>
                     break;
 
                case Error.Wait:
-                    <p>Please try again in 5 seconds...</p>
+                    <p>@Localiser["try-again-in-5"]</p>
                     break;
 
                 default:
@@ -35,24 +36,24 @@
                 type="text"
                 class="form-control"
                 id="name"
-                placeholder="App Name"
+                placeholder="@Localiser["application-name"]"
                 maxlength="255"
                 style="background-color: rgb(34, 34, 34); color: #ffffff">
-          <label for="name">Application Name</label>
+          <label for="name">@Localiser["application-name"]</label>
         </div>
         <div class="form-floating" style="padding-top: 10px; padding-bottom: 10px">
             <textarea
                 class="form-control"
                 id="desc"
-                placeholder="App Description"
+                placeholder="@Localiser["description"]"
                 maxlength="1024"
                 style="background-color: rgb(34, 34, 34); color: #ffffff"></textarea>
-            <label for="desc">Description</label>
+            <label for="desc">@Localiser["description"]</label>
         </div>
 
         <br/>
 
-        <button class="w-100 btn btn-lg btn-primary" @onclick="Submit" style="padding-top: 10px">Create</button>
+        <button class="w-100 btn btn-lg btn-primary" @onclick="Submit" style="padding-top: 10px">@Localiser["create"]</button>
     </div>
 </div>
 

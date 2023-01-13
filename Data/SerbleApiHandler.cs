@@ -2,7 +2,6 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using GeneralPurposeLib;
-using Microsoft.VisualBasic;
 using SerbleWebsite.Data.Schemas;
 
 namespace SerbleWebsite.Data;
@@ -51,7 +50,7 @@ public static class SerbleApiHandler {
         }
         if (!response.IsSuccessStatusCode) {
             Console.WriteLine("Response: " + await response.Content.ReadAsStringAsync());
-            return new SerbleApiResponse<string>($"Non Success Code: {response.StatusCode}");
+            return new SerbleApiResponse<string>(false, $"Non Success Code: {response.StatusCode}");
         }
         // Parse response
         string token;

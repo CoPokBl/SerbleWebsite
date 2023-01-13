@@ -1,16 +1,17 @@
 @page "/Store/Cancel"
+@using SerbleWebsite.Data
+@inject Localiser Localiser
 
 <div class="text-center">
-    <h1>Purchase Cancelled</h1>
+    <h1>@Localiser["purchase-cancelled"]</h1>
     
     <p class="p-5">
-        Purchasing a subscription will help support Serble and allow us to continue to provide you with the best service possible.
-        This service costs money to run, and we need your help to keep it going, so we would greatly appreciate it if you would consider purchasing a subscription.
+        @Localiser["sub-will-help-us"]
         
         <div class="p-3">
-            <a class="btn btn-primary" href="/store">Store</a>
-            <a class="btn btn-primary" href="/account">Account Page</a>
-            <a class="btn btn-primary" href="/">Home Page</a>
+            <a class="btn btn-primary" href="/store">@Localiser["store"]</a>
+            <a class="btn btn-primary" href="/account">@Localiser["account-page"]</a>
+            <a class="btn btn-primary" href="/">@Localiser["home-page"]</a>
         </div>
     </p>
 </div>

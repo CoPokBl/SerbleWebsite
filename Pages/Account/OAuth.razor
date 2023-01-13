@@ -4,6 +4,7 @@
 @using SerbleAPI.Data
 @using System.Collections.Specialized
 @inject NavigationManager NavigationManager
+@inject Localiser Localiser
 
 <RequireLogin Callback="LoginCallback"></RequireLogin>
 
@@ -12,15 +13,13 @@
 <div class="text-center form-signin">
 
     @if (_loading) {
-        <h3>Loading...</h3>
+        <h3>@Localiser["loading"]</h3>
     }
     else {
         <h1>@_appName</h1>
         <p>
             <div>
-                @_appName would like access to your account. They CANNOT access your password.
-                Do not click Allow unless you were sent here by @_appName and you
-                trust them. They are requesting access to the following scopes:
+                @(Localiser["oauth-warning"].Replace("{app}", _appName))
             </div>
 
             <p>
@@ -37,15 +36,15 @@
                         <li><a href="javascript: void(0)" data-bs-toggle="tooltip" data-bs-placement="left" title="@ScopeHandler.GetDescriptionFromName(scope)">@scope</a></li>
                     }
                     @if(!_any) {
-                        <li>None</li>
+                        <li>@Localiser["none"]</li>
                     }
                 </ul>
             </p>
-            <b>IF YOU DON'T UNDERSTAND THEN CLICK DENY</b>
+            <b>@Localiser["click-deny-if-confused"]</b>
         </p>
         <div class="d-flex" style="">
-            <button class="w-100 btn btn-lg btn-primary" @onclick="_ => AuthorizeApp(true)" style="margin-right: 10px">Allow</button>
-            <button class="w-100 btn btn-lg btn-danger" @onclick="_ => AuthorizeApp(false)" style="padding-bottom: 10px">Deny</button>
+            <button class="w-100 btn btn-lg btn-primary" @onclick="_ => AuthorizeApp(true)" style="margin-right: 10px">@Localiser["allow"]</button>
+            <button class="w-100 btn btn-lg btn-danger" @onclick="_ => AuthorizeApp(false)" style="padding-bottom: 10px">@Localiser["deny"]</button>
         </div>
     }
 
