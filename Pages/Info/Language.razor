@@ -1,17 +1,34 @@
 @page "/Language"
 @using SerbleWebsite.Data
 @inject Localiser Localiser
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
 
 <h3>@Localiser["language"]</h3>
 
 <p>@Localiser["current-lang"]</p>
 
 <ul>
-@foreach(string lang in new[] { "en","tok", "fr", "test" }) {
+@foreach(string lang in new[] { "en","tok", "tes" }) {
     <li><a href="#" onclick="(localStorage.setItem('lang','@lang'),window.location.reload())();">@lang</a></li>
 }
 </ul>
 
 @code {
-    
+
+    protected override async void OnAfterRender(bool firstRender) {
+        if (!firstRender) {
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(NavigationManager.GetQueryStrings().Get("lang"))) {
+            return;
+        }
+        
+        string? lang = NavigationManager.GetQueryStrings().Get("lang");
+        HtmlInteractor interactor = new(JsRuntime);
+        await interactor.SetLanguage(lang);
+        NavigationManager.NavigateTo("/", true);
+    }
+
 }

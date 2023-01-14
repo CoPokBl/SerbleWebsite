@@ -18,8 +18,15 @@ public static class Localisation {
         // Create a list of all files in the directory Languages and all its subdirectories at the url /assets/translations
         HttpClient http = prov.GetRequiredService<HttpClient>();
         string manifest = await http.GetStringAsync("/assets/translations/manifest.txt");
-        string[] files = manifest.Split('\n').Where(f => f.EndsWith(code) || f.EndsWith("default")).ToArray();
-        
+        string[] files;
+        try {
+            files = manifest.Split('\n').Where(f => f.EndsWith(code) || f.EndsWith("default")).ToArray();
+        }
+        catch (Exception e) {
+            Console.WriteLine("Localisation error: " + e);
+            files = new[] { "default" };
+        }
+
         // Sort so all files that end in default are at the top
         List<string> filesOrdered = new();
         foreach (string f in files) {

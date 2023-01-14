@@ -48,15 +48,15 @@ else {
                @if (_errors.Contains(Error.EmailInvalid)) {
                   <p style="color: red; font-size: 13px">@Localiser["invalid-email"]</p>
                }
-               <div style="padding-top: 20px"></div>
                
-               @* TODO: *@
-               @* <div class="row mt-2"> *@
-               @*    <div class="col-md-6"> *@
-               @*       <label class="labels">@Localiser["language"]</label> *@
-               @*       <LanguageDropdown DefaultValue="@_user.Language" Placeholder="Choose Language" Class="form-control text-white" Style="background-color: rgb(34, 34, 34); color: #ffffff" Id="language"></LanguageDropdown> *@
-               @*    </div> *@
-               @* </div> *@
+               <div class="row mt-2">
+                  <div class="col-md-6">
+                     <label class="labels">@Localiser["language"]</label>
+                     <LanguageDropdown DefaultValue="@_user.Language" Placeholder="Choose Language" Class="form-control text-white" Style="background-color: rgb(34, 34, 34); color: #ffffff" Id="language"></LanguageDropdown>
+                  </div>
+               </div>
+               
+               <div style="padding-top: 20px"></div>
                <hr/>
                
                <h4>@Localiser["change-password"]</h4>
@@ -112,6 +112,7 @@ else {
       HtmlInteractor interactor = new (JsRuntime);
       string username = await interactor.GetValue("username");
       string email = await interactor.GetValue("email");
+      string language = await interactor.GetValue("language");
       string password = await interactor.GetValue("password");
       string confirmPassword = await interactor.GetValue("confirmPassword");
       bool validationSuccess = true;
@@ -153,6 +154,14 @@ else {
       if (_user.Email != email) {
          Console.WriteLine("Email changed (from " + _user.Email + " to " + email + ")");
          edits.Add(new AccountEditRequest("Email", email));
+      }
+
+      if (language != "" && language != _user.Language) {
+         Console.WriteLine("Language changed (from " + _user.Language + " to " + language + ")");
+         edits.Add(new AccountEditRequest("Language", language));
+         
+         // Update website language
+         await interactor.SetLanguage(language);
       }
 
       if (password != "") {
