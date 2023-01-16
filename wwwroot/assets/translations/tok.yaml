@@ -9,7 +9,7 @@ invalid-creds-need-account: nimi ala, nimi wile anu seme?
 register: nimi lanpan
 account-disabled: nimi li pakala
 username: nimi
-password: utala
+password: nimi utala
 remember-me: utala ala awen
 dont-have-account: nimi ala anu seme?
 register-for-free: nimi sin
@@ -18,16 +18,16 @@ invalid-username: nimi pakala
 username-taken: nimi li sina ala
 email: lipu toki
 verified: pona
-not-verified: pona ala, o lukin lipu toki!
-invalid-email: lipu toki li pona ala
-change-password: utala ante
-confirm-password: utala awen
+not-verified: pona ala, o lukin e lipu toki!
+invalid-email: lipu toki li ike
+change-password: nimi utala ante
+confirm-password: nimi utala awen
 passwords-dont-match: utala sama ala
 id: nimi ante pi jan
 account-type: sina suli anu seme?
 premium-level: sina pana e mani anu seme?
-account-type-free: esun ala
-account-type-premium: esun
+account-type-free: mani ala
+account-type-premium: ijo pi mani
 save-changes: ante awen
 authorized-applications: ilo li lawa e sina
 scopes: "ken:"
@@ -48,7 +48,7 @@ no-apps: ala
 client-secret: ilo e lukin ala
 click-to-copy: 'luka: tu e ni'
 delete: pakala
-new-app: sin
+new-app: ilo sin
 payment-portal: ilo esun
 not-customer: sina li [esun] e ijo la sina tawa e lipu.
 user-exists-trying-to-login: nimi lon, [sina wile kepeken e ilo open anu seme?]
@@ -67,15 +67,15 @@ enter-word-to-begin: 'luka e nimi: open...'
 enter-word: luka e nimi
 reset: sin
 submit: luka
-new-record: "tenpo wawa sin:"
-record: "tenpo wawa:"
-contact-us: toki mi
-admin-email: "lipu toki e jan suli:"
-support-email: "lipu toki e jan pona:"
+new-record: "tenpo suli sin:"
+record: "tenpo suli:"
+contact-us: toki e mi
+admin-email: "lipu toki pi jan suli:"
+support-email: "lipu toki pi jan pona:"
 discord-invite: "ilo discord pana:"
 oops: pakala!
 if-sent-then-error: 'lipu pakala. o toki e jan suli:'
-error: "sona pakala:"
+error: "sona pi pakala:"
 unknown-error: lipu pakala. pakala li sona ala
 invalid-oauth: ilo pakala
 invalid-oauth-message: lipu li sona ala. anu ona li pona ala e jan ona. o toki e jan lipu lawa.
