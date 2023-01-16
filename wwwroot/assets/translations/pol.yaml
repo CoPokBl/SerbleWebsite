@@ -48,56 +48,56 @@ no-apps: Brak aplikacji
 client-secret: Sekret klienta
 click-to-copy: Kliknij, aby skopiować
 delete: Usunąć
-new-app: New Application
-payment-portal: Payment Portal
-not-customer: You cannot access this page unless you have purchased something from our [store].
-user-exists-trying-to-login: User already exists, [trying to login?]
-want-login-go-here: Want to login? [Go here]
-an-error-occured: An Error Has Occured
-email-not-verified: Your email could not be verified.
-account-page: Account Page
-success: Success!
-email-verified: You have successfully verified your email!
-confetti: Confetti
-word-master: Word Master
-words: "Words:"
-game-over: Game Over
-time-left: "Time Left:"
-enter-word-to-begin: Enter a word to being...
-enter-word: Enter a word
-reset: Reset
-submit: Submit
-new-record: "NEW RECORD:"
-record: "Record:"
-contact-us: Contact Us
-admin-email: "Admin Email:"
-support-email: "Support Email:"
-discord-invite: "Discord Invite:"
-oops: Oops!
-if-sent-then-error: If you were sent here by the website then some error has occured. Please contact admin at
-error: "Error:"
-unknown-error: Unknown Error
-invalid-oauth: Invalid OAuth
-invalid-oauth-message: The website that redirected you here didn't provide the required information for us to authenticate them. Or the client id they specified is invalid. You should report this to the website owner.
-recaptcha-test: Google ReCaptcha Test
-submit-challenge: Submit Challenge
-set-api-url: Set API URL
-browser-not-redirecting: Is your browser not redirecting you? [Click here]
-wait-while-login: Please wait while we log you in
-stuck-go-back-to-store: Stuck? [Go back to store]
-store: Store
-serble-paid-plans: Serble Paid Plans
-services-cost-money: Unfortunately some services Serble operates cost money to run, this is why we have to impose usage limits on some things. We pride ourselves on being mostly a free service run as a hobby, but we also want to keep the lights on.
-per-month: /month
-sign-up-for-free: Sign up for free
-coming-soon: Coming Soon
-subscribe: Subscribe
-compare-plans: Compare Plans
-purchase-cancelled: Purchase Cancelled
-sub-will-help-us: Purchasing a subscription will help support Serble and allow us to continue to provide you with the best service possible. This service costs money to run, and we need your help to keep it going, so we would greatly appreciate it if you would consider purchasing a subscription.
-home-page: Home Page
-purchase-complete: Purchase Complete!
-manage-subscription: Manage Subscription
+new-app: Nowa Aplikacja
+payment-portal: Portal Płatniczy
+not-customer: Nie możesz uzyskać dostępu do tej strony, chyba że kupiłeś coś od naszego [store].
+user-exists-trying-to-login: Użytkownik już istnieje, [próbujesz się zalogować?]
+want-login-go-here: Chcesz się zalogować? [Przejdź tutaj]
+an-error-occured: Wystąpił błąd
+email-not-verified: Twój e-mail nie mógł zostać zweryfikowany.
+account-page: Strona Konta
+success: Sukces!
+email-verified: Pomyślnie zweryfikowałeś swój adres e-mail!
+confetti: Konfetti
+word-master: Mistrz Słowa
+words: "Słowa:"
+game-over: Koniec gry
+time-left: "Pozostały czas:"
+enter-word-to-begin: Wpisz słowo, aby rozpocząć...
+enter-word: Wpisz słowo
+reset: Resetowanie
+submit: Składać
+new-record: "NOWY REKORD:"
+record: "Nagrywać:"
+contact-us: Skontaktuj się z nami
+admin-email: "E-mail administratora:"
+support-email: "E-mail wsparcia:"
+discord-invite: "Zaproszenie na Discorda:"
+oops: Ups!
+if-sent-then-error: Jeśli zostałeś wysłany tutaj przez stronę internetową, wystąpił błąd. Skontaktuj się z administratorem pod adresem
+error: "Błąd:"
+unknown-error: Nieznany błąd
+invalid-oauth: Nieprawidłowa OAuth
+invalid-oauth-message: Witryna, która przekierowała Cię tutaj, nie podała informacji wymaganych do uwierzytelnienia. Lub podany przez nich identyfikator klienta jest nieprawidłowy. Powinieneś zgłosić to właścicielowi strony.
+recaptcha-test: Test Google ReCaptcha
+submit-challenge: Prześlij wyzwanie
+set-api-url: Ustaw adres URL interfejsu API
+browser-not-redirecting: Twoja przeglądarka Cię nie przekierowuje? [Kliknij tutaj]
+wait-while-login: Proszę czekać, aż się zalogujemy
+stuck-go-back-to-store: Zablokowany? [Wróć do sklepu]
+store: Sklep
+serble-paid-plans: Serble Płatne Plany
+services-cost-money: Niestety niektóre usługi obsługiwane przez Serble kosztują, dlatego musimy nałożyć ograniczenia użytkowania na niektóre rzeczy. Jesteśmy dumni z tego, że jesteśmy głównie bezpłatną usługą prowadzoną jako hobby, ale chcemy też, aby światła były włączone.
+per-month: /miesiąc
+sign-up-for-free: Zarejestruj się za darmo
+coming-soon: Wkrótce
+subscribe: Subskrybuj
+compare-plans: Porównaj plany
+purchase-cancelled: Zakup anulowany
+sub-will-help-us: Zakup subskrypcji pomoże wesprzeć Serble i pozwoli nam nadal zapewniać najlepszą możliwą obsługę. Uruchomienie tej usługi kosztuje, a my potrzebujemy Twojej pomocy, aby mogła działać, dlatego bylibyśmy bardzo wdzięczni za rozważenie zakupu subskrypcji.
+home-page: Strona główna
+purchase-complete: Zakup zakończony!
+manage-subscription: Zarządzaj subskrypcją
 welcome-to-serble: Witamy w Serble! Serble to zbiór usług, z których większość stworzyłem. Nie wszystkie projekty są publicznie dostępne, ale wszystkie można znaleźć tutaj. Chciałbym zwiększyć liczbę projektów dostępnych publicznie, więc jeśli masz jakieś sugestie dotyczące nowych projektów lub uwagi, skontaktuj się ze mną za pomocą [jednej z tych metod].
 looking-for-mc-server: Szukasz starej strony serwera Minecraft? [Przejdź tutaj]
 serble-discord: Serble Discord
