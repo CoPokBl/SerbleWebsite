@@ -46,7 +46,7 @@ deny: ken ala
 your-oauth-apps: ilo sina
 no-apps: ala
 client-secret: ilo e lukin ala
-click-to-copy: "luka: tu e ni"
+click-to-copy: 'luka: tu e ni'
 delete: pakala
 new-app: sin
 payment-portal: ilo esun
@@ -63,7 +63,7 @@ word-master: jan li pona e nimi
 words: "nimi mute:"
 game-over: pini
 time-left: "tenpo:"
-enter-word-to-begin: "luka e nimi: open..."
+enter-word-to-begin: 'luka e nimi: open...'
 enter-word: luka e nimi
 reset: sin
 submit: luka
@@ -74,7 +74,7 @@ admin-email: "lipu toki e jan suli:"
 support-email: "lipu toki e jan pona:"
 discord-invite: "ilo discord pana:"
 oops: pakala!
-if-sent-then-error: "lipu pakala. o toki e jan suli:"
+if-sent-then-error: 'lipu pakala. o toki e jan suli:'
 error: "sona pakala:"
 unknown-error: lipu pakala. pakala li sona ala
 invalid-oauth: ilo pakala
