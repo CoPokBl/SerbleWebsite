@@ -1,53 +1,53 @@
 serble: Serble
-current-lang: Default
-language: Language
-loading: Loading...
-unknown: Unknown
-sign-in: Sign in
-username-password-required: Username and password are required
-invalid-creds-need-account: Invalid credentials, need an account?
-register: Register
-account-disabled: That account is disabled
-username: Username
-password: Password
-remember-me: Remember Me
-dont-have-account: Don't have an account?
-register-for-free: Register for free
-profile-settings: Profile Settings
-invalid-username: Invalid Username
-username-taken: That username is already taken
-email: Email
-verified: Verified
-not-verified: Not Verified, Check your email!
-invalid-email: Invalid Email
-change-password: Change Password
-confirm-password: Confirm Password
-passwords-dont-match: Passwords don't match
+current-lang: Polskie
+language: Język
+loading: Ładowanie...
+unknown: Nieznany
+sign-in: Zaloguj się
+username-password-required: Nazwa użytkownika i hasło są wymagane
+invalid-creds-need-account: Nieprawidłowe dane uwierzytelniające, potrzebujesz konta?
+register: Rejestr
+account-disabled: To konto jest wyłączone
+username: Nazwa użytkownika
+password: Hasło
+remember-me: Zapamiętaj mnie
+dont-have-account: Nie masz konta?
+register-for-free: Zarejestruj się za darmo
+profile-settings: Ustawienia profilu
+invalid-username: Zła nazwa użytkownika
+username-taken: ta nazwa użytkownika jest już zajęta
+email: E-mail
+verified: Zweryfikowano
+not-verified: Niezweryfikowany, sprawdź swój e-mail!
+invalid-email: Niepoprawny email
+change-password: Zmień hasło
+confirm-password: Potwierdź hasło
+passwords-dont-match: Hasła się nie zgadzają
 id: ID
-account-type: Account Type
-premium-level: Premium Level
-account-type-free: Free
-account-type-premium: Premium
-save-changes: Save Changes
-authorized-applications: Authorized Applications
-scopes: "Scopes:"
-revoke-access: Revoke Access
-new-oauth-application: New OAuth Application
-null-fields: You must fill out all fields
-try-again-in-5: Please try again in 5 seconds...
-application-name: Application Name
-description: Description
-create: Create
-oauth-warning: "{app} would like access to your account. They CANNOT access your password. Do not click Allow unless you were sent here by {app} and you trust them. They are requesting access to the following scopes:"
-none: None
-click-deny-if-confused: IF YOU DON'T UNDERSTAND THEN CLICK DENY
-allow: Allow
-deny: Deny
-your-oauth-apps: Your OAuth Applications
-no-apps: No Apps
-client-secret: Client Secret
-click-to-copy: Click to copy
-delete: Delete
+account-type: typ konta
+premium-level: Poziom premium
+account-type-free: Bezpłatny
+account-type-premium: Premia
+save-changes: Zapisz zmiany
+authorized-applications: Autoryzowane Aplikacje
+scopes: "Zakresy:"
+revoke-access: Odwołaj dostęp
+new-oauth-application: Nowa aplikacja OAuth
+null-fields: Musisz wypełnić wszystkie pola
+try-again-in-5: Spróbuj ponownie za 5 sekund...
+application-name: Nazwa aplikacji
+description: Opis
+create: Tworzyć
+oauth-warning: "{app} chce uzyskać dostęp do Twojego konta. NIE MOGĄ uzyskać dostępu do Twojego hasła. Nie klikaj Zezwól, chyba że wysłano Cię tutaj przez {app} i im ufasz. Proszą o dostęp do następujących zakresów:"
+none: Nic
+click-deny-if-confused: JEŚLI NIE ROZUMIESZ, KLIKNIJ ODMÓW
+allow: Umożliwić
+deny: Zaprzeczyć
+your-oauth-apps: Twoje aplikacje OAuth
+no-apps: Brak aplikacji
+client-secret: Sekret klienta
+click-to-copy: Kliknij, aby skopiować
+delete: Usunąć
 new-app: New Application
 payment-portal: Payment Portal
 not-customer: You cannot access this page unless you have purchased something from our [store].
@@ -98,24 +98,24 @@ sub-will-help-us: Purchasing a subscription will help support Serble and allow u
 home-page: Home Page
 purchase-complete: Purchase Complete!
 manage-subscription: Manage Subscription
-welcome-to-serble: Welcome to Serble! Serble is a collection of services, most of which I have created. Not all the projects are publicly available, but you can find them all here. I would like to increase the number of projects that are available to the public, so if you have any suggestions for new projects, or any feedback, please contact me through [one of these methods].
-looking-for-mc-server: Looking for the old Minecraft server website? [Go here]
+welcome-to-serble: Witamy w Serble! Serble to zbiór usług, z których większość stworzyłem. Nie wszystkie projekty są publicznie dostępne, ale wszystkie można znaleźć tutaj. Chciałbym zwiększyć liczbę projektów dostępnych publicznie, więc jeśli masz jakieś sugestie dotyczące nowych projektów lub uwagi, skontaktuj się ze mną za pomocą [jednej z tych metod].
+looking-for-mc-server: Szukasz starej strony serwera Minecraft? [Przejdź tutaj]
 serble-discord: Serble Discord
-uptime-monitor: Uptime Monitor
-serble-site: Serble Site
-home: Home
+uptime-monitor: Monitor czasu pracy
+serble-site: Serble Strona Internetowa
+home: Dom
 status: Status
-games: Games
-contact: Contact
-my-applications: My Applications
-account: Account
-manage-payments: Manage Payments
-admin-dashboard: Admin Dashboard
-logout: Logout
-not-found: Not Found
-404-not-found: 404 - Not Found
-sorry-not-found: "Sorry, there's nothing here, you could try another URL or go to our [home page]. Or you could look at this picture of a cat:"
-unknown-error-occured: An unknown error has occured.
-reload: Reload
-info: Info
-login: Login
+games: Gry
+contact: Kontakt
+my-applications: Moje aplikacje
+account: Konto
+manage-payments: Zarządzaj Płatnościami
+admin-dashboard: Pulpit Administratora
+logout: Wyloguj
+not-found: Nie Znaleziono
+404-not-found: 404 - Nie Znaleziono
+sorry-not-found: "Przepraszamy, nic tu nie ma, możesz spróbować innego adresu URL lub przejść do naszej [strony głównej]. Możesz też spojrzeć na to zdjęcie kota:"
+unknown-error-occured: Wystąpił nieznany błąd.
+reload: Przeładować
+info: Informacje
+login: Zaloguj sie
