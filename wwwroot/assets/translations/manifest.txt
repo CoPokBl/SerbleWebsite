@@ -1,3 +1,6 @@
 default
 tes
 tok
+pol
+lol
+pen
