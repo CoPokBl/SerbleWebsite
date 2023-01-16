@@ -3,7 +3,7 @@ current-lang: toki pona
 language: toki
 loading: tawa...
 unknown: sona ala
-sign-in: pini
+sign-in: kama
 username-password-required: nimi en utala li wile
 invalid-creds-need-account: nimi ala, nimi wile anu seme?
 register: nimi lanpan
@@ -25,7 +25,7 @@ confirm-password: utala awen
 passwords-dont-match: utala sama ala
 id: nimi ante pi jan
 account-type: sina suli anu seme?
-premium-level: sina wawa anu seme?
+premium-level: sina pana e mani anu seme?
 account-type-free: esun ala
 account-type-premium: esun
 save-changes: ante awen
@@ -34,7 +34,7 @@ scopes: "ken:"
 revoke-access: ken ala
 new-oauth-application: ilo sin
 null-fields: sina wile li pini e nimi ale
-try-again-in-5: sina wile li awen tenpo lili luka
+try-again-in-5: sina wile li awen tenpo lili luka...
 application-name: nimi
 description: toki pi ijo
 create: sin
@@ -46,7 +46,7 @@ deny: ken ala
 your-oauth-apps: ilo sina
 no-apps: ala
 client-secret: ilo e lukin ala
-click-to-copy: "luka: tu e ni"
+click-to-copy: 'luka: tu e ni'
 delete: pakala
 new-app: sin
 payment-portal: ilo esun
@@ -63,7 +63,7 @@ word-master: jan li pona e nimi
 words: "nimi mute:"
 game-over: pini
 time-left: "tenpo:"
-enter-word-to-begin: "luka e nimi: open..."
+enter-word-to-begin: 'luka e nimi: open...'
 enter-word: luka e nimi
 reset: sin
 submit: luka
@@ -74,7 +74,7 @@ admin-email: "lipu toki e jan suli:"
 support-email: "lipu toki e jan pona:"
 discord-invite: "ilo discord pana:"
 oops: pakala!
-if-sent-then-error: "lipu pakala. o toki e jan suli:"
+if-sent-then-error: 'lipu pakala. o toki e jan suli:'
 error: "sona pakala:"
 unknown-error: lipu pakala. pakala li sona ala
 invalid-oauth: ilo pakala
@@ -89,12 +89,12 @@ store: esun
 serble-paid-plans: sepl esun ijo
 services-cost-money: mi pana e mani tawa ilo sepl. mi wile open ala e jan kepeken ale. sina wile ala e pana e mana tawa mi, mi wile lanpan e mani.
 per-month: /tenpo mun
-sign-up-for-free: nimi lanpon li esun ala
+sign-up-for-free: nimi lanpon li mani ala
 coming-soon: kama li tenpo lili
 subscribe: o esun
 compare-plans: lukin ale e esun
 purchase-cancelled: esun li open ala
-sub-will-help-us: Purchasing a subscription will help support Serble and allow us to continue to provide you with the best service possible. This service costs money to run, and we need your help to keep it going, so we would greatly appreciate it if you would consider purchasing a subscription.
+sub-will-help-us: 'sina esun e ijo la tenpo kama la lipu sepl li pona mute. mi pana e mani: lipu sepl li lon. mi wile e sina. sina esun e ijo la pilin pona.'
 home-page: lipu tomo
 purchase-complete: esun pona!
 manage-subscription: esun e lawa
