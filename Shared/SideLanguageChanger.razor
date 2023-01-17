@@ -1,0 +1,12 @@
+@using SerbleWebsite.Data
+@inject Localiser Localiser
+@inject NavigationManager NavigationManager
+
+<div class="dropdown">
+    <button class="dropdown-toggle btn-link btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">@Localiser["language"]</button>
+    <ul class="dropdown-menu">
+        <li class="dropdown-item"><a href="/language?lang=en&back=@NavigationManager.Uri">English</a></li>
+        <li class="dropdown-item"><a href="/language?lang=tok&back=@NavigationManager.Uri">toki pona</a></li>
+        <li class="dropdown-item"><a href="/language?lang=pol&back=@NavigationManager.Uri">Polish</a></li>
+    </ul>
+</div>

@@ -9,7 +9,7 @@
 <p>@Localiser["current-lang"]</p>
 
 <ul>
-@foreach(string lang in new[] { "en","tok", "tes" }) {
+@foreach(string lang in new[] { "en","tok", "tes", "pol", "lol", "pen" }) {
     <li><a href="#" onclick="(localStorage.setItem('lang','@lang'),window.location.reload())();">@lang</a></li>
 }
 </ul>
@@ -26,9 +26,10 @@
         }
         
         string? lang = NavigationManager.GetQueryStrings().Get("lang");
+        string back = NavigationManager.GetQueryStrings().Get("back") ?? "/";
         HtmlInteractor interactor = new(JsRuntime);
         await interactor.SetLanguage(lang);
-        NavigationManager.NavigateTo("/", true);
+        NavigationManager.NavigateTo(back, true);
     }
 
 }
