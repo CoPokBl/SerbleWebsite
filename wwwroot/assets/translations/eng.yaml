@@ -1,13 +1,13 @@
-serble: Serble
+serble: This be Serble
 current-lang: Pirate English
 language: Language
-loading: Loading...
-unknown: Unknown
+loading: Reloading the cannons...
+unknown: It seems not to be known matey
 sign-in: Sign in
 username-password-required: Username and password are required
 invalid-creds-need-account: Invalid credentials, need an account?
 register: Register
-account-disabled: That account is disabled
+account-disabled: Yer account seems to be disabled me harety
 username: Username
 password: Password
 remember-me: Remember Me
@@ -26,7 +26,7 @@ passwords-dont-match: Passwords don't match
 id: ID
 account-type: Account Type
 premium-level: Premium Level
-account-type-free: Free
+account-type-free: Arrrrr, it be free
 account-type-premium: Premium
 save-changes: Save Changes
 authorized-applications: Authorized Applications
