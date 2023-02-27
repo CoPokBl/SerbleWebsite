@@ -1,53 +1,53 @@
 serble: Serble
-current-lang: Default
-language: Language
-loading: Loading...
-unknown: Unknown
-sign-in: Sign in
-username-password-required: Username and password are required
-invalid-creds-need-account: Invalid credentials, need an account?
-register: Register
-account-disabled: That account is disabled
-username: Username
-password: Password
-remember-me: Remember Me
-dont-have-account: Don't have an account?
-register-for-free: Register for free
-profile-settings: Profile Settings
-invalid-username: Invalid Username
-username-taken: That username is already taken
+current-lang: Standard
+language: Sprache
+loading: Wird geladen...
+unknown: Unbekannt
+sign-in: anmelden
+username-password-required: Benutzername und Passwort sind erforderlich
+invalid-creds-need-account: Ungültige Anmeldeinformationen, benötigen Sie ein Konto?
+register: Registrieren
+account-disabled: Dieses Konto ist deaktiviert
+username: Nutzername
+password: Passwort
+remember-me: Mich erinnern
+dont-have-account: Sie haben kein Konto?
+register-for-free: Kostenlos registrieren
+profile-settings: Profileinstellungen
+invalid-username: Ungültiger Benutzername
+username-taken: Dieser Benutzername ist bereits vergeben
 email: Email
-verified: Verified
-not-verified: Not Verified, Check your email!
-invalid-email: Invalid Email
-change-password: Change Password
-confirm-password: Confirm Password
-passwords-dont-match: Passwords don't match
-id: ID
-account-type: Account Type
+verified: Verifiziert
+not-verified: Nicht verifiziert, überprüfen Sie Ihre E-Mail!
+invalid-email: Ungültige E-Mail
+change-password: Kennwort ändern
+confirm-password: Bestätige das Passwort
+passwords-dont-match: Passwörter stimmen nicht überein
+id: Ausweis
+account-type: Konto Typ
 premium-level: Premium Level
-account-type-free: Free
-account-type-premium: Premium
-save-changes: Save Changes
-authorized-applications: Authorized Applications
-scopes: "Scopes:"
-revoke-access: Revoke Access
-new-oauth-application: New OAuth Application
-null-fields: You must fill out all fields
-try-again-in-5: Please try again in 5 seconds...
-application-name: Application Name
-description: Description
-create: Create
-oauth-warning: "{app} would like access to your account. They CANNOT access your password. Do not click Allow unless you were sent here by {app} and you trust them. They are requesting access to the following scopes:"
-none: None
-click-deny-if-confused: IF YOU DON'T UNDERSTAND THEN CLICK DENY
-allow: Allow
-deny: Deny
-your-oauth-apps: Your OAuth Applications
-no-apps: No Apps
+account-type-free: Frei
+account-type-premium: Prämie
+save-changes: Änderungen speichern
+authorized-applications: Autorisierte Anwendungen
+scopes: "Bereiche:"
+revoke-access: Zugangsberechtigung aufheben
+new-oauth-application: Neue OAuth-Anwendung
+null-fields: Sie müssen alle Felder ausfüllen
+try-again-in-5: Bitte versuchen Sie es in 5 Sekunden erneut...
+application-name: Anwendungsname
+description: Beschreibung
+create: Erstellen
+oauth-warning: "{app} möchte auf Ihr Konto zugreifen. Sie KÖNNEN NICHT auf Ihr Passwort zugreifen. Klicken Sie nicht auf Zulassen, es sei denn, Sie wurden von {app} hierher geschickt und Sie vertrauen ihnen. Sie fordern Zugriff auf die folgenden Bereiche an:"
+none: Keiner
+click-deny-if-confused: WENN SIE NICHT VERSTEHEN, DANN KLICKEN SIE AUF VERWEIGERN
+allow: Erlauben
+deny: Leugnen
+your-oauth-apps: Ihre OAuth-Anwendungen
+no-apps: Keine Anwendungen
 client-secret: Client Secret
-click-to-copy: Click to copy
-delete: Delete
+click-to-copy: Zum Kopieren klicken
+delete: Löschen
 new-app: New Application
 payment-portal: Payment Portal
 not-customer: You cannot access this page unless you have purchased something from our [store].
@@ -96,22 +96,22 @@ compare-plans: Compare Plans
 purchase-cancelled: Purchase Cancelled
 sub-will-help-us: Purchasing a subscription will help support Serble and allow us to continue to provide you with the best service possible. This service costs money to run, and we need your help to keep it going, so we would greatly appreciate it if you would consider purchasing a subscription.
 home-page: Home Page
-purchase-complete: Purchase Complete!
-manage-subscription: Manage Subscription
-welcome-to-serble: Welcome to Serble! Serble is a collection of services, most of which I have created. Not all the projects are publicly available, but you can find them all here. I would like to increase the number of projects that are available to the public, so if you have any suggestions for new projects, or any feedback, please contact me through [one of these methods].
+purchase-complete: Kauf abgeschlossen!
+manage-subscription: Abonnement verwalten
+welcome-to-serble: Willkommen bei Serble! Serble ist eine Sammlung von Diensten, von denen die meisten von mir erstellt wurden. Nicht alle Projekte sind öffentlich zugänglich, aber Sie finden sie alle hier. Ich möchte die Anzahl der Projekte, die der Öffentlichkeit zugänglich sind, erhöhen. Wenn Sie also Vorschläge für neue Projekte oder Feedback haben, kontaktieren Sie mich bitte über [eine dieser Methoden].
 looking-for-mc-server: Looking for the old Minecraft server website? [Go here]
 serble-discord: Serble Discord
 uptime-monitor: Uptime Monitor
-serble-site: Serble Site
-home: Home
+serble-site: Serble Seite
+home: Heim
 status: Status
-games: Games
-contact: Contact
-my-applications: My Applications
-account: Account
-manage-payments: Manage Payments
+games: Spiele
+contact: Kontakt
+my-applications: meine Anwendungen
+account: Konto
+manage-payments: Zahlungen verwalten
 admin-dashboard: Admin Dashboard
-logout: Logout
+logout: Ausloggen
 not-found: Not Found
 404-not-found: 404 - Not Found
 sorry-not-found: "Sorry, there's nothing here, you could try another URL or go to our [home page]. Or you could look at this picture of a cat:"
