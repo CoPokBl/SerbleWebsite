@@ -1,6 +1,12 @@
 default
+afr
+bin
+deu
+eng-au
+eng-en
+eng-pi
+eng-us
+lol
+pol
 tes
 tok
-pol
-lol
-pen
