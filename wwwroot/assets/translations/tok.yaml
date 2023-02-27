@@ -4,17 +4,17 @@ language: toki
 loading: tawa...
 unknown: sona ala
 sign-in: kama
-username-password-required: nimi en utala li wile
-invalid-creds-need-account: nimi ala, nimi wile anu seme?
+username-password-required: nimi en nimi utala li wile
+invalid-creds-need-account: nimi li pona ala, sina wile e sin anu seme?
 register: nimi lanpan
 account-disabled: nimi li pakala
 username: nimi
 password: nimi utala
-remember-me: utala ala awen
+remember-me: o awen sona e mi
 dont-have-account: nimi ala anu seme?
 register-for-free: nimi sin
-profile-settings: nimi ante
-invalid-username: nimi pakala
+profile-settings: o sina ijo ante
+invalid-username: nimi li pakala
 username-taken: nimi li sina ala
 email: lipu toki
 verified: pona
@@ -30,7 +30,7 @@ account-type-free: mani ala
 account-type-premium: ijo pi mani
 save-changes: ante awen
 authorized-applications: ilo li lawa e sina
-scopes: "ken:"
+scopes: "ilo li ken:"
 revoke-access: ken ala
 new-oauth-application: ilo sin
 null-fields: sina wile li pini e nimi ale
