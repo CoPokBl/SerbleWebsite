@@ -48,54 +48,54 @@ no-apps: Keine Anwendungen
 client-secret: Client Secret
 click-to-copy: Zum Kopieren klicken
 delete: Löschen
-new-app: New Application
-payment-portal: Payment Portal
-not-customer: You cannot access this page unless you have purchased something from our [store].
-user-exists-trying-to-login: User already exists, [trying to login?]
-want-login-go-here: Want to login? [Go here]
-an-error-occured: An Error Has Occured
-email-not-verified: Your email could not be verified.
-account-page: Account Page
-success: Success!
-email-verified: You have successfully verified your email!
-confetti: Confetti
-word-master: Word Master
-words: "Words:"
-game-over: Game Over
-time-left: "Time Left:"
-enter-word-to-begin: Enter a word to being...
-enter-word: Enter a word
-reset: Reset
-submit: Submit
-new-record: "NEW RECORD:"
-record: "Record:"
-contact-us: Contact Us
+new-app: Neue Bewerbung
+payment-portal: Zahlungsportal
+not-customer: Sie können auf diese Seite nur zugreifen, wenn Sie etwas bei unserem [store]gekauft haben.
+user-exists-trying-to-login: Benutzer existiert bereits, [Versuch, sich anzumelden?]
+want-login-go-here: Möchten Sie sich anmelden? [Gehe hier hin]
+an-error-occured: Ein Fehler ist aufgetreten
+email-not-verified: Ihre E-Mail konnte nicht bestätigt werden.
+account-page: Kontoseite
+success: Erfolg!
+email-verified: Sie haben Ihre E-Mail erfolgreich bestätigt!
+confetti: Konfetti
+word-master: Wortmeister
+words: "Wörter:"
+game-over: Spiel ist aus
+time-left: "Übrige Zeit:"
+enter-word-to-begin: Geben Sie ein Wort ein, um...
+enter-word: Geben Sie ein Wort ein
+reset: Zurücksetzen
+submit: Einreichen
+new-record: "NEUER EINTRAG:"
+record: "Aufzeichnen:"
+contact-us: Kontaktiere uns
 admin-email: "Admin Email:"
 support-email: "Support Email:"
 discord-invite: "Discord Invite:"
-oops: Oops!
-if-sent-then-error: If you were sent here by the website then some error has occured. Please contact admin at
-error: "Error:"
-unknown-error: Unknown Error
-invalid-oauth: Invalid OAuth
-invalid-oauth-message: The website that redirected you here didn't provide the required information for us to authenticate them. Or the client id they specified is invalid. You should report this to the website owner.
-recaptcha-test: Google ReCaptcha Test
-submit-challenge: Submit Challenge
-set-api-url: Set API URL
-browser-not-redirecting: Is your browser not redirecting you? [Click here]
-wait-while-login: Please wait while we log you in
-stuck-go-back-to-store: Stuck? [Go back to store]
-store: Store
-serble-paid-plans: Serble Paid Plans
-services-cost-money: Unfortunately some services Serble operates cost money to run, this is why we have to impose usage limits on some things. We pride ourselves on being mostly a free service run as a hobby, but we also want to keep the lights on.
-per-month: /month
-sign-up-for-free: Sign up for free
-coming-soon: Coming Soon
-subscribe: Subscribe
-compare-plans: Compare Plans
-purchase-cancelled: Purchase Cancelled
-sub-will-help-us: Purchasing a subscription will help support Serble and allow us to continue to provide you with the best service possible. This service costs money to run, and we need your help to keep it going, so we would greatly appreciate it if you would consider purchasing a subscription.
-home-page: Home Page
+oops: Hoppla!
+if-sent-then-error: Wenn Sie von der Website hierher geschickt wurden, ist ein Fehler aufgetreten. Bitte wenden Sie sich an den Administrator unter
+error: "Fehler:"
+unknown-error: Unbekannter Fehler
+invalid-oauth: Ungültiger OAuth
+invalid-oauth-message: Die Website, die Sie hierher weitergeleitet hat, hat uns nicht die erforderlichen Informationen bereitgestellt, um sie zu authentifizieren. Oder die angegebene Client-ID ist ungültig. Sie sollten dies dem Eigentümer der Website melden.
+recaptcha-test: Google ReCaptcha-Test
+submit-challenge: Herausforderung einreichen
+set-api-url: API-URL festlegen
+browser-not-redirecting: Leitet Ihr Browser Sie nicht weiter? [Klicken Sie hier]
+wait-while-login: Bitte warten Sie, während wir Sie anmelden
+stuck-go-back-to-store: Gesteckt? [Zurück zum Shop]
+store: Speichern
+serble-paid-plans: Serble Bezahlpläne
+services-cost-money: Leider kosten einige Dienste, die Serble betreibt, Geld, deshalb müssen wir einigen Dingen Nutzungsbeschränkungen auferlegen. Wir sind stolz darauf, hauptsächlich ein kostenloser Service zu sein, der als Hobby betrieben wird, aber wir wollen auch das Licht anlassen.
+per-month: /Monat
+sign-up-for-free: Melde dich kostenlos an
+coming-soon: Demnächst
+subscribe: Abonnieren
+compare-plans: Pläne vergleichen
+purchase-cancelled: Kauf storniert
+sub-will-help-us: Der Kauf eines Abonnements unterstützt Serble und ermöglicht es uns, Ihnen weiterhin den bestmöglichen Service zu bieten. Die Ausführung dieses Dienstes kostet Geld, und wir brauchen Ihre Hilfe, um ihn am Laufen zu halten. Daher würden wir es sehr schätzen, wenn Sie den Kauf eines Abonnements in Betracht ziehen würden.
+home-page: Startseite
 purchase-complete: Kauf abgeschlossen!
 manage-subscription: Abonnement verwalten
 welcome-to-serble: Willkommen bei Serble! Serble ist eine Sammlung von Diensten, von denen die meisten von mir erstellt wurden. Nicht alle Projekte sind öffentlich zugänglich, aber Sie finden sie alle hier. Ich möchte die Anzahl der Projekte, die der Öffentlichkeit zugänglich sind, erhöhen. Wenn Sie also Vorschläge für neue Projekte oder Feedback haben, kontaktieren Sie mich bitte über [eine dieser Methoden].
