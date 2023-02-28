@@ -1,70 +1,70 @@
-serble: Serble
-current-lang: Default
-language: Language
-loading: Loading...
+serble: Serbel
+current-lang: LOLCat
+language: Languaeg
+loading: Loadin...
 unknown: Unknown
 sign-in: Sign in
-username-password-required: Username and password are required
-invalid-creds-need-account: Invalid credentials, need an account?
-register: Register
-account-disabled: That account is disabled
-username: Username
+username-password-required: Usernaem an password r requird
+invalid-creds-need-account: Invalid credenshuls, ned an akownt?
+register: Registr
+account-disabled: Dat akownt iz diabld
+username: Usernaem
 password: Password
-remember-me: Remember Me
-dont-have-account: Don't have an account?
-register-for-free: Register for free
-profile-settings: Profile Settings
-invalid-username: Invalid Username
-username-taken: That username is already taken
+remember-me: remembr Me
+dont-have-account: dun haz an akownt?
+register-for-free: registr 4 free
+profile-settings: Profiel settingz
+invalid-username: Invalid Usernaem
+username-taken: dat usernaem iz already taken
 email: Email
 verified: Verified
-not-verified: Not Verified, Check your email!
+not-verified: Not Verified, Check ur email!
 invalid-email: Invalid Email
-change-password: Change Password
+change-password: Chaneg Password
 confirm-password: Confirm Password
-passwords-dont-match: Passwords don't match
+passwords-dont-match: passwordz dun match
 id: ID
-account-type: Account Type
+account-type: akownt Tyep
 premium-level: Premium Level
 account-type-free: Free
 account-type-premium: Premium
-save-changes: Save Changes
-authorized-applications: Authorized Applications
+save-changes: Saev changez
+authorized-applications: auforizd applicashuns
 scopes: "Scopes:"
-revoke-access: Revoke Access
-new-oauth-application: New OAuth Application
-null-fields: You must fill out all fields
-try-again-in-5: Please try again in 5 seconds...
-application-name: Application Name
-description: Description
-create: Create
-oauth-warning: "{app} would like access to your account. They CANNOT access your password. Do not click Allow unless you were sent here by {app} and you trust them. They are requesting access to the following scopes:"
-none: None
-click-deny-if-confused: IF YOU DON'T UNDERSTAND THEN CLICK DENY
+revoke-access: Revoek acces
+new-oauth-application: nu OAuth applicashun
+null-fields: u must fill out all fields
+try-again-in-5: plz twee agaen in 5 secondz...
+application-name: applicashun naym
+description: descripshun
+create: Creaet
+oauth-warning: "{app} wud likes acces 2 ur akownt. dey CANNOT acces ur password, Srsly . doez not click Allow unles u wuz sent hah by {app} an u trust dem. Srsly dey r requesting acces 2 teh followin scopes:"
+none: Noen
+click-deny-if-confused: IF U DUN UNDERSTAND THEN CLICK DENY
 allow: Allow
 deny: Deny
-your-oauth-apps: Your OAuth Applications
-no-apps: No Apps
-client-secret: Client Secret
-click-to-copy: Click to copy
-delete: Delete
-new-app: New Application
+your-oauth-apps: nu OAuth applicashun
+no-apps: No appz
+client-secret: Client seekret
+click-to-copy: Click 2 copy
+delete: Deleet
+new-app: nu applicashun
 payment-portal: Payment Portal
-not-customer: You cannot access this page unless you have purchased something from our [store].
-user-exists-trying-to-login: User already exists, [trying to login?]
-want-login-go-here: Want to login? [Go here]
+not-customer: u cannot acces dis paeg unles u haz purchasd somefin frum r [stoer].
+user-exists-trying-to-login: usr already existz, [tryin 2 login?]
+want-login-go-here: wantz 2 login? [Go hah]
 an-error-occured: An Error Has Occured
-email-not-verified: Your email could not be verified.
-account-page: Account Page
-success: Success!
-email-verified: You have successfully verified your email!
-confetti: Confetti
-word-master: Word Master
-words: "Words:"
-game-over: Game Over
-time-left: "Time Left:"
-enter-word-to-begin: Enter a word to being...
-enter-word: Enter a word
+email-not-verified: ur email cud not bees verified.
+account-page: akownt paeg
+success: succes!
+email-verified: u haz successfully verified ur email!
+confetti: Confetit
+word-master: werd Mastah
+words: "werdz:"
+game-over: Gaem ovar
+time-left: "tiem Left:"
+enter-word-to-begin: entr werd 2 begin...
+enter-word: entr werd
 reset: Reset
 submit: Submit
 new-record: "NEW RECORD:"
@@ -98,24 +98,24 @@ sub-will-help-us: Purchasing a subscription will help support Serble and allow u
 home-page: Home Page
 purchase-complete: Purchase Complete!
 manage-subscription: Manage Subscription
-welcome-to-serble: Welcome to Serble! Serble is a collection of services, most of which I have created. Not all the projects are publicly available, but you can find them all here. I would like to increase the number of projects that are available to the public, so if you have any suggestions for new projects, or any feedback, please contact me through [one of these methods].
-looking-for-mc-server: Looking for the old Minecraft server website? [Go here]
-serble-discord: Serble Discord
-uptime-monitor: Uptime Monitor
-serble-site: Serble Site
-home: Home
+welcome-to-serble: welcom 2 Serbel, Srsly ! Serbel iz collecshun ov servicez, most ov which Iz haz creatd, Srsly . Not all teh projectz r publicly availabel, but u can find dem all hah. Iz wud likes 2 increaes teh numbr ov projectz dat r availabel 2 teh public, so if u haz any sugesshuns 4 nu projectz, or any feedback, plz contact meh thur [wan ov thees mefods].
+looking-for-mc-server: lukingz 4 teh old Minecraft servr websiet. Srsly [Go hah]
+serble-discord: Serbel Discord
+uptime-monitor: Uptiem Monitor
+serble-site: Serbel siet
+home: Hoem
 status: Status
-games: Games
+games: gamez
 contact: Contact
-my-applications: My Applications
-account: Account
-manage-payments: Manage Payments
+my-applications: mah applicashuns
+account: akownt
+manage-payments: Manaeg Payments
 admin-dashboard: Admin Dashboard
 logout: Logout
-not-found: Not Found
-404-not-found: 404 - Not Found
-sorry-not-found: "Sorry, there's nothing here, you could try another URL or go to our [home page]. Or you could look at this picture of a cat:"
+not-found: Not findz
+404-not-found: 404 - Not findz
+sorry-not-found: "swee, thar's nofin hah, u cud twee anofr URL or go 2 r [hoem paeg]. Srsly Or u cud look at dis pictuer ov kitteh:"
 unknown-error-occured: An unknown error has occured.
 reload: Reload
-info: Info
+info: Inof
 login: Login
