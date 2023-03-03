@@ -46,7 +46,7 @@ public class HtmlInteractor {
     }
     
     public async Task SetLanguage(string lang) {
-        await _jsRuntime.InvokeVoidAsync("eval", $"localStorage.setItem('lang','{lang}')");
+        await _jsRuntime.InvokeVoidAsync("eval", $"localStorage.setItem('lang','{lang.ToLower()}')");
     }
 
 }
