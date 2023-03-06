@@ -1,5 +1,5 @@
 serble: Serble
-current-lang: Polskie
+current-lang: Polski
 language: Język
 loading: Ładowanie...
 unknown: Nieznany
@@ -15,7 +15,7 @@ dont-have-account: Nie masz konta?
 register-for-free: Zarejestruj się za darmo
 profile-settings: Ustawienia profilu
 invalid-username: Zła nazwa użytkownika
-username-taken: ta nazwa użytkownika jest już zajęta
+username-taken: Ta nazwa użytkownika jest już zajęta
 email: E-mail
 verified: Zweryfikowano
 not-verified: Niezweryfikowany, sprawdź swój e-mail!
@@ -72,7 +72,7 @@ record: "Nagrywać:"
 contact-us: Skontaktuj się z nami
 admin-email: "E-mail administratora:"
 support-email: "E-mail wsparcia:"
-discord-invite: "Zaproszenie na Discorda:"
+discord-invite: "Zaproszenie na Discord:"
 oops: Ups!
 if-sent-then-error: Jeśli zostałeś wysłany tutaj przez stronę internetową, wystąpił błąd. Skontaktuj się z administratorem pod adresem
 error: "Błąd:"
