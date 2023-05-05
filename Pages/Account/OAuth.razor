@@ -123,6 +123,10 @@
             return;
         }
         string newUri = _queryValues["redirect_uri"]!;
+        if (newUri != _app!.RedirectUri) {
+            NavigationManager.NavigateTo("/invalidoauth");
+            return;
+        }
         string state = _queryValues["state"]!;
         // Check if state contains symbols
         if (state.Any(c => !char.IsLetterOrDigit(c))) {
