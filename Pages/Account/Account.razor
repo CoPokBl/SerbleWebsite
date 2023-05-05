@@ -42,7 +42,7 @@ else {
                                             "" :
                                             _verifiedEmail ?
                                                $"<span class='text-success'>({Localiser["verified"]})</span>" :
-                                               $"<span class='text-warning'>({Localiser["verified"]})</span>").MarkupString())
+                                               $"<span class='text-warning'>({Localiser["not-verified"]})</span>").MarkupString())
                   </label><input style="background-color: rgb(34, 34, 34); color: #ffffff" type="text" class="form-control" placeholder="@Localiser["email"]" value="@_user.Email" id="email">
                </div>
                @if (_errors.Contains(Error.EmailInvalid)) {
