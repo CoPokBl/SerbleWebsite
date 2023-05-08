@@ -32,6 +32,7 @@
                                     <p>@app.Description</p>
                                     <p>@Localiser["id"]: @app.Id</p>
                                     <p>@Localiser["client-secret"]: <button class="btn btn-link" onclick="navigator.clipboard.writeText('@app.ClientSecret'); console.log('Copied!');">@Localiser["click-to-copy"]</button></p>
+                                    <p>@Localiser["redirect-uri"]: @app.RedirectUri</p>
                                     <button class="btn btn-outline-danger" type="button" @onclick="_ => DeleteApp(app.Id)">@Localiser["delete"]</button>
                                 </div>
                             </div>

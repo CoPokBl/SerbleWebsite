@@ -340,7 +340,7 @@ public static class SerbleApiHandler {
         HttpClient client = new();
         HttpResponseMessage response;
         client.DefaultRequestHeaders.Add("SerbleAuth", "User " + token);
-        string jsonInp = new { app.Name, app.Description }.ToJson();
+        string jsonInp = new { app.Name, app.Description, app.RedirectUri }.ToJson();
         try {
             response = await client.PostAsync($"{Constants.SerbleApiUrl}app", new StringContent(jsonInp, Encoding.UTF8, "application/json"));
         }
