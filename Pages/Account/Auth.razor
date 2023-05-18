@@ -125,7 +125,15 @@
         string password = await htmlInteractor.GetValue("floatingPassword");
 
         // Attempt login
-        SerbleApiResponse<string> response = await SerbleApiHandler.LoginUser(username, password);
+        SerbleApiResponse<string> response;
+
+        try {
+            response = await SerbleApiHandler.LoginUser(username, password);
+        }
+        catch (Exception e) {
+            response = new SerbleApiResponse<string>(false, e.Message);
+        }
+        
         if (!response.Success) {
             Console.WriteLine(response.ErrorMessage);
             _error = Error.InvalidCredentials;
