@@ -46,7 +46,7 @@ public static class SerbleApiHandler {
             response = await client.GetAsync(Constants.SerbleApiUrl + "auth");
         }
         catch (Exception e) {
-            return new SerbleApiResponse<string>("Error: " + e);
+            return new SerbleApiResponse<string>(false, "Error: " + e);
         }
         if (!response.IsSuccessStatusCode) {
             Console.WriteLine("Response: " + await response.Content.ReadAsStringAsync());
