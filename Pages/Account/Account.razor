@@ -73,7 +73,7 @@ else {
             <div class="row mt-3">
                <div class="col-md-6"><label class="labels">@Localiser["id"]</label><input type="text" style="background-color: rgb(34, 34, 34); color: #ffffff" class="form-control" placeholder="@Localiser["id"]" value="@_user.Id" readonly></div>
                <div class="col-md-6"><label class="labels">@Localiser["account-type"]</label><input type="text" style="background-color: rgb(34, 34, 34); color: #ffffff" class="form-control" placeholder="Normal" value="@(((AccountAccessLevel) Enum.ToObject(typeof(AccountAccessLevel), _user.PermLevel ?? 1)).ToString())" readonly></div>
-               <div class="col-md-6"><label class="labels">@Localiser["premium-level"]</label><input type="text" style="background-color: rgb(34, 34, 34); color: #ffffff" class="form-control" placeholder="Normal" value="@(SerbleValueNamesHandler.GetNameOfPremiumLevel(_user.PremiumLevel))" readonly></div>
+               <div class="col-md-6"><label class="labels">@Localiser["premium-level"]</label><input type="text" style="background-color: rgb(34, 34, 34); color: #ffffff" class="form-control" placeholder="Normal" value="@_premiumText" readonly></div>
             </div>
             <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button" @onclick="Save">@Localiser["save-changes"]</button></div>
          </div>
@@ -86,18 +86,28 @@ else {
    private string _token = "";
    private readonly List<Error> _errors = new ();
    private bool _verifiedEmail;
+   private string _premiumText = "Loading...";
 
    private void ReloadText() {
       InvokeAsync(StateHasChanged).Wait();
    }
 
-   private Task LoginChecked((User?, string) info) {
+   private async Task LoginChecked((User?, string) info) {
       _user = info.Item1;
       _token = info.Item2;
       _verifiedEmail = _user!.VerifiedEmail;
       Console.WriteLine($"{_user!.Username} is logged in");
       ReloadText();
-      return Task.CompletedTask;
+      
+      // Products
+      SerbleApiResponse<string[]> productsResponse = await SerbleApiHandler.GetUsersOwnedProducts(_token);
+      if (!productsResponse.Success) {
+         _premiumText = Localiser["unknown"];
+         ReloadText();
+         return;
+      }
+      _premiumText = productsResponse.ResponseObject!.Contains("premium") ? Localiser["account-type-premium"] : Localiser["account-type-free"];
+      ReloadText();
    }
 
    private async void Logout() {
