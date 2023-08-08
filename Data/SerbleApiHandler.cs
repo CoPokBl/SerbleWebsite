@@ -237,6 +237,43 @@ public static class SerbleApiHandler {
         }
         return new SerbleApiResponse<string>(url);
     }
+    
+    public static async Task<SerbleApiResponse<string>> GetCheckoutUrlNew(string token, ProductCheckoutEntry[] products) {
+        // Send HTTP request to API
+        HttpClient client = new();
+        client.DefaultRequestHeaders.Add("SerbleAuth", "User " + token);
+        HttpResponseMessage response;
+        string jsonInp = products.ToJson();
+        try {
+            response = await client.PostAsync($"{Constants.SerbleApiUrl}payments/checkout", new StringContent(jsonInp, Encoding.UTF8, 
+                "application/json"));
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<string>(false, "Failed: " + e);
+        }
+        if (!response.IsSuccessStatusCode) {
+            string flag = "unknown";
+            string responseContent = await response.Content.ReadAsStringAsync();
+            flag = response.StatusCode switch {
+                HttpStatusCode.NotFound => "not-found",
+                HttpStatusCode.BadRequest when responseContent == "User is not a customer." => "not-customer",
+                _ => flag
+            };
+            Console.WriteLine(responseContent);
+            return new SerbleApiResponse<string>(false, $"Failed: {response.StatusCode} ({await response.Content.ReadAsStringAsync()})", flag);
+        }
+        // Parse response
+        string json = await response.Content.ReadAsStringAsync();
+        string url;
+        try {
+            JsonDocument doc = JsonDocument.Parse(json);
+            url = doc.RootElement.GetProperty("url").GetString().ThrowIfNull();
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<string>(false, $"Failed to parse response: {e.Message}");
+        }
+        return new SerbleApiResponse<string>(url);
+    }
 
     public static async Task<SerbleApiResponse<string>> AuthorizeApp(string token, string appId, string scopeString) {
         // Send HTTP request to API

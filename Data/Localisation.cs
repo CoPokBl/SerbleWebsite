@@ -49,11 +49,7 @@ public static class Localisation {
             foreach (KeyValuePair<YamlNode, YamlNode> entry in root.Children) {
                 string key = entry.Key.ToString();
                 string value = entry.Value.ToString();
-                if (Localisations.ContainsKey(key)) {
-                    Localisations[key] = value;
-                } else {
-                    Localisations.Add(key, value);
-                }
+                Localisations[key] = value;
             }
         }
     }

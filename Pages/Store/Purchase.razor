@@ -16,7 +16,8 @@
     
     <br/>
     <h5>Debug Info (Ignore this):</h5>
-    <p>Lookup Key: @_product</p>
+    <p>Product ID: @_product</p>
+    <p>Price ID: @(_priceId)</p>
     <p>User ID: @_userId</p>
 </div>
 
@@ -29,20 +30,37 @@
 @code {
     private string _userId = "";
     private string _product = "";
+    private string? _priceId = "";
 
     private async Task LoginCallback((User?, string) data) {
         Console.WriteLine($"Logged in {data.Item1!.Username} for purchase");
 
         NameValueCollection queryValues = NavigationManager.GetQueryStrings();
         _product = queryValues["product"] ?? throw new Exception("No lookup key provided");
+        _priceId = queryValues["price_id"];
 
         _userId = data.Item1!.Id!;
         Console.WriteLine("User id: " + _userId);
 
-        SerbleApiResponse<string> checkoutResp = await SerbleApiHandler.GetCheckoutUrl(data.Item2, new []{ _product });
-        if (!checkoutResp.Success) {
-            Console.WriteLine(checkoutResp.ErrorMessage);
-            return;
+        SerbleApiResponse<string> checkoutResp;
+
+        if (_priceId == null) {
+            checkoutResp = await SerbleApiHandler.GetCheckoutUrl(data.Item2, new []{ _product });
+            if (!checkoutResp.Success) {
+                Console.WriteLine(checkoutResp.ErrorMessage);
+                return;
+            }
+        }
+        else {
+            ProductCheckoutEntry productCheckoutEntry = new() {
+                Id = _product,
+                PriceId = _priceId
+            };
+            checkoutResp = await SerbleApiHandler.GetCheckoutUrlNew(data.Item2, new []{ productCheckoutEntry });
+            if (!checkoutResp.Success) {
+                Console.WriteLine(checkoutResp.ErrorMessage);
+                return;
+            }
         }
         
         Console.WriteLine("Checkout URL: " + checkoutResp.ResponseObject);
