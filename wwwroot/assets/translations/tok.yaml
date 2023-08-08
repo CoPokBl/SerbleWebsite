@@ -120,3 +120,5 @@ reload: tawa e lipu
 info: sona
 login: kama
 redirect-uri: lon ante
+per-year: /year
+swift-description: "<insert description here>"
