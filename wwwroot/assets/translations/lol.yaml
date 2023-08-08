@@ -120,3 +120,5 @@ reload: Reload
 info: Inof
 login: Login
 redirect-uri: Redirect URI
+per-year: /year
+swift-description: "<insert description here>"
