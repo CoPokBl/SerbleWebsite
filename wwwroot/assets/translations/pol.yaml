@@ -120,3 +120,5 @@ reload: Przeładować
 info: Informacje
 login: Zaloguj sie
 redirect-uri: Redirect URI
+per-year: /year
+swift-description: "<insert description here>"
