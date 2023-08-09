@@ -121,4 +121,12 @@ info: Inof
 login: Login
 redirect-uri: Redirect URI
 per-year: /year
-swift-description: "<insert description here>"
+swift-description: "SWIFT is a user-inclusive browser extension created by 4 entrepreneurs. After weeks of deliberation and creating, SWIFT was developed. A free browser extension that allows user to vote on whether a domain is trustworthy or flag them as suspicious. With both a free and paid model, SWIFT is inclusive to all kinds of users, from those who just want the bare minimum for free, to those who want the full experience at a very fair price."
+yearly-plan: Yearly Plan
+monthly-plan: Monthly Plan
+everything-from-free: Everything from Free
+warnings-for-risky-pages: Warnings For Risky Pages
+higher-vote-importance: Higher Vote Importance
+extremely-cool: Extremely Cool
+voting: Voting
+view-trust-rating: View Trust Rating
