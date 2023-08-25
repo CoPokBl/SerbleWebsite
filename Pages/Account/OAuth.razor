@@ -79,7 +79,7 @@
 
         // Check required query parameters
         if (_requiredQueryValues.Any(requiredQueryValue => !_queryValues!.AllKeys.Contains(requiredQueryValue))) {
-            NavigationManager.NavigateTo("/invalidoauth");
+            NavigationManager.NavigateTo("/invalidoauth?error=missing-params");
             return;
         }
 
@@ -87,7 +87,7 @@
         SerbleApiResponse<PublicOAuthApp> response = await SerbleApiHandler.GetPublicAppInfo(_queryValues["client_id"]!);
         if (!response.Success) {
             if (response.ErrorFlag == "not-found") {
-                NavigationManager.NavigateTo("/invalidoauth");
+                NavigationManager.NavigateTo("/invalidoauth?error=app-not-found");
                 return;
             }
             // Unknown error
@@ -123,14 +123,15 @@
             return;
         }
         string newUri = _queryValues["redirect_uri"]!;
-        if (newUri != _app!.RedirectUri) {
-            NavigationManager.NavigateTo("/invalidoauth");
+        string[] validUrls = _app!.RedirectUri!.Split(';');
+        if (!validUrls.Contains(newUri)) {
+            NavigationManager.NavigateTo("/invalidoauth?error=redirect-uri-mismatch");
             return;
         }
         string state = _queryValues["state"]!;
         // Check if state contains symbols
         if (state.Any(c => !char.IsLetterOrDigit(c))) {
-            NavigationManager.NavigateTo("/invalidoauth");
+            NavigationManager.NavigateTo("/invalidoauth?error=invalid-state");
             return;
         }
 
@@ -141,7 +142,7 @@
             SerbleApiResponse<string> response = await SerbleApiHandler.AuthorizeApp(_token!, _app!.Id!, scopeString);
             if (!response.Success) {
                 if (response.ErrorFlag == "bad-app") {
-                    NavigationManager.NavigateTo("/invalidoauth");
+                    NavigationManager.NavigateTo("/invalidoauth?error=bad-app");
                     return;
                 }
                 Console.WriteLine("Unknown error: " + response.ErrorMessage);
