@@ -121,12 +121,14 @@ info: sona
 login: kama
 redirect-uri: lon ante
 per-year: /sike
-swift-description: "SWIFT is a user-inclusive browser extension created by 4 entrepreneurs. After weeks of deliberation and creating, SWIFT was developed. A free browser extension that allows user to vote on whether a domain is trustworthy or flag them as suspicious. With both a free and paid model, SWIFT is inclusive to all kinds of users, from those who just want the bare minimum for free, to those who want the full experience at a very fair price."
-yearly-plan: Yearly Plan
-monthly-plan: Monthly Plan
-everything-from-free: Everything from Free
-warnings-for-risky-pages: Warnings For Risky Pages
-higher-vote-importance: Higher Vote Importance
-extremely-cool: Extremely Cool
-voting: Voting
-view-trust-rating: View Trust Rating
+swift-description: "ilo SWIFT li pona tawa jan ale. jan tu tu li pali e ilo SWIFT. suno luka tu mute pini la jan li pali e ilo SWIFT. ilo SWIFT li mani ala. ilo SWIFT li ilo tawa ilo pana. jan ken pana e sona tawa ilo SWIFT. ijo pi mani ala li lon. ijo pi mani lili li lon. ilo SWIFT li pona tawa jan pi wile lili. ilo SWIFT li pona tawa jan pi wile suli."
+yearly-plan: ijo mani pi tenpo sike suno
+monthly-plan: ijo mani pi tenpo mun
+everything-from-free: ijo mani ala la ale
+warnings-for-risky-pages: lipu ike la toki
+higher-vote-importance: sina pana tawa ilo SWIFT la sina suli
+extremely-cool: sina pona mute
+voting: sina pana tawa ilo SWIFT
+view-trust-rating: lukin e nanpa pi pona anu ike
+edit-oauth-application: Edit OAuth Application
+edit: Edit
