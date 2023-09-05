@@ -25,7 +25,7 @@ confirm-password: Bestätige das Passwort
 passwords-dont-match: Passwörter stimmen nicht überein
 id: Ausweis
 account-type: Konto Typ
-premium-level: Premium Level
+premium-level: Premium-Level
 account-type-free: Frei
 account-type-premium: Prämie
 save-changes: Änderungen speichern
@@ -45,7 +45,7 @@ allow: Erlauben
 deny: Leugnen
 your-oauth-apps: Ihre OAuth-Anwendungen
 no-apps: Keine Anwendungen
-client-secret: Client Secret
+client-secret: Client-Geheimnis
 click-to-copy: Zum Kopieren klicken
 delete: Löschen
 new-app: Neue Bewerbung
@@ -70,9 +70,9 @@ submit: Einreichen
 new-record: "NEUER EINTRAG:"
 record: "Aufzeichnen:"
 contact-us: Kontaktiere uns
-admin-email: "Admin Email:"
-support-email: "Support Email:"
-discord-invite: "Discord Invite:"
+admin-email: "Admin-E-Mail:"
+support-email: "Support-E-Mail:"
+discord-invite: "Discord-Einladung:"
 oops: Hoppla!
 if-sent-then-error: Wenn Sie von der Website hierher geschickt wurden, ist ein Fehler aufgetreten. Bitte wenden Sie sich an den Administrator unter
 error: "Fehler:"
@@ -99,9 +99,9 @@ home-page: Startseite
 purchase-complete: Kauf abgeschlossen!
 manage-subscription: Abonnement verwalten
 welcome-to-serble: Willkommen bei Serble! Serble ist eine Sammlung von Diensten, von denen die meisten von mir erstellt wurden. Nicht alle Projekte sind öffentlich zugänglich, aber Sie finden sie alle hier. Ich möchte die Anzahl der Projekte, die der Öffentlichkeit zugänglich sind, erhöhen. Wenn Sie also Vorschläge für neue Projekte oder Feedback haben, kontaktieren Sie mich bitte über [eine dieser Methoden].
-looking-for-mc-server: Looking for the old Minecraft server website? [Go here]
+looking-for-mc-server: Suchen Sie nach der alten Minecraft-Server-Website? [Gehe hier hin]
 serble-discord: Serble Discord
-uptime-monitor: Uptime Monitor
+uptime-monitor: Betriebszeitmonitor
 serble-site: Serble Seite
 home: Heim
 status: Status
@@ -110,23 +110,25 @@ contact: Kontakt
 my-applications: meine Anwendungen
 account: Konto
 manage-payments: Zahlungen verwalten
-admin-dashboard: Admin Dashboard
+admin-dashboard: Admin-Dashboard
 logout: Ausloggen
-not-found: Not Found
-404-not-found: 404 - Not Found
-sorry-not-found: "Sorry, there's nothing here, you could try another URL or go to our [home page]. Or you could look at this picture of a cat:"
-unknown-error-occured: An unknown error has occured.
-reload: Reload
-info: Info
-login: Login
-redirect-uri: Redirect URI
-per-year: /year
-swift-description: "SWIFT is a user-inclusive browser extension created by 4 entrepreneurs. After weeks of deliberation and creating, SWIFT was developed. A free browser extension that allows user to vote on whether a domain is trustworthy or flag them as suspicious. With both a free and paid model, SWIFT is inclusive to all kinds of users, from those who just want the bare minimum for free, to those who want the full experience at a very fair price."
-yearly-plan: Yearly Plan
-monthly-plan: Monthly Plan
-everything-from-free: Everything from Free
-warnings-for-risky-pages: Warnings For Risky Pages
-higher-vote-importance: Higher Vote Importance
-extremely-cool: Extremely Cool
-voting: Voting
-view-trust-rating: View Trust Rating
+not-found: Nicht gefunden
+404-not-found: 404 Nicht gefunden
+sorry-not-found: "Leider gibt es hier nichts. Versuchen Sie es mit einer anderen URL oder besuchen Sie unsere [Homepage]. Oder Sie könnten sich dieses Bild einer Katze ansehen:"
+unknown-error-occured: Ein unbekannter Fehler ist aufgetreten.
+reload: Neu laden
+info: Die Info
+login: Anmeldung
+redirect-uri: Umleitungs-URI
+per-year: /Jahr
+swift-description: "SWIFT ist eine benutzerintegrierte Browsererweiterung, die von vier Unternehmern entwickelt wurde. Nach wochenlangen Überlegungen und Entwicklungen wurde SWIFT entwickelt. Eine kostenlose Browser-Erweiterung, die es Benutzern ermöglicht, darüber abzustimmen, ob eine Domain vertrauenswürdig ist, oder sie als verdächtig zu kennzeichnen. Mit einem kostenlosen und kostenpflichtigen Modell ist SWIFT für alle Arten von Benutzern geeignet, von denen, die nur das Nötigste kostenlos wollen, bis hin zu denen, die das volle Erlebnis zu einem sehr fairen Preis wollen."
+yearly-plan: Jahresplan
+monthly-plan: Monatlicher Plan
+everything-from-free: Alles von Free
+warnings-for-risky-pages: Warnungen für riskante Seiten
+higher-vote-importance: Höhere Stimmenbedeutung
+extremely-cool: Extrem cool
+voting: Wählen
+view-trust-rating: Vertrauensbewertung anzeigen
+edit-oauth-application: Edit OAuth Application
+edit: Edit
