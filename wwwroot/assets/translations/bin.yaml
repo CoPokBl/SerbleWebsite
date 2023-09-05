@@ -119,3 +119,16 @@ unknown-error-occured: 01000001 01101110 00100000 01110101 01101110 01101011 011
 reload: 01010010 01100101 01101100 01101111 01100001 01100100
 info: 01001001 01101110 01100110 01101111
 login: 01001100 01101111 01100111 01101001 01101110
+redirect-uri: Redirect URI
+per-year: /year
+swift-description: "SWIFT is a user-inclusive browser extension created by 4 entrepreneurs. After weeks of deliberation and creating, SWIFT was developed. A free browser extension that allows user to vote on whether a domain is trustworthy or flag them as suspicious. With both a free and paid model, SWIFT is inclusive to all kinds of users, from those who just want the bare minimum for free, to those who want the full experience at a very fair price."
+yearly-plan: Yearly Plan
+monthly-plan: Monthly Plan
+everything-from-free: Everything from Free
+warnings-for-risky-pages: Warnings For Risky Pages
+higher-vote-importance: Higher Vote Importance
+extremely-cool: Extremely Cool
+voting: Voting
+view-trust-rating: View Trust Rating
+edit-oauth-application: Edit OAuth Application
+edit: Edit

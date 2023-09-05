@@ -1,5 +1,5 @@
 serble: Serble
-current-lang: Polskie
+current-lang: Polski
 language: Język
 loading: Ładowanie...
 unknown: Nieznany
@@ -15,7 +15,7 @@ dont-have-account: Nie masz konta?
 register-for-free: Zarejestruj się za darmo
 profile-settings: Ustawienia profilu
 invalid-username: Zła nazwa użytkownika
-username-taken: ta nazwa użytkownika jest już zajęta
+username-taken: Ta nazwa użytkownika jest już zajęta
 email: E-mail
 verified: Zweryfikowano
 not-verified: Niezweryfikowany, sprawdź swój e-mail!
@@ -72,7 +72,7 @@ record: "Nagrywać:"
 contact-us: Skontaktuj się z nami
 admin-email: "E-mail administratora:"
 support-email: "E-mail wsparcia:"
-discord-invite: "Zaproszenie na Discorda:"
+discord-invite: "Zaproszenie na Discord:"
 oops: Ups!
 if-sent-then-error: Jeśli zostałeś wysłany tutaj przez stronę internetową, wystąpił błąd. Skontaktuj się z administratorem pod adresem
 error: "Błąd:"
@@ -119,3 +119,16 @@ unknown-error-occured: Wystąpił nieznany błąd.
 reload: Przeładować
 info: Informacje
 login: Zaloguj sie
+redirect-uri: URI przekierowania
+per-year: /rok
+swift-description: "SWIFT to rozszerzenie przeglądarki włączające użytkownika, stworzone przez 4 przedsiębiorców. Po tygodniach przemyśleń i tworzenia powstał SWIFT. Bezpłatne rozszerzenie przeglądarki, które pozwala użytkownikowi głosować, czy domena jest godna zaufania, lub oznaczać ją jako podejrzaną. Zarówno w wersji bezpłatnej, jak i płatnej, SWIFT jest dostępny dla wszystkich rodzajów użytkowników, od tych, którzy chcą po prostu minimum za darmo, po tych, którzy chcą pełnego doświadczenia za bardzo uczciwą cenę."
+yearly-plan: Plan roczny
+monthly-plan: Plan miesięczny
+everything-from-free: Wszystko od Free
+warnings-for-risky-pages: Ostrzeżenia dotyczące ryzykownych stron
+higher-vote-importance: Większa waga głosów
+extremely-cool: Niezwykle fajne
+voting: Głosowanie
+view-trust-rating: Zobacz ocenę zaufania
+edit-oauth-application: Edit OAuth Application
+edit: Edit
