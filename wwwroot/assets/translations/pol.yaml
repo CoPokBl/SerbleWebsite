@@ -119,14 +119,16 @@ unknown-error-occured: Wystąpił nieznany błąd.
 reload: Przeładować
 info: Informacje
 login: Zaloguj sie
-redirect-uri: Redirect URI
-per-year: /year
-swift-description: "SWIFT is a user-inclusive browser extension created by 4 entrepreneurs. After weeks of deliberation and creating, SWIFT was developed. A free browser extension that allows user to vote on whether a domain is trustworthy or flag them as suspicious. With both a free and paid model, SWIFT is inclusive to all kinds of users, from those who just want the bare minimum for free, to those who want the full experience at a very fair price."
-yearly-plan: Yearly Plan
-monthly-plan: Monthly Plan
-everything-from-free: Everything from Free
-warnings-for-risky-pages: Warnings For Risky Pages
-higher-vote-importance: Higher Vote Importance
-extremely-cool: Extremely Cool
-voting: Voting
-view-trust-rating: View Trust Rating
+redirect-uri: URI przekierowania
+per-year: /rok
+swift-description: "SWIFT to rozszerzenie przeglądarki włączające użytkownika, stworzone przez 4 przedsiębiorców. Po tygodniach przemyśleń i tworzenia powstał SWIFT. Bezpłatne rozszerzenie przeglądarki, które pozwala użytkownikowi głosować, czy domena jest godna zaufania, lub oznaczać ją jako podejrzaną. Zarówno w wersji bezpłatnej, jak i płatnej, SWIFT jest dostępny dla wszystkich rodzajów użytkowników, od tych, którzy chcą po prostu minimum za darmo, po tych, którzy chcą pełnego doświadczenia za bardzo uczciwą cenę."
+yearly-plan: Plan roczny
+monthly-plan: Plan miesięczny
+everything-from-free: Wszystko od Free
+warnings-for-risky-pages: Ostrzeżenia dotyczące ryzykownych stron
+higher-vote-importance: Większa waga głosów
+extremely-cool: Niezwykle fajne
+voting: Głosowanie
+view-trust-rating: Zobacz ocenę zaufania
+edit-oauth-application: Edit OAuth Application
+edit: Edit
