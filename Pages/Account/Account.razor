@@ -154,28 +154,28 @@ else {
       }
       
       // Add edits
-      List<AccountEditRequest> edits = new();
+      List<PatchEditRequest> edits = new();
 
       if (_user!.Username != username) {
          Console.WriteLine("Username changed (from " + _user!.Username + " to " + username + ")");
-         edits.Add(new AccountEditRequest("Username", username));
+         edits.Add(new PatchEditRequest("Username", username));
       }
 
       if (_user.Email != email) {
          Console.WriteLine("Email changed (from " + _user.Email + " to " + email + ")");
-         edits.Add(new AccountEditRequest("Email", email));
+         edits.Add(new PatchEditRequest("Email", email));
       }
 
       if (language != "" && language != _user.Language) {
          Console.WriteLine("Language changed (from " + _user.Language + " to " + language + ")");
-         edits.Add(new AccountEditRequest("Language", language));
+         edits.Add(new PatchEditRequest("Language", language));
          
          // Update website language
          await interactor.SetLanguage(language);
       }
 
       if (password != "") {
-         edits.Add(new AccountEditRequest("Password", password));
+         edits.Add(new PatchEditRequest("Password", password));
       }
 
       SerbleApiResponse<User> response = await SerbleApiHandler.EditUser(_token, edits.ToArray());

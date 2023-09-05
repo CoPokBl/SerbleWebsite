@@ -93,7 +93,7 @@ public static class SerbleApiHandler {
         return new SerbleApiResponse<User>(user);
     }
     
-    public static async Task<SerbleApiResponse<User>> EditUser(string token, AccountEditRequest[] edits) {
+    public static async Task<SerbleApiResponse<User>> EditUser(string token, PatchEditRequest[] edits) {
         // Send HTTP request to API
         HttpClient client = new();
         client.DefaultRequestHeaders.Add("SerbleAuth", "User " + token);
@@ -409,6 +409,68 @@ public static class SerbleApiHandler {
         }
         // Don't parse response
         return new SerbleApiResponse<bool>(true);
+    }
+    
+    public static async Task<SerbleApiResponse<OAuthApp>> EditOAuthApp(string token, string id, PatchEditRequest[] edits) {
+        // Send HTTP request to API
+        HttpClient client = new();
+        client.DefaultRequestHeaders.Add("SerbleAuth", "User " + token);
+        HttpResponseMessage response;
+        string jsonInp = edits.ToJson();
+        Console.WriteLine(jsonInp);
+        try {
+            response = await client.PatchAsync(
+                Constants.SerbleApiUrl + "app/" + id, 
+                new StringContent(jsonInp, Encoding.UTF8, 
+                    "application/json"));
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<OAuthApp>(false, "Failed: " + e);
+        }
+        if (!response.IsSuccessStatusCode) {
+            string flag = "unknown";
+            string responseContent = await response.Content.ReadAsStringAsync();
+            Console.WriteLine(responseContent);
+            return new SerbleApiResponse<OAuthApp>(false, $"Failed: {response.StatusCode} ({await response.Content.ReadAsStringAsync()})", flag);
+        }
+        // Parse response
+        string json = await response.Content.ReadAsStringAsync();
+        OAuthApp user;
+        try {
+            user = JsonSerializer.Deserialize<OAuthApp>(json).ThrowIfNull();
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<OAuthApp>(false, $"Failed to parse response: {e.Message}");
+        }
+        return new SerbleApiResponse<OAuthApp>(user);
+    }
+    
+    public static async Task<SerbleApiResponse<OAuthApp>> GetOAuthApp(string token, string appId) {
+        // Send HTTP request to API
+        HttpClient client = new();
+        client.DefaultRequestHeaders.Add("SerbleAuth", "User " + token);
+        HttpResponseMessage response;
+        try {
+            response = await client.GetAsync(Constants.SerbleApiUrl + "app/" + appId);
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<OAuthApp>(false, "Failed: " + e);
+        }
+        if (!response.IsSuccessStatusCode) {
+            Console.WriteLine("Response: " + await response.Content.ReadAsStringAsync());
+            return new SerbleApiResponse<OAuthApp>(false, $"Failed: {response.StatusCode}");
+        }
+        // Parse response
+        string json = await response.Content.ReadAsStringAsync();
+        Console.WriteLine(json);
+        OAuthApp app;
+        try {
+            app = JsonSerializer.Deserialize<OAuthApp>(json).ThrowIfNull();
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<OAuthApp>(false, $"Failed to parse response: {e.Message}");
+        }
+        return new SerbleApiResponse<OAuthApp>(app);
     }
     
     public static async Task<SerbleApiResponse<string[]>> GetUsersOwnedProducts(string token) {
