@@ -132,3 +132,9 @@ voting: Wählen
 view-trust-rating: Vertrauensbewertung anzeigen
 edit-oauth-application: Bearbeiten Sie die OAuth-Anwendung
 edit: Bearbeiten
+invalid-code: Invalid Code
+otp-code: OTP Code
+2fa: Two Factor Authentication
+security: Security
+setup-totp-app: Setup TOTP App
+setup-2fa: Setup 2FA
