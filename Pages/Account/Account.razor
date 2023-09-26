@@ -66,6 +66,16 @@ else {
                   <p style="color: red; font-size: 13px">@Localiser["passwords-dont-match"]</p>
                }
                <div style="padding-top: 20px"></div>
+               
+               <h4>@Localiser["security"]</h4>
+               @if (_user.TotpEnabled) {
+                  <button class="btn btn-primary">@Localiser["setup-totp-app"]</button>
+               }
+               else {
+                  <button class="btn btn-success">@Localiser["setup-2fa"]</button>
+               }
+               
+               <div style="padding-top: 20px"></div>
                <hr/>
                
             </div>
@@ -91,6 +101,8 @@ else {
    private void ReloadText() {
       InvokeAsync(StateHasChanged).Wait();
    }
+   
+   
 
    private async Task LoginChecked((User?, string) info) {
       _user = info.Item1;

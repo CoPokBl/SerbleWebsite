@@ -40,6 +40,10 @@
             return;
         }
 
+        if (DefaultValue == null) {
+            return;
+        }
+
         HtmlInteractor interactor = new(JsRuntime);
         await interactor.InvokeCode($"addAttribute('{DefaultValue}', 'selected', '')");
         await interactor.InvokeCode("console.log('Set default value')");

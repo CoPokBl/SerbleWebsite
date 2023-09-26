@@ -35,5 +35,8 @@ public class User {
     
     [JsonPropertyName("language")]
     public string? Language { get; set; }
+    
+    [JsonPropertyName("totpEnabled")]
+    public bool TotpEnabled { get; set; }
 
 }

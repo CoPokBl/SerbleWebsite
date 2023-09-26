@@ -125,13 +125,13 @@
         string password = await htmlInteractor.GetValue("floatingPassword");
 
         // Attempt login
-        SerbleApiResponse<string> response;
+        SerbleApiResponse<(bool, string)> response;
 
         try {
             response = await SerbleApiHandler.LoginUser(username, password);
         }
         catch (Exception e) {
-            response = new SerbleApiResponse<string>(false, e.Message);
+            response = new SerbleApiResponse<(bool, string)>(false, e.Message);
         }
         
         if (!response.Success) {
@@ -141,8 +141,18 @@
             return;
         }
 
+        if (response.ResponseObject.Item1) {
+            // MFA is required
+            Console.WriteLine("MFA is required");
+            NavigationManager.NavigateTo("/mfa" +
+                                         "?mfa_token=" + response.ResponseObject.Item2 + "" +
+                                         "&return_url=" + NavigationManager.Uri + "" +
+                                         "&remember_me=" + _rememberMe);
+            return;
+        }
+
         // Login successful
-        string token = response.ResponseObject.ThrowIfNull();
+        string token = response.ResponseObject.Item2.ThrowIfNull();
         Console.WriteLine("Token: " + token);
 
         // Set cookie

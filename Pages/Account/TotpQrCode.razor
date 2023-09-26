@@ -1,0 +1,28 @@
+@page "/TotpQrCode"
+@using SerbleWebsite.Data
+@using SerbleWebsite.Data.Schemas
+@inject ImageService ImageService
+
+<RequireLogin Callback="Login"></RequireLogin>
+
+<h3>TotpQrCode</h3>
+
+<img src="@ImageSrc" class="crisp-image" height="500" width="500" alt="QR Code for setting up a TOTP App"/>
+
+@code {
+    private string? ImageSrc { get; set; }
+    
+    private async Task Login((User?, string) data) {
+        Stream imageData = await ImageService.GetImageStreamAsync(Constants.SerbleApiUrl + "account/mfa/totp/qrcode", data.Item2);
+        MemoryStream memoryStream = new();
+        await imageData.CopyToAsync(memoryStream);
+        string base64String = Convert.ToBase64String(memoryStream.ToArray());
+        ImageSrc = $"data:image/png;base64,{base64String}";
+        ReloadText();
+    }
+    
+    private void ReloadText() {
+        InvokeAsync(StateHasChanged).Wait();
+    }
+    
+}
