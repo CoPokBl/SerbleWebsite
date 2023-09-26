@@ -15,6 +15,26 @@ html, body {
     -ms-interpolation-mode: nearest-neighbor;   /* IE8+                           */
 }
 
+.form-setup-2fa {
+    width: 100%;
+    max-width: 400px;
+    padding: 15px;
+    margin-top: auto;
+    margin-bottom: auto;
+    /*margin: auto;*/
+}
+
+.form-setup-2fa .form-floating:focus-within {
+    z-index: 2;
+}
+
+.half-page {
+    /*width: 45%;*/
+    /*flex: 1;*/
+    /*flex-basis: 50%;*/
+    max-width: 30%;
+}
+
 h1:focus {
     outline: none;
 }

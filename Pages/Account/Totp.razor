@@ -84,7 +84,7 @@
         HtmlInteractor interactor = new(JsRuntime);
         string code = await interactor.GetValue("otp");
 
-        SerbleApiResponse<string> response = await SerbleApiHandler.SubmitTotpCode(mfaToken!, code);
+        SerbleApiResponse<string> response = await SerbleApiHandler.SubmitTotpCodeForLogin(mfaToken!, code);
         if (!response.Success) {
             _error = Error.InvalidCode;
             ReloadText();

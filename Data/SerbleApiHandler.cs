@@ -499,7 +499,7 @@ public static class SerbleApiHandler {
         }
     }
 
-    public static async Task<SerbleApiResponse<string>> SubmitTotpCode(string mfaToken, string code) {
+    public static async Task<SerbleApiResponse<string>> SubmitTotpCodeForLogin(string mfaToken, string code) {
         string json = new {
             login_token = mfaToken,
             totp_code = code
@@ -527,6 +527,36 @@ public static class SerbleApiHandler {
             return new SerbleApiResponse<string>(false, $"Failed to parse response: {e.Message}");
         }
         return new SerbleApiResponse<string>(body.Token);
+    }
+    
+    public static async Task<SerbleApiResponse<bool>> SubmitTotpCode(string token, string code) {
+        string json = new {
+            totp_code = code
+        }.ToJson();
+        
+        HttpClient client = new();
+        client.DefaultRequestHeaders.Add("SerbleAuth", "User " + token);
+        HttpResponseMessage response;
+        try {
+            response = await client.PostAsync(Constants.SerbleApiUrl + "account/mfa/totp", new StringContent(json, null, "application/json"));
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<bool>(false, "Error: " + e);
+        }
+        if (!response.IsSuccessStatusCode) {
+            Console.WriteLine("Response: " + await response.Content.ReadAsStringAsync());
+            return new SerbleApiResponse<bool>(false, $"Non Success Code: {response.StatusCode}");
+        }
+        // Parse response
+        TotpCheckResponse body;
+        try {
+            body = (await response.Content.ReadAsStringAsync()).FromJson<TotpCheckResponse>()!;
+        }
+        catch (Exception e) {
+            Console.WriteLine("Response: " + await response.Content.ReadAsStringAsync());
+            return new SerbleApiResponse<bool>(false, $"Failed to parse response: {e.Message}");
+        }
+        return new SerbleApiResponse<bool>(body.Valid);
     }
 
 }
