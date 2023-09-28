@@ -156,3 +156,43 @@ loaded = [];
 window.addAttribute = (elementId, attributeName, attributeValue) => {
     document.getElementById(elementId).setAttribute(attributeName, attributeValue);
 }
+
+window.cryptoApi = {
+    encrypt: async function (plainText, password) {
+        const ptUtf8 = new TextEncoder().encode(plainText);
+        const pwUtf8 = new TextEncoder().encode(password);
+        const pwHash = await window.crypto.subtle.digest('SHA-256', pwUtf8);
+        const iv = window.crypto.getRandomValues(new Uint8Array(12));
+        const alg = { name: 'AES-GCM', iv: iv };
+        const key = await window.crypto.subtle.importKey('raw', pwHash, alg, false, ['encrypt']);
+        const ctBuffer = await window.crypto.subtle.encrypt(alg, key, ptUtf8);
+        const ctArray = Array.from(new Uint8Array(ctBuffer));
+        const ctStr = ctArray.map(byte => String.fromCharCode(byte)).join('');
+        const ctBase64 = window.btoa(ctStr);
+        const ivHex = Array.from(iv).map(b => ('00' + b.toString(16)).slice(-2)).join('');
+        return ivHex + ctBase64;
+    },
+
+    decrypt: async function (cipherText, password) {
+        const iv = cipherText.slice(0,24).match(/.{2}/g).map(byte => parseInt(byte, 16));
+        const ctStr = window.atob(cipherText.slice(24));
+        const ctUint8 = new Uint8Array(ctStr.match(/[\s\S]/g).map(ch => ch.charCodeAt(0)));
+        const pwUtf8 = new TextEncoder().encode(password);
+        const pwHash = await window.crypto.subtle.digest('SHA-256', pwUtf8);
+        const alg = { name: 'AES-GCM', iv: new Uint8Array(iv) };
+        const key = await window.crypto.subtle.importKey('raw', pwHash, alg, false, ['decrypt']);
+        const plainBuffer = await window.crypto.subtle.decrypt(alg, key, ctUint8);
+        const plaintext = new TextDecoder().decode(plainBuffer);
+        return plaintext;
+    }
+};
+
+window.unsavedChanges = function () {
+    window.onbeforeunload = function () {
+        return "You have unsaved changes. Do you really want to leave this page?";
+    }
+}
+
+window.savedChanges = function () {
+    window.onbeforeunload = null;
+}

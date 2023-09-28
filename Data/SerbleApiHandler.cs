@@ -558,6 +558,117 @@ public static class SerbleApiHandler {
         }
         return new SerbleApiResponse<bool>(body.Valid);
     }
+    
+    public static async Task<SerbleApiResponse<string[]>> GetNotes(string token) {
+        // Send HTTP request to API
+        HttpClient client = new();
+        HttpResponseMessage response;
+        client.DefaultRequestHeaders.Add("SerbleAuth", "User " + token);
+        try {
+            response = await client.GetAsync($"{Constants.SerbleApiUrl}vault/notes");
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<string[]>(false, "Failed: " + e);
+        }
+        if (!response.IsSuccessStatusCode) {
+            Console.WriteLine("Response: " + await response.Content.ReadAsStringAsync());
+            return new SerbleApiResponse<string[]>(false, $"Failed: {response.StatusCode}");
+        }
+        // Parse response
+        string responseStr = await response.Content.ReadAsStringAsync();
+        try {
+            return new SerbleApiResponse<string[]>(JsonSerializer.Deserialize<string[]>(responseStr).ThrowIfNull());
+        }
+        catch (Exception e) {
+            Console.WriteLine(e);
+            return new SerbleApiResponse<string[]>(false, $"Failed to parse response: {e.Message}");
+        }
+    }
+
+    public static async Task<SerbleApiResponse<string>> GetNoteContent(string token, string noteId) {
+        // Send HTTP request to API
+        HttpClient client = new();
+        HttpResponseMessage response;
+        client.DefaultRequestHeaders.Add("SerbleAuth", "User " + token);
+        try {
+            response = await client.GetAsync($"{Constants.SerbleApiUrl}vault/notes/{noteId}");
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<string>(false, "Failed: " + e);
+        }
+        if (!response.IsSuccessStatusCode) {
+            Console.WriteLine("Response: " + await response.Content.ReadAsStringAsync());
+            return new SerbleApiResponse<string>(false, $"Failed: {response.StatusCode}");
+        }
+        // Parse response
+        string responseStr = await response.Content.ReadAsStringAsync();
+        try {
+            return new SerbleApiResponse<string>(responseStr);
+        }
+        catch (Exception e) {
+            Console.WriteLine(e);
+            return new SerbleApiResponse<string>(false, $"Failed to parse response: {e.Message}");
+        }
+    }
+    
+    public static async Task<SerbleApiResponse<string>> UpdateNoteContent(string token, string noteId, string content) {
+        // Send HTTP request to API
+        HttpClient client = new();
+        HttpResponseMessage response;
+        client.DefaultRequestHeaders.Add("SerbleAuth", "User " + token);
+        try {
+            response = await client.PutAsync($"{Constants.SerbleApiUrl}vault/notes/{noteId}", new StringContent(content.ToJson(), null, "application/json"));
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<string>(false, "Failed: " + e);
+        }
+        if (response.IsSuccessStatusCode) return new SerbleApiResponse<string>(noteId);
+        Console.WriteLine("Response: " + await response.Content.ReadAsStringAsync());
+        return new SerbleApiResponse<string>(false, $"Failed: {response.StatusCode}");
+    }
+    
+    public static async Task<SerbleApiResponse<string>> NewNote(string token) {
+        // Send HTTP request to API
+        HttpClient client = new();
+        HttpResponseMessage response;
+        client.DefaultRequestHeaders.Add("SerbleAuth", "User " + token);
+        try {
+            response = await client.PostAsync($"{Constants.SerbleApiUrl}vault/notes", null);
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<string>(false, "Failed: " + e);
+        }
+        if (!response.IsSuccessStatusCode) {
+            Console.WriteLine("Response: " + await response.Content.ReadAsStringAsync());
+            return new SerbleApiResponse<string>(false, $"Failed: {response.StatusCode}");
+        }
+        string bodyString = await response.Content.ReadAsStringAsync();
+        NoteCreationResponse body;
+        try {
+            body = bodyString.FromJson<NoteCreationResponse>()!;
+        }
+        catch (Exception e) {
+            Console.WriteLine(e);
+            return new SerbleApiResponse<string>(false, e.Message);
+        }
+        return new SerbleApiResponse<string>(body.NoteId!);
+    }
+    
+    public static async Task<SerbleApiResponse<string>> DeleteNote(string token, string id) {
+        // Send HTTP request to API
+        HttpClient client = new();
+        HttpResponseMessage response;
+        client.DefaultRequestHeaders.Add("SerbleAuth", "User " + token);
+        try {
+            response = await client.DeleteAsync($"{Constants.SerbleApiUrl}vault/notes/{id}");
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<string>(false, "Failed: " + e);
+        }
+        if (response.IsSuccessStatusCode) return new SerbleApiResponse<string>(id);
+        Console.WriteLine("Response: " + await response.Content.ReadAsStringAsync());
+        return new SerbleApiResponse<string>(false, $"Failed: {response.StatusCode}");
+    }
 
 }
 
