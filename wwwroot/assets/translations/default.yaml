@@ -141,17 +141,3 @@ setup-2fa: Setup 2FA
 disable-2fa: Disable 2FA
 setup-totp-instructions: "On your chosen TOTP app (Some apps you could use include Authy, Microsoft Authenticator, Google Authenticator) scan the QR code below and setup your account. Once you have setup your account, enter the code it provides you into the box to the right and click submit."
 totp-warning: "If you proceed to setup up 2FA then you will be required to enter a code from your TOTP app every time you login. If you lose access to your TOTP app then you will lose access to your account."
-notes: Notes
-new-note: New Note
-new-encrypted-note: New Encrypted Note
-set-encryption-password: Set your encryption password
-note-is-encrypted: This note is encrypted
-incorrect-password: Incorrect Password
-decrypt: Decrypt
-save: Save
-no-note-selected: No Note Selected
-loading-note: Loading note...
-empty-note: Empty note
-saving: Saving...
-saved: Saved!
-vault: Vault
