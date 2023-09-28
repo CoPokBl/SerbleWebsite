@@ -133,11 +133,11 @@ view-trust-rating: lukin e nanpa pi pona anu ike
 edit-oauth-application: o ante e ilo
 edit: o ante
 invalid-code: nanpa ike
-otp-code: OTP Code
-2fa: Two Factor Authentication
-security: Security
-setup-totp-app: Setup TOTP App
-setup-2fa: Setup 2FA
-disable-2fa: Disable 2FA
-setup-totp-instructions: "On your chosen TOTP app (Some apps you could use include Authy, Microsoft Authenticator, Google Authenticator) scan the QR code below and setup your account. Once you have setup your account, enter the code it provides you into the box to the right and click submit."
-totp-warning: "If you proceed to setup up 2FA then you will be required to enter a code from your TOTP app every time you login. If you lose access to your TOTP app then you will lose access to your account."
+otp-code: nanpa tenpo
+2fa: ilo wawa pi ijo tu
+security: wawa
+setup-totp-app: o open e nanpa tenpo
+setup-2fa: o open e ilo wawa pi ijo tu
+disable-2fa: o open ala e ilo wawa pi ijo tu
+setup-totp-instructions: "o lukin e sitelen kepeken ilo wawa (ilo Authy, ilo Microsoft Authenticator, ilo Google Authenticator). o pana e nanpa pi ilo wawa. o luka e nena \"luka\"."
+totp-warning: "sina awen la sina open e ilo Serble la sina wile pana e nanpa. sina lawa ala e nanpa la sina lawa ala e sina pi ilo Serble."
