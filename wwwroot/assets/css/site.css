@@ -5,6 +5,83 @@ html, body {
     color: #ffffff;
 }
 
+.crisp-image {
+    image-rendering: optimizeSpeed;             /* STOP SMOOTHING, GIVE ME SPEED  */
+    image-rendering: -moz-crisp-edges;          /* Firefox                        */
+    image-rendering: -o-crisp-edges;            /* Opera                          */
+    image-rendering: -webkit-optimize-contrast; /* Chrome (and eventually Safari) */
+    image-rendering: pixelated;                 /* Universal support since 2021   */
+    image-rendering: optimize-contrast;         /* CSS3 Proposed                  */
+    -ms-interpolation-mode: nearest-neighbor;   /* IE8+                           */
+}
+
+.form-setup-2fa {
+    width: 100%;
+    max-width: 400px;
+    padding: 15px;
+    margin-top: auto;
+    margin-bottom: auto;
+    /*margin: auto;*/
+}
+
+.form-setup-2fa .form-floating:focus-within {
+    z-index: 2;
+}
+
+.full-page-textarea {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    flex: 1;
+}
+
+.list-group {
+    overflow: auto; /* to provide a scrollbar when necessary. */
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 0; /* to make it grow and shrink as needed and not have an initial size. */
+}
+
+.editor-section-vault {
+    resize: none;    /* disable resizing */
+    overflow: auto;   /* add scrollbar when necessary */
+    width: 80%;
+    height: 88%;
+    max-height: 88%;
+}
+
+.editor-section-vault-height {
+    height: 88%;
+    max-height: 88%;
+}
+
+.notes-height-setting {
+    height: 93%;
+    max-height: 93%;
+}
+
+.editor-section-button {
+    width: 100%; /* viewport width */
+    height: 5%; /* viewport height */
+    max-height: 5%;
+}
+
+.notes-box {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    flex-direction: row; /* to make sure elements are laid out horizontally. */
+    align-items: stretch; /* to make items match the height of the container. */
+}
+
+.half-page {
+    /*width: 45%;*/
+    /*flex: 1;*/
+    /*flex-basis: 50%;*/
+    max-width: 30%;
+}
+
 h1:focus {
     outline: none;
 }

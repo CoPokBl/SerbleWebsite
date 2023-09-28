@@ -37,7 +37,7 @@ public static class SerbleApiHandler {
         return new SerbleApiResponse<User>(user);
     }
     
-    public static async Task<SerbleApiResponse<string>> LoginUser(string username, string password) {
+    public static async Task<SerbleApiResponse<(bool, string)>> LoginUser(string username, string password) {
         // Send HTTP request to API
         HttpClient client = new();
         client.DefaultRequestHeaders.Add("Authorization", "Basic " + Convert.ToBase64String(Encoding.ASCII.GetBytes($"{username}:{password}")));
@@ -46,22 +46,22 @@ public static class SerbleApiHandler {
             response = await client.GetAsync(Constants.SerbleApiUrl + "auth");
         }
         catch (Exception e) {
-            return new SerbleApiResponse<string>(false, "Error: " + e);
+            return new SerbleApiResponse<(bool, string)>(false, "Error: " + e);
         }
         if (!response.IsSuccessStatusCode) {
             Console.WriteLine("Response: " + await response.Content.ReadAsStringAsync());
-            return new SerbleApiResponse<string>(false, $"Non Success Code: {response.StatusCode}");
+            return new SerbleApiResponse<(bool, string)>(false, $"Non Success Code: {response.StatusCode}");
         }
         // Parse response
-        string token;
+        AuthResponseBody body;
         try {
-            token = await response.Content.ReadAsStringAsync();
+            body = (await response.Content.ReadAsStringAsync()).FromJson<AuthResponseBody>()!;
         }
         catch (Exception e) {
             Console.WriteLine("Response: " + await response.Content.ReadAsStringAsync());
-            return new SerbleApiResponse<string>($"Failed to parse response: {e.Message}");
+            return new SerbleApiResponse<(bool, string)>(false, $"Failed to parse response: {e.Message}");
         }
-        return new SerbleApiResponse<string>(token);
+        return new SerbleApiResponse<(bool, string)>((body.MfaRequired, body.MfaRequired ? body.MfaToken : body.Token));
     }
     
     public static async Task<SerbleApiResponse<User>> RegisterUser(string username, string password, string recaptchaToken) {
@@ -497,6 +497,177 @@ public static class SerbleApiHandler {
             Console.WriteLine(e);
             return new SerbleApiResponse<string[]>(false, $"Failed to parse response: {e.Message}");
         }
+    }
+
+    public static async Task<SerbleApiResponse<string>> SubmitTotpCodeForLogin(string mfaToken, string code) {
+        string json = new {
+            login_token = mfaToken,
+            totp_code = code
+        }.ToJson();
+        
+        HttpClient client = new();
+        HttpResponseMessage response;
+        try {
+            response = await client.PostAsync(Constants.SerbleApiUrl + "account/mfa", new StringContent(json, null, "application/json"));
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<string>(false, "Error: " + e);
+        }
+        if (!response.IsSuccessStatusCode) {
+            Console.WriteLine("Response: " + await response.Content.ReadAsStringAsync());
+            return new SerbleApiResponse<string>(false, $"Non Success Code: {response.StatusCode}");
+        }
+        // Parse response
+        AuthResponseBody body;
+        try {
+            body = (await response.Content.ReadAsStringAsync()).FromJson<AuthResponseBody>()!;
+        }
+        catch (Exception e) {
+            Console.WriteLine("Response: " + await response.Content.ReadAsStringAsync());
+            return new SerbleApiResponse<string>(false, $"Failed to parse response: {e.Message}");
+        }
+        return new SerbleApiResponse<string>(body.Token);
+    }
+    
+    public static async Task<SerbleApiResponse<bool>> SubmitTotpCode(string token, string code) {
+        string json = new {
+            totp_code = code
+        }.ToJson();
+        
+        HttpClient client = new();
+        client.DefaultRequestHeaders.Add("SerbleAuth", "User " + token);
+        HttpResponseMessage response;
+        try {
+            response = await client.PostAsync(Constants.SerbleApiUrl + "account/mfa/totp", new StringContent(json, null, "application/json"));
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<bool>(false, "Error: " + e);
+        }
+        if (!response.IsSuccessStatusCode) {
+            Console.WriteLine("Response: " + await response.Content.ReadAsStringAsync());
+            return new SerbleApiResponse<bool>(false, $"Non Success Code: {response.StatusCode}");
+        }
+        // Parse response
+        TotpCheckResponse body;
+        try {
+            body = (await response.Content.ReadAsStringAsync()).FromJson<TotpCheckResponse>()!;
+        }
+        catch (Exception e) {
+            Console.WriteLine("Response: " + await response.Content.ReadAsStringAsync());
+            return new SerbleApiResponse<bool>(false, $"Failed to parse response: {e.Message}");
+        }
+        return new SerbleApiResponse<bool>(body.Valid);
+    }
+    
+    public static async Task<SerbleApiResponse<string[]>> GetNotes(string token) {
+        // Send HTTP request to API
+        HttpClient client = new();
+        HttpResponseMessage response;
+        client.DefaultRequestHeaders.Add("SerbleAuth", "User " + token);
+        try {
+            response = await client.GetAsync($"{Constants.SerbleApiUrl}vault/notes");
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<string[]>(false, "Failed: " + e);
+        }
+        if (!response.IsSuccessStatusCode) {
+            Console.WriteLine("Response: " + await response.Content.ReadAsStringAsync());
+            return new SerbleApiResponse<string[]>(false, $"Failed: {response.StatusCode}");
+        }
+        // Parse response
+        string responseStr = await response.Content.ReadAsStringAsync();
+        try {
+            return new SerbleApiResponse<string[]>(JsonSerializer.Deserialize<string[]>(responseStr).ThrowIfNull());
+        }
+        catch (Exception e) {
+            Console.WriteLine(e);
+            return new SerbleApiResponse<string[]>(false, $"Failed to parse response: {e.Message}");
+        }
+    }
+
+    public static async Task<SerbleApiResponse<string>> GetNoteContent(string token, string noteId) {
+        // Send HTTP request to API
+        HttpClient client = new();
+        HttpResponseMessage response;
+        client.DefaultRequestHeaders.Add("SerbleAuth", "User " + token);
+        try {
+            response = await client.GetAsync($"{Constants.SerbleApiUrl}vault/notes/{noteId}");
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<string>(false, "Failed: " + e);
+        }
+        if (!response.IsSuccessStatusCode) {
+            Console.WriteLine("Response: " + await response.Content.ReadAsStringAsync());
+            return new SerbleApiResponse<string>(false, $"Failed: {response.StatusCode}");
+        }
+        // Parse response
+        string responseStr = await response.Content.ReadAsStringAsync();
+        try {
+            return new SerbleApiResponse<string>(responseStr);
+        }
+        catch (Exception e) {
+            Console.WriteLine(e);
+            return new SerbleApiResponse<string>(false, $"Failed to parse response: {e.Message}");
+        }
+    }
+    
+    public static async Task<SerbleApiResponse<string>> UpdateNoteContent(string token, string noteId, string content) {
+        // Send HTTP request to API
+        HttpClient client = new();
+        HttpResponseMessage response;
+        client.DefaultRequestHeaders.Add("SerbleAuth", "User " + token);
+        try {
+            response = await client.PutAsync($"{Constants.SerbleApiUrl}vault/notes/{noteId}", new StringContent(content.ToJson(), null, "application/json"));
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<string>(false, "Failed: " + e);
+        }
+        if (response.IsSuccessStatusCode) return new SerbleApiResponse<string>(noteId);
+        Console.WriteLine("Response: " + await response.Content.ReadAsStringAsync());
+        return new SerbleApiResponse<string>(false, $"Failed: {response.StatusCode}");
+    }
+    
+    public static async Task<SerbleApiResponse<string>> NewNote(string token) {
+        // Send HTTP request to API
+        HttpClient client = new();
+        HttpResponseMessage response;
+        client.DefaultRequestHeaders.Add("SerbleAuth", "User " + token);
+        try {
+            response = await client.PostAsync($"{Constants.SerbleApiUrl}vault/notes", null);
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<string>(false, "Failed: " + e);
+        }
+        if (!response.IsSuccessStatusCode) {
+            Console.WriteLine("Response: " + await response.Content.ReadAsStringAsync());
+            return new SerbleApiResponse<string>(false, $"Failed: {response.StatusCode}");
+        }
+        string bodyString = await response.Content.ReadAsStringAsync();
+        NoteCreationResponse body;
+        try {
+            body = bodyString.FromJson<NoteCreationResponse>()!;
+        }
+        catch (Exception e) {
+            Console.WriteLine(e);
+            return new SerbleApiResponse<string>(false, e.Message);
+        }
+        return new SerbleApiResponse<string>(body.NoteId!);
+    }
+    
+    public static async Task<SerbleApiResponse<string>> DeleteNote(string token, string id) {
+        // Send HTTP request to API
+        HttpClient client = new();
+        HttpResponseMessage response;
+        client.DefaultRequestHeaders.Add("SerbleAuth", "User " + token);
+        try {
+            response = await client.DeleteAsync($"{Constants.SerbleApiUrl}vault/notes/{id}");
+        }
+        catch (Exception e) {
+            return new SerbleApiResponse<string>(false, "Failed: " + e);
+        }
+        if (response.IsSuccessStatusCode) return new SerbleApiResponse<string>(id);
+        Console.WriteLine("Response: " + await response.Content.ReadAsStringAsync());
+        return new SerbleApiResponse<string>(false, $"Failed: {response.StatusCode}");
     }
 
 }

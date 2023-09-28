@@ -48,5 +48,22 @@ public class HtmlInteractor {
     public async Task SetLanguage(string lang) {
         await _jsRuntime.InvokeVoidAsync("eval", $"localStorage.setItem('lang','{lang.ToLower()}')");
     }
+    
+    public async Task RemoveAttribute(string id, string attribute) {
+        await _jsRuntime.InvokeVoidAsync("eval", $"document.getElementById('{id}').removeAttribute('{attribute}')");
+    }
+    
+    public async Task SetAttribute(string id, string attribute, string value) {
+        await _jsRuntime.InvokeVoidAsync("eval", $"document.getElementById('{id}').setAttribute('{attribute}','{value}')");
+    }
+
+    public async Task MarkUnsavedChanges(bool mark) {
+        if (mark) {
+            await _jsRuntime.InvokeVoidAsync("eval", "window.unsavedChanges");
+        }
+        else {
+            await _jsRuntime.InvokeVoidAsync("eval", "window.savedChanges");
+        }
+    }
 
 }

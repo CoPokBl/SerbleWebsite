@@ -66,6 +66,20 @@ else {
                   <p style="color: red; font-size: 13px">@Localiser["passwords-dont-match"]</p>
                }
                <div style="padding-top: 20px"></div>
+               
+               <h4>@Localiser["security"]</h4>
+               @if (_user.TotpEnabled) {
+                  <div class="row mt-3">
+                     <button @onclick="Disable2Fa" class="btn btn-danger">@Localiser["disable-2fa"]</button>
+                     <div style="padding-top: 10px"></div>
+                     <button @onclick="SetupTotp" class="btn btn-primary">@Localiser["setup-totp-app"]</button>
+                  </div>
+               }
+               else {
+                  <button @onclick="SetupTotp" class="btn btn-success">@Localiser["setup-2fa"]</button>
+               }
+               
+               <div style="padding-top: 20px"></div>
                <hr/>
                
             </div>
@@ -91,12 +105,15 @@ else {
    private void ReloadText() {
       InvokeAsync(StateHasChanged).Wait();
    }
+   
+   
 
    private async Task LoginChecked((User?, string) info) {
       _user = info.Item1;
       _token = info.Item2;
       _verifiedEmail = _user!.VerifiedEmail;
       Console.WriteLine($"{_user!.Username} is logged in");
+      Console.WriteLine("TOTP: " + _user.TotpEnabled);
       ReloadText();
       
       // Products
@@ -203,6 +220,35 @@ else {
       }
       // Success
       NavigationManager.NavigateTo(NavigationManager.Uri, true);
+   }
+
+   private async Task Disable2Fa() {
+      List<PatchEditRequest> edits = new() {
+         new PatchEditRequest("TotpEnabled", "false")
+      };
+
+      SerbleApiResponse<User> response = await SerbleApiHandler.EditUser(_token, edits.ToArray());
+      if (!response.Success) {
+         // Fail
+         switch (response.ErrorFlag) {
+            default:
+               Console.WriteLine("Unknown error");
+               return;
+                  
+            case "bad-field":
+               Console.WriteLine("Bad field wtf");
+               break;
+         }
+         ReloadText();
+         return;
+      }
+      // Success
+      _user!.TotpEnabled = false;
+      ReloadText();
+   }
+
+   private void SetupTotp() {
+      NavigationManager.NavigateTo("/setuptotp");
    }
 
    enum Error {

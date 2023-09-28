@@ -9,6 +9,7 @@ public class Localiser {
 public static class Localisation {
     
     public static readonly Dictionary<string, string> Localisations = new();
+    public static readonly Localiser Localiser = new();
 
     public static void AddLocalisations(this IServiceCollection services) {
         services.AddSingleton<Localiser>();
