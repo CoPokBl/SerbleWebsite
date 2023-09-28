@@ -132,3 +132,12 @@ voting: sina pana tawa ilo SWIFT
 view-trust-rating: lukin e nanpa pi pona anu ike
 edit-oauth-application: o ante e ilo
 edit: o ante
+invalid-code: nanpa ike
+otp-code: nanpa tenpo
+2fa: ilo wawa pi ijo tu
+security: wawa
+setup-totp-app: o open e nanpa tenpo
+setup-2fa: o open e ilo wawa pi ijo tu
+disable-2fa: o open ala e ilo wawa pi ijo tu
+setup-totp-instructions: "o lukin e sitelen kepeken ilo wawa (ilo Authy, ilo Microsoft Authenticator, ilo Google Authenticator). o pana e nanpa pi ilo wawa. o luka e nena \"luka\"."
+totp-warning: "sina awen la sina open e ilo Serble la sina wile pana e nanpa. sina lawa ala e nanpa la sina lawa ala e sina pi ilo Serble."
