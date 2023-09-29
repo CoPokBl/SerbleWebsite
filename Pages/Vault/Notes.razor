@@ -29,8 +29,8 @@
         </div>
         
         <div class="editor-section-button">
-            <button class="btn btn-primary" @onclick="() => NewNote(true)">@Localiser["new-note"]</button>
-            <button class="btn btn-secondary" @onclick="() => NewNote(false)">@Localiser["new-encrypted-note"]</button>
+            <button class="btn btn-primary" @onclick="() => NewNote(true)">@Localiser["new-encrypted-note"]</button>
+            <button class="btn btn-secondary" @onclick="() => NewNote(false)">@Localiser["new-note"]</button>
         </div>
     </div>
     
@@ -76,10 +76,10 @@
         }
         else {
             @if (_noteIsEncrypted) {
-                <textarea id="note-content" class="bg-black bg-opacity-50 text-white form-control editor-section-vault" @bind="_currentDecryptedContent">@_currentDecryptedContent</textarea>
+                <textarea @oninput="UserInput" id="note-content" class="bg-black bg-opacity-50 text-white form-control editor-section-vault" @bind="_currentDecryptedContent">@_currentDecryptedContent</textarea>
             }
             else {
-                <textarea id="note-content" class="bg-black bg-opacity-50 text-white form-control editor-section-vault" @bind="_currentNote">@_currentNote</textarea>
+                <textarea @oninput="UserInput" id="note-content" class="bg-black bg-opacity-50 text-white form-control editor-section-vault" @bind="_currentNote">@_currentNote</textarea>
             }
         }
         <button id="save-button" disabled class="btn btn-success editor-section-button" @onclick="UpdateNote">@_saveButtonText</button>
@@ -95,6 +95,7 @@
     private bool _noteIsEncrypted;
     private bool _encryptedNoteIsEmpty;
     private int _incorrectPasswordAttempts;
+    private bool _textSaved = true;
     private string? _token;
     private string _saveButtonText = Localisation.Localiser["save"];
     private readonly Dictionary<string, string> _noteTitles = new();
@@ -227,6 +228,8 @@
         }
         // Yay it worked
         _saveButtonText = Localisation.Localiser["saved"];
+        _textSaved = true;
+        await interactor.SetAttribute("save-button", "disabled", "true");
         await LoadNote(_currentNoteId!, true);
         ReloadText();
     }
@@ -298,6 +301,16 @@
         string base64Passwords = Convert.ToBase64String(Encoding.UTF8.GetBytes(jsonPasswords)).Replace("=", "~");
         Cookie cookie = new(JsRuntime);
         await cookie.SetValue("vault-passwords", base64Passwords);
+    }
+
+    private async void UserInput() {
+        if (!_textSaved || _currentNoteId == null) {
+            return;
+        }
+        _textSaved = false;
+        _saveButtonText = Localisation.Localiser["save"];
+        await new HtmlInteractor(JsRuntime).RemoveAttribute("save-button", "disabled");
+        ReloadText();
     }
     
 }
