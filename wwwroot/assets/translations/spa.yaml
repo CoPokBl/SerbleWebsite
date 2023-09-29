@@ -132,3 +132,12 @@ voting: Votación
 view-trust-rating: Ver calificación de confianza
 edit-oauth-application: Editar aplicación OAuth
 edit: Editar
+invalid-code: Codigo invalido
+otp-code: Código OTP
+2fa: Autenticación de dos factores
+security: Seguridad
+setup-totp-app: Configurar la aplicación TOTP
+setup-2fa: Configurar 2FA
+disable-2fa: Deshabilitar 2FA
+setup-totp-instructions: "En la aplicación TOTP que haya elegido (algunas aplicaciones que puede usar incluyen Authy, Microsoft Authenticator, Google Authenticator), escanee el código QR a continuación y configure su cuenta. Una vez que haya configurado su cuenta, ingrese el código que le proporciona en el cuadro de la derecha y haga clic en enviar."
+totp-warning: "Si continúas configurando 2FA, se te pedirá que ingreses un código de tu aplicación TOTP cada vez que inicies sesión. Si pierde el acceso a su aplicación TOTP, perderá el acceso a su cuenta."
