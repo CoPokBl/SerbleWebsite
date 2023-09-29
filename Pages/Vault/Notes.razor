@@ -159,10 +159,10 @@
 
         HtmlInteractor interactor = new(JsRuntime);
         _noteIsEncrypted = content.StartsWith(EncryptionHeader);
+        await interactor.SetAttribute("save-button", "disabled", "true");
         if (_noteIsEncrypted) {
             _encryptedNoteIsEmpty = content == EncryptionHeader;
             _currentDecryptedContent = null;
-            await interactor.SetAttribute("save-button", "disabled", "true");
             if (_passwords.ContainsKey(id)) {
                 await DecryptNote(false);
                 actualContent = _currentDecryptedContent.ThrowIfNull();
@@ -170,7 +170,6 @@
         }
         else {
             _currentDecryptedContent = null;
-            await interactor.RemoveAttribute("save-button", "disabled");
         }
 
         _noteTitles[id] = empty ? id : actualContent.Split('\n')[0];
