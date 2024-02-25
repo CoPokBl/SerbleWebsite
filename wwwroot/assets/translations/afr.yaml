@@ -141,3 +141,17 @@ setup-2fa: Stel 2FA op
 disable-2fa: Deaktiveer 2FA
 setup-totp-instructions: "Op jou gekose TOTP-toepassing (Sommige toepassings wat jy kan gebruik sluit in Authy, Microsoft Authenticator, Google Authenticator) skandeer die QR-kode hieronder en stel jou rekening op. Sodra jy jou rekening opgestel het, voer die kode wat dit aan jou verskaf in die blokkie aan die regterkant in en klik indien."
 totp-warning: "As jy voortgaan om 2FA op te stel, sal daar van jou verwag word om 'n kode vanaf jou TOTP-toepassing in te voer elke keer as jy aanmeld. As jy toegang tot jou TOTP-toepassing verloor, sal jy toegang tot jou rekening verloor."
+notes: Notes
+new-note: New Note
+new-encrypted-note: New Encrypted Note
+set-encryption-password: Set your encryption password
+note-is-encrypted: This note is encrypted
+incorrect-password: Incorrect Password
+decrypt: Decrypt
+save: Save
+no-note-selected: No Note Selected
+loading-note: Loading note...
+empty-note: Empty note
+saving: Saving...
+saved: Saved!
+vault: Vault

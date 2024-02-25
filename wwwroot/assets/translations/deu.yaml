@@ -141,3 +141,17 @@ setup-2fa: Richten Sie 2FA ein
 disable-2fa: Deaktivieren Sie 2FA
 setup-totp-instructions: "Scannen Sie in der von Ihnen gewählten TOTP-App (einige Apps, die Sie verwenden könnten, Authy, Microsoft Authenticator, Google Authenticator) den QR-Code unten und richten Sie Ihr Konto ein. Sobald Sie Ihr Konto eingerichtet haben, geben Sie den Code, den Sie erhalten, in das Feld rechts ein und klicken Sie auf „Senden“."
 totp-warning: "Wenn Sie mit der Einrichtung von 2FA fortfahren, müssen Sie bei jeder Anmeldung einen Code aus Ihrer TOTP-App eingeben. Wenn Sie den Zugriff auf Ihre TOTP-App verlieren, verlieren Sie auch den Zugriff auf Ihr Konto."
+notes: Notes
+new-note: New Note
+new-encrypted-note: New Encrypted Note
+set-encryption-password: Set your encryption password
+note-is-encrypted: This note is encrypted
+incorrect-password: Incorrect Password
+decrypt: Decrypt
+save: Save
+no-note-selected: No Note Selected
+loading-note: Loading note...
+empty-note: Empty note
+saving: Saving...
+saved: Saved!
+vault: Vault
