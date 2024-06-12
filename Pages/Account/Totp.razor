@@ -79,7 +79,7 @@
 
     private async void Submit() {
         string? mfaToken = NavigationManager.GetQueryStrings("mfa_token");
-        bool rememberMe = NavigationManager.GetQueryStrings("remember_me") == "true";
+        bool rememberMe = NavigationManager.GetQueryStrings("remember_me")?.ToLower() == "true";
         
         HtmlInteractor interactor = new(JsRuntime);
         string code = await interactor.GetValue("otp");
