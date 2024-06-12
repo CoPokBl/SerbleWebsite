@@ -63,8 +63,8 @@
 
     protected override async void OnInitialized() {
         RegisterStaticHandler.Register = this;  // This is run locally so we only need to hold one instance of this class
-        Cookie cookieService = new (JsRuntime);
-        Console.WriteLine("Token: " + await cookieService.GetValue("token"));
+        TokenManager tok = new(JsRuntime);
+        Console.WriteLine("Token: " + await tok.GetToken());
     }
 
     [JSInvokable("RegisterSubmit")]

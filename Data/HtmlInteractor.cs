@@ -57,6 +57,15 @@ public class HtmlInteractor {
         await _jsRuntime.InvokeVoidAsync("eval", $"document.getElementById('{id}').setAttribute('{attribute}','{value}')");
     }
 
+    public async Task SetLocalStorage(string key, string val) {
+        await _jsRuntime.InvokeVoidAsync("eval", $"localStorage.setItem('{key}','{val}')");
+    }
+    
+    public async Task<string> GetLocalStorage(string key, string def = "") {
+        string val = await _jsRuntime.InvokeAsync<string>("eval", $"localStorage.getItem('{key}')");
+        return string.IsNullOrWhiteSpace(val) ? def : val;
+    }
+
     public async Task MarkUnsavedChanges(bool mark) {
         if (mark) {
             await _jsRuntime.InvokeVoidAsync("eval", "window.unsavedChanges");

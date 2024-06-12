@@ -56,10 +56,10 @@
     
     protected override async void OnAfterRender(bool firstRender) {
         if (!firstRender) return;
-        Cookie cookieService = new (JsRuntime);
+        TokenManager tok = new(JsRuntime);
 
         // Check if user is logged in.
-        string token = await cookieService.GetValue("token");
+        string token = await tok.GetToken();
         if (token == "") {
             _loading = false;
             ReloadText();
@@ -94,8 +94,8 @@
         string token = response.ResponseObject.ThrowIfNull();
         
         // Set cookie
-        Cookie cookieService = new (JsRuntime);
-        await cookieService.SetValue("token", token, rememberMe ? 24 * 365 : 1);
+        TokenManager tok = new(JsRuntime);
+        await tok.SetToken(token, rememberMe);
         Console.WriteLine("Logged in!");
         
         // Get user language

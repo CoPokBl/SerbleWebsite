@@ -111,8 +111,8 @@
 
     private async Task Login((User?, string) data) {
         // Get passwords from cookie
-        Cookie cookie = new(JsRuntime);
-        string base64Passwords = (await cookie.GetValue("vault-passwords")).Replace("~", "=");
+        HtmlInteractor js = new(JsRuntime);
+        string base64Passwords = (await js.GetLocalStorage("vault-passwords")).Replace("~", "=");
         if (base64Passwords != "") {
             string jsonPasswords = Encoding.UTF8.GetString(Convert.FromBase64String(base64Passwords));
             _passwords = jsonPasswords.FromJson<Dictionary<string, string>>()!;
@@ -300,8 +300,8 @@
     private async void SavePasswords() {
         string jsonPasswords = _passwords.ToJson();
         string base64Passwords = Convert.ToBase64String(Encoding.UTF8.GetBytes(jsonPasswords)).Replace("=", "~");
-        Cookie cookie = new(JsRuntime);
-        await cookie.SetValue("vault-passwords", base64Passwords);
+        HtmlInteractor js = new(JsRuntime);
+        await js.SetLocalStorage("vault-passwords", base64Passwords);
     }
 
     private async void UserInput() {

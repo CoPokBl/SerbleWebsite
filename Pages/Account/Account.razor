@@ -128,8 +128,8 @@ else {
    }
 
    private async void Logout() {
-      Cookie cookies = new (JsRuntime);
-      await cookies.SetValue("token", "", 0);
+      TokenManager tok = new(JsRuntime);
+      await tok.ClearToken();
       NavigationManager.NavigateTo("/login", true);
    }
 

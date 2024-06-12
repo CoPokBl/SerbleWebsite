@@ -113,8 +113,8 @@
     }
     
     private async void Logout() {
-        Cookie cookies = new (JsRuntime);
-        await cookies.SetValue("token", "");
+        TokenManager tok = new(JsRuntime);
+        await tok.ClearToken();
         NavigationManager.NavigateTo(NavigationManager.Uri, true);
     }
     

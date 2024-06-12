@@ -77,10 +77,15 @@
         _stopwatch ??= new Timer(CountdownCallback, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
         if (_finished) return;
         
-        HtmlInteractor interactor = new (JsRuntime);
+        HtmlInteractor interactor = new(JsRuntime);
         string guess = await interactor.GetValue("word-input");
         await interactor.SetValue("word-input", "");
-        bool correct = _englishWords!.Contains(guess.ToUpper()) && _words.All(word => word.Item2 != guess);
+        if (_englishWords == null) {
+            Console.WriteLine("Words aren't loaded, failed to submit");
+            await interactor.SetValue("word-input", "An error occured");
+            return;
+        }
+        bool correct = _englishWords.Contains(guess.ToUpper()) && _words.All(word => word.Item2 != guess);
         _words.Add((correct, guess));
         if (!correct) _strikes++;
         if (_strikes == 3) {
@@ -110,8 +115,8 @@
         int words = _words.Count(word => word.Item1);
         if (words <= _record) return;
         _record = words;
-        Cookie cookie = new (JsRuntime);
-        await cookie.SetValue("wordmaster-record", words.ToString(), 8760);
+        HtmlInteractor js = new(JsRuntime);
+        await js.SetLocalStorage("wordmaster-record", words.ToString());
         _newWr = true;
         ReloadText();
     }
@@ -129,8 +134,8 @@
 
     protected override async Task OnInitializedAsync() {
         _englishWords = (await Http.GetFromJsonAsync<string[]>(Constants.SerbleApiUrl + "raw/dictionary"))!;
-        Cookie cookie = new (JsRuntime);
-        int.TryParse(await cookie.GetValue("wordmaster-record", "0"), out _record);
+        HtmlInteractor js = new(JsRuntime);
+        int.TryParse(await js.GetLocalStorage("wordmaster-record", "0"), out _record);
     }
     
     

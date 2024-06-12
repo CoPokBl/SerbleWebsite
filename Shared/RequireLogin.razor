@@ -37,10 +37,10 @@
     protected override async void OnAfterRender(bool firstRender) {
         if (!firstRender) return;
         Console.WriteLine("Attempting login check");
-        Cookie cookieHandler = new (JsRuntime);
+        TokenManager tok = new(JsRuntime);
 
         // Attempt Login
-        string tokenCookie = await cookieHandler.GetValue("token");
+        string tokenCookie = await tok.GetToken();
         if (tokenCookie == "") {
             // NotLoggedIn();
             // return;

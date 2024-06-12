@@ -12,8 +12,8 @@
 @code {
 
     protected override async Task OnAfterRenderAsync(bool firstRender) {
-        Cookie cookie = new(JsRuntime);
-        string apiUrl = await cookie.GetValue("apiUrl", Constants.DefaultSerbleApiUrl);
+        HtmlInteractor js = new(JsRuntime);
+        string apiUrl = await js.GetLocalStorage("apiUrl", Constants.DefaultSerbleApiUrl);
         Constants.SerbleApiUrl = apiUrl;
         Console.WriteLine("apiUrl: " + apiUrl);
     }

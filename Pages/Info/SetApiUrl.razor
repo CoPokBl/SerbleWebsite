@@ -12,13 +12,13 @@
 
     protected override async Task OnAfterRenderAsync(bool firstRender) {
         HtmlInteractor interactor = new(JsRuntime);
-        Cookie cookie = new(JsRuntime);
+        HtmlInteractor js = new(JsRuntime);
         string newUrl = NavigationManager.GetQueryStrings("url").DefaultIfNull(Constants.DefaultSerbleApiUrl);
         if (newUrl == "") {
             newUrl = Constants.DefaultSerbleApiUrl;
         }
         
-        await cookie.SetValue("apiUrl", newUrl, 24 * 365);
+        await js.SetLocalStorage("apiUrl", newUrl);
         await interactor.SetValue("info", $"Current Api Url: {newUrl}");
         Console.WriteLine("Set Api Url: " + newUrl);
     }
