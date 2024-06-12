@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <!-- Meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -31,7 +30,35 @@
 
     <main>
         <article>
-            <div id="app">Loading...</div>
+            <div id="app"> <!-- This is rendered while the page is loading -->
+                <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+                    <a class="navbar-brand" href="/" style="padding-left: 20px"><img src="/assets/images/icon.png" width="41" height="41" alt="Serble Logo"></a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/">Loading...</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                
+                <div class="text-center">
+                    <h1>The page is loading...</h1>
+                    <img class="p-3" width="35%" height="35%" alt="Processing Cat Picture" src="https://http.cat/102"/>
+                </div>
+
+                <div class="text-center col-lg-6 offset-lg-3">
+                    <h4>Serble Site </h4>
+                    <p>&copy; 2020-Present &middot; CoPokBl &middot; <a href="/">Serble</a></p>
+                    <div class="dropdown">
+                        <button class="dropdown-toggle btn-link btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">Loading...</button>
+                        <ul class="dropdown-menu"></ul>
+                    </div>
+                </div>
+            </div>
         </article>
     </main>
 
