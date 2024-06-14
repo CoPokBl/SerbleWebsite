@@ -75,4 +75,7 @@ public class HtmlInteractor {
         }
     }
 
+    public async Task<bool> DoesSupportPasskeys() {
+        return await _jsRuntime.InvokeAsync<bool>("eval", "window.doesSupportPasskeys()");
+    }
 }

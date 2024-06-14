@@ -5,6 +5,41 @@ It should be linked before all other scripts
 
 */
 
+// Availability of `window.PublicKeyCredential` means WebAuthn is usable.  
+// `isUserVerifyingPlatformAuthenticatorAvailable` means the feature detection is usable.  
+// `isConditionalMediationAvailable` means the feature detection is usable.
+let supportsPasskeys = false;
+console.log("Checking passkey support...");
+if (navigator.credentials) {
+    supportsPasskeys = true;
+}
+console.log("Supports passkeys: " + supportsPasskeys);
+
+window.doesSupportPasskeys = () => {
+    return supportsPasskeys;
+}
+
+window.loginWithPasskey = async () => {
+    let credentialRequestOptions = {
+        challenge: new Uint8Array([/* server-generated random bytes */]),
+        timeout: 60000, // Arbitrary value 
+        allowCredentials: [ // credentials object array created at registration, could be fetched from the server. 
+            {
+                id: Uint8Array.from(atob(""/*credentialId*/), c => c.charCodeAt(0)),
+                type: 'public-key',
+                transports: ['usb', 'ble', 'nfc', 'internal'],
+            }
+        ]
+    }
+
+    let assert;
+    try {
+        assert = await navigator.credentials.get({ "publicKey": credentialRequestOptions });
+    } catch (err) {
+        console.error(err);
+    }
+}
+
 // Replace all occurrences of the first string with the second string
 function replaceAll(str, find, replace) {
     return str.replace(new RegExp(find, 'g'), replace);

@@ -73,7 +73,14 @@
                 </label>
             </div>
             <button class="w-100 btn btn-lg btn-primary" @onclick="Login" style="padding-bottom: 10px">@Localiser["sign-in"]</button>
+            @if (_supportsPasskeys) {
+                <button class="w-100 btn btn-lg btn-secondary" style="padding-bottom: 10px; padding-top: 10px" @onclick="PasskeyLogin">@Localiser["login-with-passkey"]</button>
+            }
             <p>@Localiser["dont-have-account"] <a href="/register" onclick="window.location='register'+window.location.search;">@Localiser["register-for-free"]</a></p>
+        </form>
+        
+        <form @onsubmit='() => Console.WriteLine("Submitted webauthn field")' hidden>
+            <input type="text" name="username" autocomplete="username webauthn" hidden>
         </form>
     }
 
@@ -81,11 +88,16 @@
 
 @code {
     private bool _rememberMe;
+    private bool _supportsPasskeys = false;
     private Error _error = Error.None;
     private bool _loading = true;
 
     protected override async void OnAfterRender(bool firstRender) {
         if (!firstRender) return;
+
+        HtmlInteractor js = new(JsRuntime);
+        _supportsPasskeys = await js.DoesSupportPasskeys();  // TODO: Do something with this info
+        
         TokenManager tok = new(JsRuntime);
 
         // Check if user is logged in.
@@ -117,6 +129,11 @@
         LoginMain();
         _loading = false;
         ReloadText();
+    }
+
+    private async Task PasskeyLogin() {
+        HtmlInteractor js = new(JsRuntime);
+        
     }
 
     private async void LoginMain() {
