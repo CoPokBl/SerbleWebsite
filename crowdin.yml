@@ -1,3 +1,0 @@
-files:
-  - source: /wwwroot/assets/translations/default.yaml
-    translation: /wwwroot/assets/translations/%three_letters_code%.yaml

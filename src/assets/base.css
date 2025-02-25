@@ -1,0 +1,13 @@
+.dropdown-menu {
+    background-color: #393d41;
+    color: #ffffff;
+}
+
+.dropdown-item {
+    color: #bebebe;
+}
+
+.dropdown-item:focus, .dropdown-item:hover {
+    background-color: #474c50;
+    color: #e3e3e3;
+}
