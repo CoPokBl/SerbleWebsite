@@ -1,5 +1,5 @@
 import { reactive, readonly } from 'vue';
-import {checkLogin} from "@/assets/js/serble.js";
+import {checkLogin, logout} from "@/assets/js/serble.js";
 
 const state = reactive({
     user: null
@@ -16,6 +16,10 @@ const useUserStore = () => {
                 console.log(user);
             }
         },
+        logout() {
+            state.user = null;
+            logout();
+        }
     };
 };
 

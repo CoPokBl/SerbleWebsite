@@ -10,9 +10,17 @@ export default {
 
     return {
       user,
-      isAdmin
+      isAdmin,
+      userStore
     };
   },
+  methods: {
+    logout() {
+      console.log("Logging out...");
+      this.userStore.logout();
+      window.location = "/";
+    }
+  }
 };
 </script>
 
@@ -74,12 +82,12 @@ export default {
           <li><RouterLink class="dropdown-item" to="/account/paymentportal">{{ $t('manage-payments') }}</RouterLink></li>
           <li v-if="isAdmin"><RouterLink class="dropdown-item" to="/admin">{{ $t('admin-dashboard') }}</RouterLink></li>
           <li><hr class="dropdown-divider"></li>
-          <li><button class="dropdown-item" type="button" @onclick="Logout">{{ $t('logout') }}</button></li>
+          <li><button class="dropdown-item" type="button" @click="logout">{{ $t('logout') }}</button></li>
         </ul>
       </div>
     </div>
     <div v-else class="dropdown text-end" style="padding-right: 180px;">
-      <RouterLink to="/login"><button type="button" class="btn btn-outline-light" @onclick="Login">{{ $t('login') }}</button></RouterLink>
+      <RouterLink to="/login"><button type="button" class="btn btn-outline-light">{{ $t('login') }}</button></RouterLink>
     </div>
   </nav>
 </template>
